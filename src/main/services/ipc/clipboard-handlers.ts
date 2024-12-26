@@ -1,7 +1,7 @@
 import { getMainWindow } from '../window/window'
 import { getSelectedText } from '../clipboard/clipboard'
 import { updateSelectedText } from '../text/text-operations'
-import { IPC_EVENTS } from '../../constants/ipc'
+import { IPC_EVENTS } from './constants'
 
 export const handleSelectedText = async (): Promise<void> => {
   const selectedText = await getSelectedText()

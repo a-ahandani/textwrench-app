@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import { IPC_EVENTS } from '../main/constants/ipc'
+import { IPC_EVENTS } from '../main/services/ipc/constants'
 
 const api = {
   onClipboardUpdated: (callback: (text: string) => void) => {
