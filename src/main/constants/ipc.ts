@@ -1,0 +1,3 @@
+export const IPC_EVENTS = {
+  CLIPBOARD_UPDATED: 'CLIPBOARD_UPDATED'
+}
