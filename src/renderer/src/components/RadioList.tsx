@@ -1,4 +1,4 @@
-import { DataListRoot, RadioCardLabel, VStack } from '@chakra-ui/react'
+import { DataListRoot, Group, RadioCardLabel } from '@chakra-ui/react'
 import { RadioCardItem, RadioCardRoot } from './RadioCard'
 
 type RadioListProps = {
@@ -11,16 +11,19 @@ export const RadioList = ({ options, onChange, label }: RadioListProps) => {
     <DataListRoot>
       <RadioCardRoot defaultValue="next">
         <RadioCardLabel>{label}</RadioCardLabel>
-        <VStack align="stretch">
+        <Group attached orientation="vertical">
           {options?.map((item) => (
             <RadioCardItem
+              width="full"
               label={item.label}
               key={item.value}
               value={item.value}
-              onSelect={() => onChange?.(item.value)}
+              onChange={() => {
+                onChange?.(item.value)
+              }}
             />
           ))}
-        </VStack>
+        </Group>
       </RadioCardRoot>
     </DataListRoot>
   )

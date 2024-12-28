@@ -5,21 +5,21 @@ function App() {
   const [clipboardText, setClipboardText] = useState<string>('')
   const [options, setOptions] = useState<{ value: string; label: string }[]>([])
 
-  const { onClipboardUpdated, getPromptOptions } = window.api
+  const { onClipboardUpdated, getStoreValue, setStoreValue } = window.api
   onClipboardUpdated((text) => {
     setClipboardText(text)
   })
 
   useEffect(() => {
     const loadPromptOptions = async () => {
-      const promptOptions = await getPromptOptions()
+      const promptOptions = await getStoreValue('prompts')
       setOptions(promptOptions)
     }
     loadPromptOptions()
   }, [])
 
   const handleChange = (value: string) => {
-    console.log('Selected value:', value)
+    setStoreValue('selectedPrompt', value)
   }
 
   return (

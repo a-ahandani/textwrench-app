@@ -1,11 +1,19 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import { IPC_CHANNELS, IPC_EVENTS } from '../main/services/ipc/constants'
+import { IPC_EVENTS } from '../main/ipc/constants'
 
 const api = {
-  getPromptOptions: () => ipcRenderer.invoke(IPC_CHANNELS.GET_PROMPT_OPTIONS),
   onClipboardUpdated: (callback: (text: string) => void) => {
     ipcRenderer.on(IPC_EVENTS.CLIPBOARD_UPDATED, (_, text) => callback(text))
+  },
+  getStoreValue: (key: string) => ipcRenderer.invoke(IPC_EVENTS.GET_STORE_VALUE, key),
+  setStoreValue: (key: string, value) => ipcRenderer.invoke(IPC_EVENTS.SET_STORE_VALUE, key, value),
+  onStoreChange: (callback) => {
+    const subscription = (_event, data) => callback(data)
+    ipcRenderer.on(IPC_EVENTS.STORE_CHANGED, subscription)
+    return () => {
+      ipcRenderer.removeListener(IPC_EVENTS.STORE_CHANGED, subscription)
+    }
   }
 }
 
