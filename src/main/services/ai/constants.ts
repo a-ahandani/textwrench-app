@@ -4,7 +4,7 @@ export const USER_PROMPTS_KEYS = {
   TRANSLATION: 'translation'
 }
 
-export const USER_PROMPTS_NAMES = {
+export const USER_PROMPT_LABELS = {
   [USER_PROMPTS_KEYS.GRAMMAR]: 'Grammar Correction',
   [USER_PROMPTS_KEYS.SUMMARIZATION]: 'Summarization',
   [USER_PROMPTS_KEYS.TRANSLATION]: 'Translation'

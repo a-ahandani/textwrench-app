@@ -3,6 +3,7 @@ import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { registerShortcut } from './services/shortcuts/shortcuts'
 import { initializeApp } from './services/window/window'
 import { handleSelectedText } from './services/ipc/clipboard-handlers'
+import { setupIpcHandlers } from './services/ipc/handlers'
 
 app.whenReady().then(() => {
   const registerCopy = registerShortcut('Control+Shift+C', handleSelectedText)
@@ -18,6 +19,7 @@ app.whenReady().then(() => {
   })
 
   initializeApp()
+  setupIpcHandlers()
 
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) initializeApp()
