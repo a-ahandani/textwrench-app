@@ -1,18 +1,16 @@
 import OpenAI from 'openai'
-import {
-  AI_MODELS,
-  Roles,
-  SYSTEM_PROMPT_KEYS,
-  SYSTEM_PROMPTS,
-  USER_PROMPTS_KEYS,
-  USER_PROMPTS
-} from './constants'
+import { AI_MODELS, Roles, SYSTEM_PROMPT_KEYS, SYSTEM_PROMPTS, USER_PROMPTS } from './constants'
+import { store } from '../../store'
+
+const apiKey = import.meta.env.VITE_OPENAI_API_KEY
 
 export const openAiClient = new OpenAI({
-  apiKey: process.env.VITE_OPENAI_API_KEY
+  apiKey
 })
 
 export const processTextWithAI = async (text: string): Promise<string> => {
+  const selectedPrompt = await store.get('selectedPrompt')
+
   const systemPrompt = {
     role: Roles.System,
     content: SYSTEM_PROMPTS[SYSTEM_PROMPT_KEYS.DEFAULT]
@@ -20,7 +18,7 @@ export const processTextWithAI = async (text: string): Promise<string> => {
 
   const userPrompt = {
     role: Roles.User,
-    content: `${USER_PROMPTS[USER_PROMPTS_KEYS.GRAMMAR]}: \n\n ${text}`
+    content: `${USER_PROMPTS[selectedPrompt]}: \n\n ${text}`
   }
 
   const chatCompletion = await openAiClient.chat.completions.create({

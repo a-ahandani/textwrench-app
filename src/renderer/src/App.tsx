@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react'
 import { RadioList } from './components/RadioList'
+import { Box, Container, Heading, Icon } from '@chakra-ui/react'
+import { GoTools } from 'react-icons/go'
 
 function App() {
-  const [clipboardText, setClipboardText] = useState<string>('')
   const [options, setOptions] = useState<{ value: string; label: string }[]>([])
-
-  const { onClipboardUpdated, getStoreValue, setStoreValue } = window.api
-  onClipboardUpdated((text) => {
-    setClipboardText(text)
-  })
+  const { getStoreValue, setStoreValue } = window.api
 
   useEffect(() => {
     const loadPromptOptions = async () => {
@@ -23,10 +20,17 @@ function App() {
   }
 
   return (
-    <div>
-      <p>Clipboard text: {clipboardText}</p>
+    <Container>
+      <Box display={'flex'} justifyContent={'flex-end'} alignItems={'center'} mb={2} p={2}>
+        <Heading lineHeight="tall" size={'xs'} fontWeight={'bold'}>
+          TEXTWRENCH
+        </Heading>
+        <Icon fontSize="xl" ml={2}>
+          <GoTools />
+        </Icon>
+      </Box>
       <RadioList options={options} onChange={handleChange} />
-    </div>
+    </Container>
   )
 }
 

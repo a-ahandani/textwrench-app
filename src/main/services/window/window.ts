@@ -5,9 +5,11 @@ import icon from '../../../../resources/icon.png?asset'
 
 export const initializeApp = (): BrowserWindow => {
   const mainWindow = new BrowserWindow({
-    width: 400,
-    height: 210,
     show: false,
+    frame: false,
+    titleBarStyle: 'hidden',
+    resizable: false,
+    maximizable: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
@@ -15,6 +17,9 @@ export const initializeApp = (): BrowserWindow => {
       sandbox: false
     }
   })
+
+  mainWindow.setBounds({ x: 10, y: 10, width: 400, height: 210 })
+  mainWindow.setVisibleOnAllWorkspaces(true)
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
