@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { RadioList } from './components/RadioList'
-import { Box, Container, Heading, Icon } from '@chakra-ui/react'
-import { GoTools } from 'react-icons/go'
+import { Container, Tabs } from '@chakra-ui/react'
+import { Header } from './components/Header'
+import { GoGear, GoPencil, GoTools } from 'react-icons/go'
 
 function App() {
   const [options, setOptions] = useState<{ value: string; label: string }[]>([])
@@ -21,15 +22,29 @@ function App() {
 
   return (
     <Container>
-      <Box display={'flex'} justifyContent={'flex-end'} alignItems={'center'} mb={2} p={2}>
-        <Heading lineHeight="tall" size={'xs'} fontWeight={'bold'}>
-          TEXTWRENCH
-        </Heading>
-        <Icon fontSize="xl" ml={2}>
-          <GoTools />
-        </Icon>
-      </Box>
-      <RadioList options={options} onChange={handleChange} />
+      <Header />
+      <Tabs.Root defaultValue="prompts" variant="plain">
+        <Tabs.List bg="bg.muted" rounded="l3" p="1">
+          <Tabs.Trigger value="prompts">
+            <GoPencil />
+            Prompts
+          </Tabs.Trigger>
+          <Tabs.Trigger value="settings">
+            <GoGear />
+            Settings
+          </Tabs.Trigger>
+          <Tabs.Trigger value="about">
+            <GoTools />
+            About
+          </Tabs.Trigger>
+          <Tabs.Indicator rounded="l2" />
+        </Tabs.List>
+        <Tabs.Content value="prompts">
+          <RadioList options={options} onChange={handleChange} />
+        </Tabs.Content>
+        <Tabs.Content value="settings">Manage your settings</Tabs.Content>
+        <Tabs.Content value="about">About the app</Tabs.Content>
+      </Tabs.Root>
     </Container>
   )
 }

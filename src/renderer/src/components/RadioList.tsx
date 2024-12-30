@@ -9,12 +9,18 @@ type RadioListProps = {
 export const RadioList = ({ options, onChange, label }: RadioListProps) => {
   return (
     <DataListRoot>
-      <RadioCardRoot defaultValue="next">
+      <RadioCardRoot
+        size="sm"
+        variant="outline"
+        colorPalette="teal"
+        defaultValue={options?.[0]?.value || ''}
+      >
         <RadioCardLabel>{label}</RadioCardLabel>
         <Group attached orientation="vertical">
           {options?.map((item) => (
             <RadioCardItem
               width="full"
+              // addon={<div>sss</div>}
               label={item.label}
               key={item.value}
               value={item.value}

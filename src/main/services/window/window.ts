@@ -8,7 +8,7 @@ export const initializeApp = (): BrowserWindow => {
     show: false,
     frame: false,
     titleBarStyle: 'hidden',
-    resizable: false,
+    resizable: true,
     maximizable: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
