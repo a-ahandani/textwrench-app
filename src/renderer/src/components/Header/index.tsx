@@ -1,10 +1,10 @@
-import { Box, Heading, Icon } from '@chakra-ui/react'
+import { Box, Heading } from '@chakra-ui/react'
 import { GoTools } from 'react-icons/go'
 
 export const Header = () => (
   <Box
     css={{
-      '-webkit-app-region': 'drag'
+      WebkitAppRegion: 'drag'
     }}
     display={'flex'}
     justifyContent={'flex-end'}
@@ -15,8 +15,8 @@ export const Header = () => (
     <Heading lineHeight="tall" size={'xs'} fontWeight={'bold'}>
       TEXTWRENCH
     </Heading>
-    <Icon fontSize="xl" ml={2}>
-      <GoTools />
-    </Icon>
+    <Box ml={2}>
+      <GoTools fontSize="xl" />
+    </Box>
   </Box>
 )
