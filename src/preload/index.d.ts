@@ -1,5 +1,5 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import { StoreType } from '../main/store'
+import { StoreType } from '../shared/types/store'
 declare global {
   interface Window {
     electron: ElectronAPI

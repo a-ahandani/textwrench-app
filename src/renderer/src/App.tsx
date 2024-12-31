@@ -1,23 +1,18 @@
-import { useEffect, useState } from 'react'
 import { RadioList } from './components/RadioList'
 import { Container, Tabs } from '@chakra-ui/react'
 import { Header } from './components/Header'
 import { GoGear, GoPencil, GoTools } from 'react-icons/go'
+import { useStore } from './hooks/useStore'
+import { OptionType } from 'src/shared/types/store'
 
 function App() {
-  const [options, setOptions] = useState<{ value: string; label: string }[]>([])
-  const { getStoreValue, setStoreValue } = window.api
-
-  useEffect(() => {
-    const loadPromptOptions = async () => {
-      const promptOptions = await getStoreValue('prompts')
-      setOptions(promptOptions)
-    }
-    loadPromptOptions()
-  }, [])
+  const { value: options, isLoading } = useStore<OptionType[]>({
+    key: 'prompts'
+  })
+  const { setValue: setSelectedPrompt } = useStore({ key: 'selectedPrompt' })
 
   const handleChange = (value: string) => {
-    setStoreValue('selectedPrompt', value)
+    setSelectedPrompt(value)
   }
 
   return (
@@ -40,7 +35,7 @@ function App() {
           <Tabs.Indicator rounded="l2" />
         </Tabs.List>
         <Tabs.Content value="prompts">
-          <RadioList options={options} onChange={handleChange} />
+          {isLoading ? 'Loading...' : <RadioList options={options} onChange={handleChange} />}
         </Tabs.Content>
         <Tabs.Content value="settings">Manage your settings</Tabs.Content>
         <Tabs.Content value="about">About the app</Tabs.Content>

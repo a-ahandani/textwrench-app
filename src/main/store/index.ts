@@ -1,14 +1,5 @@
 import Store, { type Options } from 'electron-store'
-
-export type OptionType = {
-  value: string
-  label: string
-}
-
-export type StoreType = {
-  selectedPrompt: string | null
-  prompts: OptionType[]
-}
+import { StoreType } from '../../shared/types/store'
 
 const store = new Store<StoreType>({
   defaults: {
