@@ -3,9 +3,6 @@ import { electronAPI } from '@electron-toolkit/preload'
 import { IPC_EVENTS } from '../main/ipc/constants'
 
 const api = {
-  onClipboardUpdated: (callback: (text: string) => void) => {
-    ipcRenderer.on(IPC_EVENTS.CLIPBOARD_UPDATED, (_, text) => callback(text))
-  },
   getStoreValue: (key: string) => ipcRenderer.invoke(IPC_EVENTS.GET_STORE_VALUE, key),
   setStoreValue: (key: string, value) => ipcRenderer.invoke(IPC_EVENTS.SET_STORE_VALUE, key, value),
   onStoreChange: (callback) => {
