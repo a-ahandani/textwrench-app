@@ -5,6 +5,7 @@ import { store } from '../../store'
 const apiKey = import.meta.env.VITE_OPENAI_API_KEY
 
 export const openAiClient = new OpenAI({
+  dangerouslyAllowBrowser: true,
   apiKey
 })
 

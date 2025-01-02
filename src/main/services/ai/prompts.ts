@@ -1,4 +1,4 @@
-import { store } from '../../store'
+import { updateStore } from '../../store/helpers'
 import { USER_PROMPT_LABELS, USER_PROMPTS_KEYS } from './constants'
 
 export function initializePromptOptions() {
@@ -9,5 +9,5 @@ export function initializePromptOptions() {
     }
   })
 
-  store.set('prompts', options)
+  updateStore('prompts', options)
 }
