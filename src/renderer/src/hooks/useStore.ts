@@ -15,7 +15,7 @@ export const useStore = <K>({ key }: useStoreProps): useStoreReturnType<K> => {
   const [localValue, setLocalValue] = useState<StoreType[keyof StoreType]>()
   const [isLoading, setIsLoading] = useState(false)
 
-  const { getStoreValue, setStoreValue } = window.api
+  const { getStoreValue, setStoreValue, onStoreChange } = window.api
 
   useEffect(() => {
     setIsLoading(true)
@@ -25,9 +25,21 @@ export const useStore = <K>({ key }: useStoreProps): useStoreReturnType<K> => {
       setIsLoading(false)
     }
     loadStoreData()
-  }, [])
 
-  const handleSetStoreValue = (value) => {
+    // Subscribe to store changes
+    const unsubscribe = onStoreChange((data) => {
+      if (data.key === key && data.value !== localValue) {
+        setLocalValue(data.value)
+      }
+    })
+
+    // Cleanup subscription on unmount
+    return () => {
+      unsubscribe()
+    }
+  }, [key])
+
+  const handleSetStoreValue = (value: StoreType[keyof StoreType]) => {
     setStoreValue(key, value)
   }
 

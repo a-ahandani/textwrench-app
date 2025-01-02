@@ -1,14 +1,10 @@
-import { getMainWindow } from '../services/window/window'
 import { getSelectedText } from '../services/clipboard/clipboard'
 import { updateSelectedText } from '../services/text/text-operations'
+import { updateStore } from '../store/helpers'
 
 export const handleSelectedText = async (): Promise<void> => {
   const selectedText = await getSelectedText()
-  const mainWindow = getMainWindow()
-
-  if (mainWindow) {
-    // clipboard updated event
-  }
+  updateStore('selectedText', selectedText)
 
   await updateSelectedText(selectedText)
 }

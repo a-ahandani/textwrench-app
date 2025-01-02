@@ -4,6 +4,7 @@ export type OptionType = {
 }
 
 export type StoreType = {
+  selectedText?: string
   selectedPrompt?: string
   prompts?: OptionType[]
 }

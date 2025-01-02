@@ -4,9 +4,9 @@ declare global {
   interface Window {
     electron: ElectronAPI
     api: {
-      onClipboardUpdated(callback: (text: string) => void): void
       getStoreValue<K extends keyof StoreType>(key: K): Promise<StoreType[K]>
       setStoreValue<K extends keyof StoreType>(key: K, value: StoreType[K]): Promise<boolean>
+      onStoreChange(callback: (data) => void): () => void
     }
   }
 }
