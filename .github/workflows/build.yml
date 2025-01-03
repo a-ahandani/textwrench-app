@@ -1,6 +1,10 @@
 name: Build/release
 
-on: push
+on:
+  push:
+    tags:
+      - 'v*'
+
 
 jobs:
   release:
@@ -8,7 +12,8 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, windows-latest]
+        # os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
       - name: Check out Git repository
@@ -51,9 +56,13 @@ jobs:
         env:
           VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
 
-      - name: Upload built files
-        if: success()
-        uses: actions/upload-artifact@v4
+      - name: SFTP upload with version folder
+        uses: Dylan700/sftp-upload-action@latest
         with:
-          name: ${{ matrix.os }}-dist-files
-          path: dist/*
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 22
+          uploads: |
+            ./dist/ => /var/www/textwrench.ai/public_html/downloads/${{ matrix.os }}-files
+          delete: 'true'
