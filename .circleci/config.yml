@@ -1,6 +1,47 @@
 version: 2.1
+
 jobs:
-  build:
+  build-linux:
+    working_directory: ~/repo
+    docker:
+      - image: cimg/node:current
+    steps:
+      - checkout
+      - run:
+          name: Update NPM
+          command: "sudo npm install -g npm"
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install Required Libraries
+          command: |
+            sudo apt-get update -y
+            sudo apt-get install -y \
+              dpkg \
+              fakeroot \
+              rpm \
+              libxtst-dev \
+              libx11-dev \
+              libxkbfile-dev \
+              libpng-dev \
+              make \
+              gcc \
+              g++
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Build Linux App
+          command: npm run build:linux
+      - store_artifacts:
+          path: dist
+          destination: build-artifacts/linux
+
+  build-windows:
     working_directory: ~/repo
     docker:
       - image: cimg/node:current
@@ -14,19 +55,37 @@ jobs:
       - run:
           name: Install Dependencies
           command: npm install
-      - run:
-          name: Install dpkg and fakeroot
-          command: |
-            sudo apt-get update -y
-            sudo apt-get install -y dpkg fakeroot rpm
-
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
       - run:
-          name: Generate Builds
-          command: npm run build
-
+          name: Build Windows App
+          command: npm run build:win
       - store_artifacts:
-          path: ~/repo/out/build
+          path: dist
+          destination: build-artifacts/windows
+
+  build-mac:
+    macos:
+      xcode: 14.0.1
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - run:
+          name: Build macOS App
+          command: npm run build:mac
+      - store_artifacts:
+          path: dist
+          destination: build-artifacts/mac
+
+# workflows:
+#   version: 2
+#   build-and-deploy:
+#     jobs:
+#       # - build-linux
+#       # - build-windows
+#       - build-mac
