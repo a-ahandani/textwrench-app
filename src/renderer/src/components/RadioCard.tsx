@@ -28,14 +28,39 @@ export const RadioCardItem = React.forwardRef<HTMLInputElement, RadioCardItemPro
     const ContentWrapper = indicator ? RadioCard.ItemContent : React.Fragment
 
     return (
-      <RadioCard.Item {...rest}>
+      <RadioCard.Item
+        {...rest}
+        css={{
+          '& button': {
+            visibility: 'hidden',
+            opacity: 0
+          },
+          '&:hover': {
+            cursor: 'pointer',
+            '& button': {
+              visibility: 'visible',
+              opacity: 1
+            }
+          },
+          '&:focus-within': {
+            '& button': {
+              visibility: 'visible',
+              opacity: 1
+            }
+          }
+        }}
+      >
         <RadioCard.ItemHiddenInput ref={ref} {...inputProps} />
-        <RadioCard.ItemControl>
+        <RadioCard.ItemControl display="flex" alignItems="center" py="2">
           {indicatorPlacement === 'start' && indicator}
           {hasContent && (
             <ContentWrapper>
               {icon}
-              {label && <RadioCard.ItemText>{label}</RadioCard.ItemText>}
+              {label && (
+                <RadioCard.ItemText display="flex" width="100%">
+                  {label}
+                </RadioCard.ItemText>
+              )}
               {description && <RadioCard.ItemDescription>{description}</RadioCard.ItemDescription>}
               {indicatorPlacement === 'inside' && indicator}
             </ContentWrapper>

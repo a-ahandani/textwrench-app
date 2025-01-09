@@ -18,7 +18,7 @@ export const initializeApp = (): BrowserWindow => {
     }
   })
 
-  mainWindow.setBounds({ x: 10, y: 10, width: 400, height: 290 })
+  mainWindow.setBounds({ x: 10, y: 10, width: 480, height: 320 })
   mainWindow.setVisibleOnAllWorkspaces(true)
 
   mainWindow.on('ready-to-show', () => {
