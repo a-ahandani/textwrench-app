@@ -25,8 +25,8 @@ export const DrawerContent = React.forwardRef<HTMLDivElement, DrawerContentProps
 
 type DrawerFullProps = {
   open: boolean
-  onConfirm: VoidFunction
-  onCancel: VoidFunction
+  onConfirm?: VoidFunction
+  onCancel?: VoidFunction
   children: React.ReactNode
   confirmLabel?: string
   cancelLabel?: string
@@ -36,9 +36,9 @@ type DrawerFullProps = {
 
 export const DrawerFull = ({
   open,
+  confirmLabel,
+  cancelLabel,
   onConfirm,
-  confirmLabel = 'Save',
-  cancelLabel = 'Cancel',
   onCancel,
   children,
   title,
@@ -55,16 +55,26 @@ export const DrawerFull = ({
               <Box ml={2} flex={'1'}>
                 {title}
               </Box>
-              <DrawerActionTrigger>
-                <Button aria-label={cancelLabel} size={'xs'} variant="ghost" onClick={onCancel}>
-                  <GoX />
-                  {cancelLabel}
+              {onCancel && (
+                <DrawerActionTrigger>
+                  <Button aria-label={cancelLabel} size={'xs'} variant="ghost" onClick={onCancel}>
+                    <GoX />
+                    {cancelLabel}
+                  </Button>
+                </DrawerActionTrigger>
+              )}
+              {onConfirm && (
+                <Button
+                  ml={2}
+                  aria-label={confirmLabel}
+                  variant="solid"
+                  size={'xs'}
+                  onClick={onConfirm}
+                >
+                  <GoCheck />
+                  {confirmLabel}
                 </Button>
-              </DrawerActionTrigger>
-              <Button aria-label={confirmLabel} variant="solid" size={'xs'} onClick={onConfirm}>
-                <GoCheck />
-                {confirmLabel}
-              </Button>
+              )}
             </Box>
           </DrawerTitle>
         </DrawerHeader>
