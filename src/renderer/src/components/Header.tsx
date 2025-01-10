@@ -9,7 +9,6 @@ export const Header = () => (
     display={'flex'}
     justifyContent={'flex-end'}
     alignItems={'center'}
-    mb={2}
     p={2}
   >
     <Heading lineHeight="tall" size={'xs'} fontWeight={'bold'}>

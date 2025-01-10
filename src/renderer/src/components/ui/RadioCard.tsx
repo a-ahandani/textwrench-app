@@ -31,6 +31,7 @@ export const RadioCardItem = React.forwardRef<HTMLInputElement, RadioCardItemPro
       <RadioCard.Item
         {...rest}
         css={{
+          ...rest.css,
           '& button': {
             visibility: 'hidden',
             opacity: 0
@@ -47,11 +48,12 @@ export const RadioCardItem = React.forwardRef<HTMLInputElement, RadioCardItemPro
               visibility: 'visible',
               opacity: 1
             }
-          }
+          },
+          border: 'none'
         }}
       >
         <RadioCard.ItemHiddenInput ref={ref} {...inputProps} />
-        <RadioCard.ItemControl display="flex" alignItems="center" py="2">
+        <RadioCard.ItemControl display="flex" alignItems="center" py="1">
           {indicatorPlacement === 'start' && indicator}
           {hasContent && (
             <ContentWrapper>

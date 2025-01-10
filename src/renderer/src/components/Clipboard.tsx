@@ -22,8 +22,8 @@ export const Clipboard = () => {
         size={'sm'}
         css={{
           position: 'absolute',
-          top: '50px',
-          right: '15px',
+          bottom: '10px',
+          left: '15px',
           zIndex: 12
         }}
         aria-label="Settings"
