@@ -5,6 +5,9 @@ import { initializeApp } from './services/window/window'
 import { handleSelectedText } from './ipc/clipboard-handlers'
 import { setupIpcHandlers } from './ipc/handlers'
 import { initializePromptOptions } from './services/ai/prompts'
+import path from 'path'
+import { updateStore } from './store/helpers'
+import { twService } from './services/axios/axios'
 
 app.whenReady().then(() => {
   const registerCopy = registerShortcut('Control+Shift+C', handleSelectedText)
@@ -15,8 +18,27 @@ app.whenReady().then(() => {
 
   electronApp.setAppUserModelId('com.electron')
 
+  if (process.defaultApp) {
+    if (process.argv.length >= 2) {
+      app.setAsDefaultProtocolClient('textwrench', process.execPath, [
+        path.resolve(process.argv[1])
+      ])
+    }
+  } else {
+    app.setAsDefaultProtocolClient('textwrench')
+  }
+
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
+  })
+
+  app.on('open-url', (_, url) => {
+    const urlParams = new URL(url)
+    const token = urlParams.searchParams.get('token')
+    if (token) {
+      updateStore('token', token)
+      twService.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    }
   })
 
   initializeApp()

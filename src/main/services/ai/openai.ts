@@ -1,8 +1,6 @@
 import { Roles, USER_PROMPTS } from './constants'
 import { store } from '../../store'
-import axios from 'axios'
-
-const apiServer = import.meta.env.VITE_API_SERVER
+import { twService } from '../axios/axios'
 
 export const processTextWithAI = async (text: string): Promise<string> => {
   const selectedPrompt = await store.get('selectedPrompt')
@@ -12,7 +10,7 @@ export const processTextWithAI = async (text: string): Promise<string> => {
     content: `${USER_PROMPTS[selectedPrompt]}: \n\n ${text}`
   }
 
-  const response = await axios.post(`${apiServer}/process-text`, {
+  const response = await twService.post('/protected/process-text', {
     text: userPrompt.content
   })
 

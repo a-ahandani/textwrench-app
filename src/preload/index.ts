@@ -11,7 +11,10 @@ const api = {
     return () => {
       ipcRenderer.removeListener(IPC_EVENTS.STORE_CHANGED, subscription)
     }
-  }
+  },
+  getProfile: () => ipcRenderer.invoke(IPC_EVENTS.GET_PROFILE),
+  login: () => ipcRenderer.invoke(IPC_EVENTS.LOGIN),
+  logout: () => ipcRenderer.invoke(IPC_EVENTS.LOGOUT)
 }
 
 if (process.contextIsolated) {

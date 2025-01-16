@@ -4,8 +4,16 @@ export type OptionType = {
   label: string
 }
 
+export type UserProfile = {
+  name: string
+  email: string
+  ID: string
+}
+
 export type StoreType = {
   selectedText?: string
   selectedPrompt?: string
   prompts?: OptionType[]
+  token?: string
+  profile?: UserProfile
 }

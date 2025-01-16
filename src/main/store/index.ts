@@ -3,6 +3,8 @@ import { StoreType } from '../../shared/types/store'
 
 const store = new Store<StoreType>({
   defaults: {
+    token: null,
+    profile: null,
     selectedText: '',
     selectedPrompt: null,
     prompts: []

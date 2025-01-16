@@ -1,17 +1,36 @@
 import { Button, Card } from '@chakra-ui/react'
+import { useProfile } from '@renderer/hooks/useProfile'
 
 export const Settings = () => {
+  const { login, logout, profile, isLoggedIn } = useProfile()
+
   return (
     <Card.Root>
-      <Card.Body gap="2">
-        <Card.Title mt="2">Login to your account</Card.Title>
-        <Card.Description>
-          This is the card body. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </Card.Description>
+      <Card.Body>
+        <Card.Title mt="2">{isLoggedIn ? profile?.name : 'Login to your account'}</Card.Title>
+        <Card.Description>Hello {isLoggedIn ? profile?.name : 'Guest'}</Card.Description>
       </Card.Body>
       <Card.Footer justifyContent="flex-end">
-        <Button variant="outline">Login</Button>
-        <Button>Join</Button>
+        {!isLoggedIn ? (
+          <Button
+            onClick={() => {
+              login()
+            }}
+            variant="outline"
+          >
+            Login
+          </Button>
+        ) : (
+          <Button
+            onClick={() => {
+              logout()
+            }}
+            bg={'red.500'}
+            variant="solid"
+          >
+            Logout
+          </Button>
+        )}
       </Card.Footer>
     </Card.Root>
   )
