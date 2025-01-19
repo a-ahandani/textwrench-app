@@ -5,5 +5,8 @@ export const IPC_EVENTS = {
   WATCH_STORE: 'watch-store',
   LOGIN: 'login',
   LOGOUT: 'logout',
-  GET_PROFILE: 'get-profile'
+  GET_PROFILE: 'get-profile',
+  GET_PROMPTS: 'get-prompts',
+  UPDATE_PROMPT: 'update-prompt',
+  LOGIN_FULFILLED: 'login-fulfilled'
 }

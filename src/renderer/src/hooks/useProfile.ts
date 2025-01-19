@@ -1,30 +1,22 @@
-import { useEffect } from 'react'
-import { useStore } from './useStore'
-import { UserProfile } from 'src/shared/types/store'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { IPC_EVENTS } from '@shared/ipc-events'
+import { UserProfile } from '@shared/types/store'
 
-export const useProfile = () => {
-  const { login, logout, getProfile } = window.api
-  const { value: token } = useStore<UserProfile>({
-    key: 'token'
+const { getProfile } = window.api
+const queryKey = [IPC_EVENTS.GET_PROFILE]
+
+export const useProfile = (props) => {
+  const queryClient = useQueryClient(props)
+
+  const query = useQuery<UserProfile>({
+    queryKey,
+    queryFn: getProfile
   })
-  const { value: profile, isLoading } = useStore<UserProfile>({
-    key: 'profile'
-  })
-
-  const isLoggedIn = !!profile?.ID
-
-  useEffect(() => {
-    if (token && !isLoggedIn) {
-      getProfile()
-    }
-  }, [token])
 
   return {
-    token,
-    profile,
-    isLoading,
-    login,
-    logout,
-    isLoggedIn
+    ...query,
+    removeQuery: () => {
+      queryClient.resetQueries({ queryKey, exact: true })
+    }
   }
 }

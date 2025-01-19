@@ -1,13 +1,14 @@
 import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { registerShortcut } from './services/shortcuts/shortcuts'
-import { initializeApp } from './services/window/window'
+import { getMainWindow, initializeApp } from './services/window/window'
 import { handleSelectedText } from './ipc/clipboard-handlers'
 import { setupIpcHandlers } from './ipc/handlers'
 import { initializePromptOptions } from './services/ai/prompts'
 import path from 'path'
 import { updateStore } from './store/helpers'
 import { twService } from './services/axios/axios'
+import { IPC_EVENTS } from '../shared/ipc-events'
 
 app.whenReady().then(() => {
   const registerCopy = registerShortcut('Control+Shift+C', handleSelectedText)
@@ -35,9 +36,17 @@ app.whenReady().then(() => {
   app.on('open-url', (_, url) => {
     const urlParams = new URL(url)
     const token = urlParams.searchParams.get('token')
+    const mainWindow = getMainWindow()
+
     if (token) {
       updateStore('token', token)
       twService.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      if (mainWindow) {
+        mainWindow.webContents.send(IPC_EVENTS.LOGIN_FULFILLED, { token })
+      }
+    }
+    if (!token && mainWindow) {
+      mainWindow.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
     }
   })
 

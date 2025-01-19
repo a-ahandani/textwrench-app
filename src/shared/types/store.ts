@@ -1,7 +1,7 @@
 export type OptionType = {
-  id: string
   value: string
-  label: string
+  label: string | undefined
+  ID: string
 }
 
 export type UserProfile = {
@@ -10,10 +10,14 @@ export type UserProfile = {
   ID: string
 }
 
+export enum DataTypes {
+  Prompts = 'prompts',
+  Profile = 'profile'
+}
+
 export type StoreType = {
-  selectedText?: string
-  selectedPrompt?: string
-  prompts?: OptionType[]
-  token?: string
-  profile?: UserProfile
+  selectedText?: string | null
+  selectedPrompt?: string | null
+  token?: string | null
+  [DataTypes.Prompts]?: OptionType[] | null
 }
