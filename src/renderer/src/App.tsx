@@ -5,10 +5,10 @@ import { Clipboard } from './components/Clipboard'
 import { Header } from './components/Header'
 import { TabContents } from './components/ui/TabContents'
 import { GoGear, GoPencil, GoTools } from 'react-icons/go'
-import { useProfile } from './hooks/useProfile'
+import { useAuth } from './components/providers/AuthProvider'
 
 function App() {
-  const { isLoggedIn } = useProfile()
+  const { isLoggedIn } = useAuth()
 
   const tabs = [
     { value: 'prompts', icon: <GoPencil />, content: <PromptList />, isProtected: true },

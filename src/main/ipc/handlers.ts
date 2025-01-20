@@ -1,9 +1,10 @@
 import { ipcMain, shell } from 'electron'
-import { IPC_EVENTS } from './constants'
+import { IPC_EVENTS } from '../../shared/ipc-events'
 import { store } from '../store'
 import { updateStore } from '../store/helpers'
-import { StoreType } from '../../shared/types/store'
-import { twService } from '../services/axios/axios'
+import { Prompt, StoreType, UserProfile } from '../../shared/types/store'
+import { handleError, twService } from '../services/axios/axios'
+
 const apiServer = import.meta.env.VITE_API_SERVER
 
 export function setupIpcHandlers() {
@@ -21,12 +22,31 @@ export function setupIpcHandlers() {
   })
 
   ipcMain.handle(IPC_EVENTS.LOGOUT, () => {
-    updateStore('profile', null)
     updateStore('token', null)
+    twService.defaults.headers.common['Authorization'] = ''
   })
 
   ipcMain.handle(IPC_EVENTS.GET_PROFILE, async () => {
-    const profile = await twService.get('/protected/profile')
-    updateStore('profile', profile.data)
+    try {
+      const result = await twService.get<{ data: UserProfile }>('/protected/profile')
+      return result.data
+    } catch (error) {
+      handleError(error)
+    }
+    return
+  })
+
+  ipcMain.handle(IPC_EVENTS.GET_PROMPTS, async () => {
+    try {
+      const result = await twService.get<{ data: Prompt[] }>('/protected/prompts')
+      return result.data
+    } catch (error) {
+      handleError(error)
+    }
+    return
+  })
+
+  ipcMain.handle(IPC_EVENTS.UPDATE_PROMPT, async (prompt) => {
+    await twService.put('/protected/prompts', prompt)
   })
 }

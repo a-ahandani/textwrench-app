@@ -9,7 +9,9 @@ declare global {
       onStoreChange(callback: (data) => void): () => void
       login(): Promise<void>
       logout(): Promise<void>
-      getProfile(): Promise<void>
+      getProfile(): Promise<UserProfile>
+      getPrompts(): Promise<Prompt[]>
+      onLoggedIn(callback: (data) => void): () => void
     }
   }
 }

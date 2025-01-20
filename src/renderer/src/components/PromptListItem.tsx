@@ -9,12 +9,18 @@ type PromptListProps = {
   onChange?: (value: string) => void
   label?: string
   value: string
+  prompt: string
 }
-export const PromptListItem = ({ onChange, label, value }: PromptListProps) => {
+
+export const PromptListItem = ({ onChange, label, value, prompt }: PromptListProps) => {
   const [open, setOpen] = useState(false)
 
   const handleModalOpen = () => {
     setOpen(!open)
+  }
+
+  const handleConfirm = () => {
+    setOpen(false)
   }
 
   return (
@@ -41,13 +47,19 @@ export const PromptListItem = ({ onChange, label, value }: PromptListProps) => {
       />
       <DrawerFull
         open={open}
-        onConfirm={handleModalOpen}
+        onConfirm={handleConfirm}
         onCancel={handleModalOpen}
         icon={GoPencil}
         title={'Edit Prompt'}
       >
         <Input value={label} my="1" placeholder="Prompt title" variant="subtle" />
-        <Textarea value={value} my="1" variant="subtle" placeholder="Prompt details" height={110} />
+        <Textarea
+          value={prompt}
+          my="1"
+          variant="subtle"
+          placeholder="Prompt details"
+          height={110}
+        />
       </DrawerFull>
     </>
   )

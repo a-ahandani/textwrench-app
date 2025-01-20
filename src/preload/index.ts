@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import { IPC_EVENTS } from '../main/ipc/constants'
+import { IPC_EVENTS } from '../shared/ipc-events'
 
 const api = {
   getStoreValue: (key: string) => ipcRenderer.invoke(IPC_EVENTS.GET_STORE_VALUE, key),
@@ -13,8 +13,12 @@ const api = {
     }
   },
   getProfile: () => ipcRenderer.invoke(IPC_EVENTS.GET_PROFILE),
+  getPrompts: () => ipcRenderer.invoke(IPC_EVENTS.GET_PROMPTS),
+  updatePrompt: (prompt) => ipcRenderer.invoke(IPC_EVENTS.UPDATE_PROMPT, prompt),
   login: () => ipcRenderer.invoke(IPC_EVENTS.LOGIN),
-  logout: () => ipcRenderer.invoke(IPC_EVENTS.LOGOUT)
+  logout: () => ipcRenderer.invoke(IPC_EVENTS.LOGOUT),
+  onLoggedIn: (callback) =>
+    ipcRenderer.on(IPC_EVENTS.LOGIN_FULFILLED, (_event, value) => callback(value))
 }
 
 if (process.contextIsolated) {

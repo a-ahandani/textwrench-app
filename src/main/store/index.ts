@@ -5,8 +5,7 @@ const store = new Store<StoreType>({
   defaults: {
     token: null,
     selectedText: '',
-    selectedPrompt: null,
-    prompts: []
+    selectedPrompt: null
   } as StoreType
 }) as Options<StoreType>
 

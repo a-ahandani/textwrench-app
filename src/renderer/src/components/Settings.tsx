@@ -1,8 +1,10 @@
 import { Button, Card } from '@chakra-ui/react'
 import { useProfile } from '@renderer/hooks/useProfile'
+import { useAuth } from './providers/AuthProvider'
 
 export const Settings = () => {
-  const { login, logout, profile, isLoggedIn } = useProfile()
+  const { login, logout, isLoading, isLoggedIn } = useAuth()
+  const { data: profile } = useProfile({ enabled: isLoggedIn })
 
   return (
     <Card.Root>
@@ -18,7 +20,7 @@ export const Settings = () => {
             }}
             variant="outline"
           >
-            Login
+            {isLoading ? 'Loading...' : 'Login'}
           </Button>
         ) : (
           <Button
@@ -28,7 +30,7 @@ export const Settings = () => {
             bg={'red.500'}
             variant="solid"
           >
-            Logout
+            {isLoading ? 'Loading...' : 'Logout'}
           </Button>
         )}
       </Card.Footer>
