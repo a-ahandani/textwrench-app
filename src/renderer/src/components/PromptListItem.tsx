@@ -1,9 +1,10 @@
-import { Box, Button, Input, Textarea } from '@chakra-ui/react'
+import { Box, Button, Input, ProgressRoot, Textarea } from '@chakra-ui/react'
 import { RadioCardItem } from './ui/RadioCard'
 import { DrawerFull } from './Drawer'
 import { useState } from 'react'
 import { GoPencil } from 'react-icons/go'
 import { useUpdatePrompts } from '@renderer/hooks/useUpdatePrompts'
+import { ProgressBar } from './ui/Progress'
 
 type PromptListProps = {
   options?: Array<{ label: string; value: string }>
@@ -29,6 +30,7 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
 
   const handleConfirm = () => {
     updatePrompt(localPrompt)
+    setOpen(false)
   }
 
   return (
@@ -38,6 +40,22 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
         indicatorPlacement="start"
         label={
           <Box display="flex" width="100%">
+            {isPending && (
+              <ProgressRoot
+                position={'absolute'}
+                top="0"
+                left={0}
+                width={'100%'}
+                shape="square"
+                variant="subtle"
+                animated
+                value={null}
+                size="xs"
+                height={1}
+              >
+                <ProgressBar height={1} />
+              </ProgressRoot>
+            )}
             <Box flex="1" display="flex" alignItems={'center'}>
               {label}
             </Box>

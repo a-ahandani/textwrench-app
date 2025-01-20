@@ -4,7 +4,7 @@ import { Prompt } from '@shared/types/store'
 
 const { updatePrompt } = window.api
 const mutationKey = [IPC_EVENTS.UPDATE_PROMPT]
-
+const queryKey = [IPC_EVENTS.GET_PROMPTS]
 export const useUpdatePrompts = ({
   id,
   onSuccess,
@@ -12,18 +12,29 @@ export const useUpdatePrompts = ({
 }: {
   id: Prompt['ID']
   onSuccess?: (data: Prompt) => void
-  onError?: (error: unknown) => void
+  onError?: (error) => void
 }) => {
   const queryClient = useQueryClient()
-  return useMutation<Prompt, unknown, Partial<Prompt>>({
+  return useMutation({
     mutationKey,
-    mutationFn: (prompt) => updatePrompt({ ...prompt, ID: id }),
+    mutationFn: (prompt: Partial<Prompt>) => updatePrompt({ ...prompt, ID: id }),
+    onMutate: (prompt) => {
+      queryClient.cancelQueries({ queryKey })
+      const previousValue = queryClient.getQueryData<Prompt[]>(queryKey)
+      queryClient.setQueryData(queryKey, (old: Prompt[]) =>
+        old.map((item) => (item.ID === id ? { ...item, ...prompt } : item))
+      )
+
+      return { previousValue }
+    },
     onSuccess: (data) => {
-      // e.g. queryClient.invalidateQueries(queryKey)
-      // or queryClient.setQueryData(queryKey, data)
-      queryClient.invalidateQueries({ queryKey: [IPC_EVENTS.GET_PROMPTS] })
+      queryClient.invalidateQueries({ queryKey })
       onSuccess?.(data)
     },
-    onError
+    onError: (err, newPrompt, context) => {
+      queryClient.setQueryData(queryKey, context?.previousValue)
+      queryClient.invalidateQueries({ queryKey })
+      onError?.(err)
+    }
   })
 }
