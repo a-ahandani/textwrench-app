@@ -29,7 +29,11 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
   }
 
   const handleConfirm = () => {
-    updatePrompt(localPrompt)
+    updatePrompt({
+      ...localPrompt,
+      value: localPrompt.prompt,
+      label: localPrompt.label
+    })
     setOpen(false)
   }
 

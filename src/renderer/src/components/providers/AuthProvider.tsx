@@ -22,7 +22,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const handleLogin = () => {
     setIsLoading(true)
     login()
-    setIsLoggedIn(true)
   }
 
   const handleLogout = () => {
@@ -32,9 +31,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(false)
   }
   useEffect(() => {
-    onLoggedIn(() => {
+    onLoggedIn((data) => {
       setIsLoading(false)
-      setIsLoggedIn(true)
+      if (data?.token) {
+        setIsLoggedIn(true)
+      } else {
+        setIsLoggedIn(false)
+      }
     })
   }, [])
 

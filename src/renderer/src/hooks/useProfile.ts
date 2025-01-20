@@ -6,11 +6,12 @@ const { getProfile } = window.api
 const queryKey = [IPC_EVENTS.GET_PROFILE]
 
 export const useProfile = (props) => {
-  const queryClient = useQueryClient(props)
+  const queryClient = useQueryClient()
 
   const query = useQuery<UserProfile>({
     queryKey,
-    queryFn: getProfile
+    queryFn: getProfile,
+    ...props
   })
 
   return {

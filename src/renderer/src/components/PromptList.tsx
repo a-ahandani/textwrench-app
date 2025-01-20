@@ -14,12 +14,16 @@ type PromptListProps = {
 }
 export const PromptList = ({ label }: PromptListProps) => {
   const { data: prompts, isLoading } = usePrompts()
-  const { setValue: setSelectedPrompt } = useStore({ key: 'selectedPrompt' })
+  const { setValue: setSelectedPrompt, value: selectedPrompt } = useStore<number>({
+    key: 'selectedPrompt'
+  })
 
-  const handleChange = (value: string) => {
-    setSelectedPrompt(value)
+  const handleChange = (e) => {
+    const promptId = e?.target?.value
+    setSelectedPrompt(promptId)
   }
 
+  console.log('selectedPrompt', selectedPrompt)
   return (
     <Box>
       {isLoading ? (
@@ -29,15 +33,19 @@ export const PromptList = ({ label }: PromptListProps) => {
           <InputGroup width="full" mb="2" startElement={<LuSearch />} endElement={<Kbd>⌘K</Kbd>}>
             <Input variant="flushed" placeholder="Search prompts" />
           </InputGroup>
-          <RadioCardRoot size="sm" variant="surface" defaultValue={prompts?.[0]?.value || ''}>
+          <RadioCardRoot
+            size="sm"
+            variant="surface"
+            onChange={handleChange}
+            value={String(selectedPrompt || prompts?.[0]?.ID)}
+          >
             <RadioCardLabel>{label}</RadioCardLabel>
             <Group attached orientation="vertical">
               {prompts?.map((item) => (
                 <PromptListItem
                   key={item.ID}
-                  value={item.ID}
+                  value={String(item.ID)}
                   label={item.label}
-                  onChange={handleChange}
                   prompt={item.value}
                 />
               ))}

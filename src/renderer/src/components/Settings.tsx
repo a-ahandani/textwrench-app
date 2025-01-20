@@ -1,16 +1,26 @@
-import { Button, Card } from '@chakra-ui/react'
+import { Button, Card, ProgressRoot } from '@chakra-ui/react'
 import { useProfile } from '@renderer/hooks/useProfile'
 import { useAuth } from './providers/AuthProvider'
+import { ProgressBar } from './ui/Progress'
 
 export const Settings = () => {
-  const { login, logout, isLoading, isLoggedIn } = useAuth()
-  const { data: profile } = useProfile({ enabled: isLoggedIn })
+  const { login, logout, isLoading: isLoggingIn, isLoggedIn } = useAuth()
+  const { data: profile, isLoading, isFetched } = useProfile({ enabled: isLoggedIn })
 
   return (
     <Card.Root>
       <Card.Body>
-        <Card.Title mt="2">{isLoggedIn ? profile?.name : 'Login to your account'}</Card.Title>
-        <Card.Description>Hello {isLoggedIn ? profile?.name : 'Guest'}</Card.Description>
+        {isLoading && (
+          <ProgressRoot shape="square" variant="subtle" animated value={null} size="xs" mb={2}>
+            <ProgressBar />
+          </ProgressRoot>
+        )}
+        <Card.Title mt="2">
+          {isLoggedIn && isFetched ? profile?.name : 'Login to your account'}
+        </Card.Title>
+        <Card.Description>
+          Hello {isLoggedIn && isFetched ? profile?.name : 'Guest'}
+        </Card.Description>
       </Card.Body>
       <Card.Footer justifyContent="flex-end">
         {!isLoggedIn ? (
@@ -20,7 +30,7 @@ export const Settings = () => {
             }}
             variant="outline"
           >
-            {isLoading ? 'Loading...' : 'Login'}
+            {isLoggingIn ? 'Loading...' : 'Login'}
           </Button>
         ) : (
           <Button
@@ -30,7 +40,7 @@ export const Settings = () => {
             bg={'red.500'}
             variant="solid"
           >
-            {isLoading ? 'Loading...' : 'Logout'}
+            {isLoggingIn ? 'Loading...' : 'Logout'}
           </Button>
         )}
       </Card.Footer>

@@ -9,6 +9,7 @@ import path from 'path'
 import { updateStore } from './store/helpers'
 import { twService } from './services/axios/axios'
 import { IPC_EVENTS } from '../shared/ipc-events'
+import { verifyToken } from './services/auth/verifyToken'
 
 app.whenReady().then(() => {
   const registerCopy = registerShortcut('Control+Shift+C', handleSelectedText)
@@ -53,6 +54,7 @@ app.whenReady().then(() => {
   initializeApp()
   initializePromptOptions()
   setupIpcHandlers()
+  verifyToken()
 
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) initializeApp()
