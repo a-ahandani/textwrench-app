@@ -3,6 +3,7 @@ import { RadioCardItem } from './ui/RadioCard'
 import { DrawerFull } from './Drawer'
 import { useState } from 'react'
 import { GoPencil } from 'react-icons/go'
+import { useUpdatePrompts } from '@renderer/hooks/useUpdatePrompts'
 
 type PromptListProps = {
   options?: Array<{ label: string; value: string }>
@@ -14,13 +15,20 @@ type PromptListProps = {
 
 export const PromptListItem = ({ onChange, label, value, prompt }: PromptListProps) => {
   const [open, setOpen] = useState(false)
+  const [localPrompt, setLocalPrompt] = useState({ label, prompt })
+  const { mutate: updatePrompt, isPending } = useUpdatePrompts({
+    id: value,
+    onSuccess: () => {
+      setOpen(false)
+    }
+  })
 
   const handleModalOpen = () => {
     setOpen(!open)
   }
 
   const handleConfirm = () => {
-    setOpen(false)
+    updatePrompt(localPrompt)
   }
 
   return (
@@ -51,10 +59,22 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
         onCancel={handleModalOpen}
         icon={GoPencil}
         title={'Edit Prompt'}
+        isLoading={isPending}
       >
-        <Input value={label} my="1" placeholder="Prompt title" variant="subtle" />
+        <Input
+          value={localPrompt.label}
+          onChange={(e) => {
+            setLocalPrompt({ ...localPrompt, label: e.target.value })
+          }}
+          my="1"
+          placeholder="Prompt title"
+          variant="subtle"
+        />
         <Textarea
-          value={prompt}
+          value={localPrompt.prompt}
+          onChange={(e) => {
+            setLocalPrompt({ ...localPrompt, prompt: e.target.value })
+          }}
           my="1"
           variant="subtle"
           placeholder="Prompt details"

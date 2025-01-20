@@ -1,6 +1,7 @@
-import { Box, Drawer as ChakraDrawer, Button, Portal } from '@chakra-ui/react'
+import { Box, Drawer as ChakraDrawer, Button, Portal, ProgressRoot } from '@chakra-ui/react'
 import * as React from 'react'
 import { GoCheck, GoX } from 'react-icons/go'
+import { ProgressBar } from './ui/Progress'
 
 interface DrawerContentProps extends ChakraDrawer.ContentProps {
   portalled?: boolean
@@ -32,6 +33,7 @@ type DrawerFullProps = {
   cancelLabel?: string
   title?: string
   icon?: React.ComponentType
+  isLoading?: boolean
 }
 
 export const DrawerFull = ({
@@ -42,13 +44,19 @@ export const DrawerFull = ({
   onCancel,
   children,
   title,
-  icon: Icon
+  icon: Icon,
+  isLoading
 }: DrawerFullProps) => (
   <DrawerRoot open={open} placement="bottom" size="full">
     <DrawerBackdrop />
     <DrawerContent>
       {title && (
         <DrawerHeader pt="10" pb="2">
+          {isLoading && (
+            <ProgressRoot shape="square" variant="subtle" animated value={null} size="xs" mb={2}>
+              <ProgressBar />
+            </ProgressRoot>
+          )}
           <DrawerTitle>
             <Box display="flex" alignItems="center">
               {Icon && <Icon />}
