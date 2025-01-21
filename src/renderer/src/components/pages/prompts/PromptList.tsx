@@ -7,13 +7,18 @@ import { LuSearch } from 'react-icons/lu'
 import { InputGroup } from '../../ui/InputGroup'
 import { usePrompts } from '@renderer/hooks/usePrompts'
 import { Prompt } from '@shared/types/store'
+import { useState } from 'react'
 
 type PromptListProps = {
   label?: string
 }
 
 export const PromptList = ({ label }: PromptListProps) => {
-  const { data: prompts, isLoading } = usePrompts()
+  const [term, setTerm] = useState<string>('')
+  const { data: prompts, isLoading } = usePrompts({
+    term
+  })
+
   const { setValue: setSelectedPrompt, value: selectedPrompt } = useStore<Prompt>({
     key: 'selectedPrompt'
   })
@@ -31,7 +36,14 @@ export const PromptList = ({ label }: PromptListProps) => {
       ) : (
         <DataListRoot unstyled>
           <InputGroup width="full" mb="2" startElement={<LuSearch />} endElement={<Kbd>⌘K</Kbd>}>
-            <Input variant="flushed" placeholder="Search prompts" />
+            <Input
+              variant="flushed"
+              placeholder="Search prompts"
+              value={term}
+              onChange={(e) => {
+                setTerm(e.target.value)
+              }}
+            />
           </InputGroup>
           <RadioCardRoot
             size="sm"

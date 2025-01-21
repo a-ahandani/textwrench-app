@@ -6,14 +6,28 @@ import { useAuth } from '@renderer/components/providers/AuthProvider'
 const { getPrompts } = window.api
 const queryKey = [IPC_EVENTS.GET_PROMPTS]
 
-export const usePrompts = () => {
+export const usePrompts = (props: { term?: string; id?: Prompt['ID'] } | undefined) => {
+  const { term, id } = props || {}
+
   const { isLoggedIn } = useAuth()
   const queryClient = useQueryClient()
 
   const query = useQuery<Prompt[]>({
     queryKey,
     queryFn: getPrompts,
-    enabled: isLoggedIn
+    enabled: isLoggedIn,
+    select: (data) => {
+      return data.filter((item) => {
+        const matchesTerm = term
+          ? item.label?.toLowerCase().includes(term.toLowerCase()) ||
+            item.value?.toLowerCase().includes(term.toLowerCase())
+          : true
+
+        const matchesId = id ? item.ID === id : true
+
+        return matchesTerm && matchesId
+      })
+    }
   })
 
   return {
