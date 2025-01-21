@@ -65,12 +65,10 @@ export const DrawerFull = ({
                 {title}
               </Box>
               {onCancel && (
-                <DrawerActionTrigger>
-                  <Button aria-label={cancelLabel} size={'xs'} variant="ghost" onClick={onCancel}>
-                    <GoX />
-                    {cancelLabel}
-                  </Button>
-                </DrawerActionTrigger>
+                <Button aria-label={cancelLabel} size={'xs'} variant="ghost" onClick={onCancel}>
+                  <GoX />
+                  {cancelLabel}
+                </Button>
               )}
               {onConfirm && (
                 <Button

@@ -1,4 +1,4 @@
-import { Box, DataListRoot, Group, Input, Kbd, RadioCardLabel } from '@chakra-ui/react'
+import { Box, DataListRoot, Flex, Group, Input, RadioCardLabel } from '@chakra-ui/react'
 import { RadioCardRoot } from '../../ui/RadioCard'
 import { PromptListItem } from './PromptListItem'
 import { useStore } from '../../../hooks/useStore'
@@ -8,6 +8,8 @@ import { InputGroup } from '../../ui/InputGroup'
 import { usePrompts } from '@renderer/hooks/usePrompts'
 import { Prompt } from '@shared/types/store'
 import { useState } from 'react'
+import { Button } from '@renderer/components/ui/Button'
+import { GoPlus } from 'react-icons/go'
 
 type PromptListProps = {
   label?: string
@@ -35,16 +37,28 @@ export const PromptList = ({ label }: PromptListProps) => {
         <SkeletonText noOfLines={4} />
       ) : (
         <DataListRoot unstyled>
-          <InputGroup width="full" mb="2" startElement={<LuSearch />} endElement={<Kbd>⌘K</Kbd>}>
-            <Input
-              variant="flushed"
-              placeholder="Search prompts"
-              value={term}
-              onChange={(e) => {
-                setTerm(e.target.value)
-              }}
-            />
-          </InputGroup>
+          <Flex align={'center'} justify={'space-between'} mb={2}>
+            <InputGroup
+              width="full"
+              mb="2"
+              startElement={<LuSearch />}
+              endElement={
+                <Button size="xs" variant="solid" colorPalette="green">
+                  <GoPlus /> Add Prompt
+                </Button>
+              }
+            >
+              <Input
+                variant="subtle"
+                placeholder="Search prompts"
+                value={term}
+                onChange={(e) => {
+                  setTerm(e.target.value)
+                }}
+              />
+            </InputGroup>
+          </Flex>
+
           <RadioCardRoot
             size="sm"
             variant="surface"
