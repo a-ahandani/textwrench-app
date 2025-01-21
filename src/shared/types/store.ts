@@ -12,6 +12,6 @@ export type UserProfile = {
 
 export type StoreType = {
   selectedText?: string | null
-  selectedPrompt?: string | null
+  selectedPrompt?: Prompt
   token?: string | null
 }

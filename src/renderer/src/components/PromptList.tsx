@@ -6,24 +6,24 @@ import { SkeletonText } from './ui/Skeleton'
 import { LuSearch } from 'react-icons/lu'
 import { InputGroup } from './ui/InputGroup'
 import { usePrompts } from '@renderer/hooks/usePrompts'
+import { Prompt } from '@shared/types/store'
 
 type PromptListProps = {
-  options?: Array<{ label: string; value: string }>
-  onChange?: (value: string) => void
   label?: string
 }
+
 export const PromptList = ({ label }: PromptListProps) => {
   const { data: prompts, isLoading } = usePrompts()
-  const { setValue: setSelectedPrompt, value: selectedPrompt } = useStore<number>({
+  const { setValue: setSelectedPrompt, value: selectedPrompt } = useStore<Prompt>({
     key: 'selectedPrompt'
   })
 
   const handleChange = (e) => {
     const promptId = e?.target?.value
-    setSelectedPrompt(promptId)
+    const prompt = prompts?.find((item) => item.ID == promptId)
+    setSelectedPrompt(prompt)
   }
 
-  console.log('selectedPrompt', selectedPrompt)
   return (
     <Box>
       {isLoading ? (
@@ -37,7 +37,7 @@ export const PromptList = ({ label }: PromptListProps) => {
             size="sm"
             variant="surface"
             onChange={handleChange}
-            value={String(selectedPrompt || prompts?.[0]?.ID)}
+            value={String(selectedPrompt?.ID || prompts?.[0]?.ID)}
           >
             <RadioCardLabel>{label}</RadioCardLabel>
             <Group attached orientation="vertical">

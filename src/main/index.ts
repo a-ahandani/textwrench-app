@@ -4,7 +4,6 @@ import { registerShortcut } from './services/shortcuts/shortcuts'
 import { getMainWindow, initializeApp } from './services/window/window'
 import { handleSelectedText } from './ipc/clipboard-handlers'
 import { setupIpcHandlers } from './ipc/handlers'
-import { initializePromptOptions } from './services/ai/prompts'
 import path from 'path'
 import { updateStore } from './store/helpers'
 import { twService } from './services/axios/axios'
@@ -52,7 +51,6 @@ app.whenReady().then(() => {
   })
 
   initializeApp()
-  initializePromptOptions()
   setupIpcHandlers()
   verifyToken()
 
