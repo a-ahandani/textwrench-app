@@ -1,7 +1,8 @@
-import { Box, Drawer as ChakraDrawer, Button, Portal, ProgressRoot } from '@chakra-ui/react'
+import { Box, Drawer as ChakraDrawer, Portal, ProgressRoot } from '@chakra-ui/react'
 import * as React from 'react'
 import { GoCheck, GoX } from 'react-icons/go'
 import { ProgressBar } from './Progress'
+import { Button } from '@renderer/components/ui/Button'
 
 interface DrawerContentProps extends ChakraDrawer.ContentProps {
   portalled?: boolean

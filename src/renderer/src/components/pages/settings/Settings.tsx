@@ -1,7 +1,8 @@
-import { Button, Card, ProgressRoot } from '@chakra-ui/react'
+import { Card, ProgressRoot } from '@chakra-ui/react'
 import { useProfile } from '@renderer/hooks/useProfile'
 import { useAuth } from '../../providers/AuthProvider'
 import { ProgressBar } from '../../ui/Progress'
+import { Button } from '@renderer/components/ui/Button'
 
 export const Settings = () => {
   const { login, logout, isLoading: isLoggingIn, isLoggedIn } = useAuth()
@@ -29,8 +30,9 @@ export const Settings = () => {
               login()
             }}
             variant="outline"
+            loading={isLoggingIn}
           >
-            {isLoggingIn ? 'Loading...' : 'Login'}
+            Login
           </Button>
         ) : (
           <Button
@@ -39,8 +41,9 @@ export const Settings = () => {
             }}
             bg={'red.500'}
             variant="solid"
+            loading={isLoggingIn}
           >
-            {isLoggingIn ? 'Loading...' : 'Logout'}
+            Logout
           </Button>
         )}
       </Card.Footer>
