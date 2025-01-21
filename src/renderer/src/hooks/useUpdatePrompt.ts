@@ -5,7 +5,7 @@ import { Prompt } from '@shared/types/store'
 const { updatePrompt } = window.api
 const mutationKey = [IPC_EVENTS.UPDATE_PROMPT]
 const queryKey = [IPC_EVENTS.GET_PROMPTS]
-export const useUpdatePrompts = ({
+export const useUpdatePrompt = ({
   id,
   onSuccess,
   onError

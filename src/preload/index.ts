@@ -15,6 +15,7 @@ const api = {
   getProfile: () => ipcRenderer.invoke(IPC_EVENTS.GET_PROFILE),
   getPrompts: () => ipcRenderer.invoke(IPC_EVENTS.GET_PROMPTS),
   updatePrompt: (prompt) => ipcRenderer.invoke(IPC_EVENTS.UPDATE_PROMPT, prompt),
+  createPrompt: (prompt) => ipcRenderer.invoke(IPC_EVENTS.CREATE_PROMPT, prompt),
   login: () => ipcRenderer.invoke(IPC_EVENTS.LOGIN),
   logout: () => ipcRenderer.invoke(IPC_EVENTS.LOGOUT),
   onLoggedIn: (callback) =>

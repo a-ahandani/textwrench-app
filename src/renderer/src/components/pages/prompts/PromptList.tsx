@@ -10,6 +10,8 @@ import { Prompt } from '@shared/types/store'
 import { useState } from 'react'
 import { Button } from '@renderer/components/ui/Button'
 import { GoPlus } from 'react-icons/go'
+import { PromptForm } from './PromptForm'
+import { useCreatePrompt } from '@renderer/hooks/useCreatePrompt'
 
 type PromptListProps = {
   label?: string
@@ -17,6 +19,14 @@ type PromptListProps = {
 
 export const PromptList = ({ label }: PromptListProps) => {
   const [term, setTerm] = useState<string>('')
+  const [open, setOpen] = useState(false)
+
+  const { mutate: createPrompt, isPending } = useCreatePrompt({
+    onSuccess: () => {
+      setOpen(false)
+    }
+  })
+
   const { data: prompts, isLoading } = usePrompts({
     term
   })
@@ -31,6 +41,11 @@ export const PromptList = ({ label }: PromptListProps) => {
     setSelectedPrompt(prompt)
   }
 
+  const handleSubmitNewPrompt = (prompt: Partial<Prompt>) => {
+    createPrompt(prompt)
+    setOpen(false)
+  }
+
   return (
     <Box>
       {isLoading ? (
@@ -43,7 +58,14 @@ export const PromptList = ({ label }: PromptListProps) => {
               mb="2"
               startElement={<LuSearch />}
               endElement={
-                <Button size="xs" variant="solid" colorPalette="green">
+                <Button
+                  onClick={() => {
+                    setOpen(true)
+                  }}
+                  size="xs"
+                  variant="solid"
+                  colorPalette="green"
+                >
                   <GoPlus /> Add Prompt
                 </Button>
               }
@@ -79,6 +101,12 @@ export const PromptList = ({ label }: PromptListProps) => {
           </RadioCardRoot>
         </DataListRoot>
       )}
+      <PromptForm
+        isLoading={isPending}
+        open={open}
+        onSubmit={handleSubmitNewPrompt}
+        onClose={() => setOpen(false)}
+      />
     </Box>
   )
 }

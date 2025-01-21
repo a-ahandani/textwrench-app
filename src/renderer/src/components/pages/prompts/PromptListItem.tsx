@@ -2,7 +2,7 @@ import { Box, ProgressRoot } from '@chakra-ui/react'
 import { RadioCardItem } from '../../ui/RadioCard'
 import { useState } from 'react'
 import { GoPencil } from 'react-icons/go'
-import { useUpdatePrompts } from '@renderer/hooks/useUpdatePrompts'
+import { useUpdatePrompt } from '@renderer/hooks/useUpdatePrompt'
 import { ProgressBar } from '../../ui/Progress'
 import { PromptForm } from './PromptForm'
 import { Button } from '@renderer/components/ui/Button'
@@ -18,7 +18,7 @@ type PromptListProps = {
 export const PromptListItem = ({ onChange, label, value, prompt }: PromptListProps) => {
   const [open, setOpen] = useState(false)
 
-  const { mutate: updatePrompt, isPending } = useUpdatePrompts({
+  const { mutate: updatePrompt, isPending } = useUpdatePrompt({
     id: value,
     onSuccess: () => {
       setOpen(false)

@@ -12,6 +12,7 @@ declare global {
       getProfile(): Promise<UserProfile>
       getPrompts(): Promise<Prompt[]>
       updatePrompt(prompt: Partial<Prompt>): Promise<Prompt>
+      createPrompt(prompt: Partial<Prompt>): Promise<Prompt>
       onLoggedIn(callback: (data) => void): () => void
     }
   }

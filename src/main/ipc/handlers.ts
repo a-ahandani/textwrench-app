@@ -59,4 +59,18 @@ export function setupIpcHandlers() {
     }
     return
   })
+
+  ipcMain.handle(IPC_EVENTS.CREATE_PROMPT, async (_event, prompt: Prompt) => {
+    const { value, label } = prompt
+    try {
+      const result = await twService.post<{ data: Prompt }>(`/protected/prompts`, {
+        value,
+        label
+      })
+      return result.data
+    } catch (error) {
+      handleError(error)
+    }
+    return
+  })
 }

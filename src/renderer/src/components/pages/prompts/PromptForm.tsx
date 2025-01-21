@@ -20,6 +20,8 @@ export const PromptForm = ({
   isLoading,
   initialValue
 }: PromptFormProps) => {
+  const isCreate = !initialValue
+
   const [localPrompt, setLocalPrompt] = useState({
     label: initialValue?.label || '',
     prompt: initialValue?.value || ''
@@ -39,7 +41,7 @@ export const PromptForm = ({
       onConfirm={handleConfirm}
       onCancel={onClose}
       icon={GoPencil}
-      title={'Edit Prompt'}
+      title={isCreate ? 'Add new prompt' : 'Edit prompt'}
       isLoading={isLoading}
     >
       <Input
