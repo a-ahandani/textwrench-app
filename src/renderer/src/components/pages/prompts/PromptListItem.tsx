@@ -1,11 +1,12 @@
-import { Box, ProgressRoot } from '@chakra-ui/react'
+import { Box, Group, ProgressRoot } from '@chakra-ui/react'
 import { RadioCardItem } from '../../ui/RadioCard'
 import { useState } from 'react'
-import { GoPencil } from 'react-icons/go'
+import { GoPencil, GoX } from 'react-icons/go'
 import { useUpdatePrompt } from '@renderer/hooks/useUpdatePrompt'
 import { ProgressBar } from '../../ui/Progress'
 import { PromptForm } from './PromptForm'
 import { Button } from '@renderer/components/ui/Button'
+import { useDeletePrompt } from '@renderer/hooks/useDeletePrompt'
 
 type PromptListProps = {
   options?: Array<{ label: string; value: string }>
@@ -18,7 +19,14 @@ type PromptListProps = {
 export const PromptListItem = ({ onChange, label, value, prompt }: PromptListProps) => {
   const [open, setOpen] = useState(false)
 
-  const { mutate: updatePrompt, isPending } = useUpdatePrompt({
+  const { mutate: updatePrompt, isPending: isUpdating } = useUpdatePrompt({
+    id: value,
+    onSuccess: () => {
+      setOpen(false)
+    }
+  })
+
+  const { mutate: deletePrompt, isPending: isDeleting } = useDeletePrompt({
     id: value,
     onSuccess: () => {
       setOpen(false)
@@ -29,12 +37,16 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
     setOpen(!open)
   }
 
-  const handleConfirm = (prompt) => {
+  const handleUpdate = (prompt) => {
     updatePrompt({
       value: prompt.prompt,
       label: prompt.label
     })
     setOpen(false)
+  }
+
+  const handleDelete = () => {
+    deletePrompt()
   }
 
   return (
@@ -44,7 +56,7 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
         indicatorPlacement="start"
         label={
           <Box display="flex" width="100%">
-            {isPending && (
+            {(isUpdating || isDeleting) && (
               <ProgressRoot
                 position={'absolute'}
                 top="0"
@@ -63,10 +75,15 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
             <Box flex="1" display="flex" alignItems={'center'}>
               {label}
             </Box>
-            <Button variant="ghost" size="xs" onClick={handleModalOpen}>
-              <GoPencil />
-              Edit Prompt
-            </Button>
+            <Group attached>
+              <Button variant="subtle" color="red.400" size="xs" onClick={handleDelete}>
+                <GoX />
+              </Button>
+              <Button variant="subtle" size="xs" onClick={handleModalOpen}>
+                <GoPencil />
+                Edit Prompt
+              </Button>
+            </Group>
           </Box>
         }
         key={value}
@@ -77,9 +94,9 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
       />
       <PromptForm
         open={open}
-        isLoading={isPending}
+        isLoading={isUpdating}
         initialValue={{ label, value: prompt }}
-        onSubmit={handleConfirm}
+        onSubmit={handleUpdate}
         onClose={handleModalOpen}
       />
     </>

@@ -23,7 +23,7 @@ export const useUpdatePrompt = ({
       queryClient.cancelQueries({ queryKey })
       const previousValue = queryClient.getQueryData<Prompt[]>(queryKey)
       queryClient.setQueryData(queryKey, (old: Prompt[]) =>
-        old.map((item) => (item.ID === id ? { ...item, ...prompt } : item))
+        old.map((item) => (item.ID == id ? { ...item, ...prompt } : item))
       )
 
       return { previousValue }
@@ -32,7 +32,7 @@ export const useUpdatePrompt = ({
       queryClient.invalidateQueries({ queryKey })
       onSuccess?.(data)
     },
-    onError: (err, newPrompt, context) => {
+    onError: (err, _, context) => {
       queryClient.setQueryData(queryKey, context?.previousValue)
       queryClient.invalidateQueries({ queryKey })
       onError?.(err)

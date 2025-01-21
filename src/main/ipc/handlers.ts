@@ -73,4 +73,15 @@ export function setupIpcHandlers() {
     }
     return
   })
+
+  ipcMain.handle(IPC_EVENTS.DELETE_PROMPT, async (_event, prompt: Prompt) => {
+    const { ID } = prompt
+    try {
+      const result = await twService.delete<{ data: Prompt }>(`/protected/prompts/${ID}`)
+      return result.data
+    } catch (error) {
+      handleError(error)
+    }
+    return
+  })
 }

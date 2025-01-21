@@ -2,31 +2,33 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { IPC_EVENTS } from '@shared/ipc-events'
 import { Prompt } from '@shared/types/store'
 
-const { createPrompt } = window.api
-const mutationKey = [IPC_EVENTS.CREATE_PROMPT]
+const { deletePrompt } = window.api
+const mutationKey = [IPC_EVENTS.DELETE_PROMPT]
 const queryKey = [IPC_EVENTS.GET_PROMPTS]
-export const useCreatePrompt = ({
+export const useDeletePrompt = ({
+  id,
   onSuccess,
   onError
 }: {
-  onSuccess?: (data: Prompt) => void
+  id?: Prompt['ID']
+  onSuccess?: () => void
   onError?: (error) => void
 }) => {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationKey,
-    mutationFn: (prompt: Partial<Prompt>) => createPrompt({ ...prompt }),
-    onMutate: (prompt) => {
+    mutationFn: () => deletePrompt({ ID: id }),
+    onMutate: () => {
       queryClient.cancelQueries({ queryKey })
       const previousValue = queryClient.getQueryData<Prompt[]>(queryKey)
-      queryClient.setQueryData(queryKey, (old: Prompt[]) => [{ ...prompt, ID: 'temp_id' }, ...old])
+      queryClient.setQueryData(queryKey, (old: Prompt[]) => old.filter((item) => item.ID != id))
 
       return { previousValue }
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey })
-      onSuccess?.(data)
+      onSuccess?.()
     },
     onError: (err, _, context) => {
       queryClient.setQueryData(queryKey, context?.previousValue)
