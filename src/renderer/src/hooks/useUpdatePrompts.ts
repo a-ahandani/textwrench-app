@@ -10,11 +10,12 @@ export const useUpdatePrompts = ({
   onSuccess,
   onError
 }: {
-  id: Prompt['ID']
+  id?: Prompt['ID']
   onSuccess?: (data: Prompt) => void
   onError?: (error) => void
 }) => {
   const queryClient = useQueryClient()
+
   return useMutation({
     mutationKey,
     mutationFn: (prompt: Partial<Prompt>) => updatePrompt({ ...prompt, ID: id }),

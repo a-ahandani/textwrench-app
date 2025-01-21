@@ -6,7 +6,7 @@ import { useAuth } from '@renderer/components/providers/AuthProvider'
 const { getPrompts } = window.api
 const queryKey = [IPC_EVENTS.GET_PROMPTS]
 
-export const usePrompts = (props: { term?: string; id?: Prompt['ID'] } | undefined) => {
+export const usePrompts = (props?: { term?: string; id?: Prompt['ID'] } | undefined) => {
   const { term, id } = props || {}
 
   const { isLoggedIn } = useAuth()

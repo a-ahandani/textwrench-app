@@ -1,10 +1,10 @@
-import { Box, Button, Input, ProgressRoot, Textarea } from '@chakra-ui/react'
+import { Box, Button, ProgressRoot } from '@chakra-ui/react'
 import { RadioCardItem } from '../../ui/RadioCard'
-import { DrawerFull } from '../../ui/Drawer'
 import { useState } from 'react'
 import { GoPencil } from 'react-icons/go'
 import { useUpdatePrompts } from '@renderer/hooks/useUpdatePrompts'
 import { ProgressBar } from '../../ui/Progress'
+import { PromptForm } from './PromptForm'
 
 type PromptListProps = {
   options?: Array<{ label: string; value: string }>
@@ -16,7 +16,7 @@ type PromptListProps = {
 
 export const PromptListItem = ({ onChange, label, value, prompt }: PromptListProps) => {
   const [open, setOpen] = useState(false)
-  const [localPrompt, setLocalPrompt] = useState({ label, prompt })
+
   const { mutate: updatePrompt, isPending } = useUpdatePrompts({
     id: value,
     onSuccess: () => {
@@ -28,11 +28,10 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
     setOpen(!open)
   }
 
-  const handleConfirm = () => {
+  const handleConfirm = (prompt) => {
     updatePrompt({
-      ...localPrompt,
-      value: localPrompt.prompt,
-      label: localPrompt.label
+      value: prompt.prompt,
+      label: prompt.label
     })
     setOpen(false)
   }
@@ -75,34 +74,13 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
           onChange?.(value)
         }}
       />
-      <DrawerFull
+      <PromptForm
         open={open}
-        onConfirm={handleConfirm}
-        onCancel={handleModalOpen}
-        icon={GoPencil}
-        title={'Edit Prompt'}
         isLoading={isPending}
-      >
-        <Input
-          value={localPrompt.label}
-          onChange={(e) => {
-            setLocalPrompt({ ...localPrompt, label: e.target.value })
-          }}
-          my="1"
-          placeholder="Prompt title"
-          variant="subtle"
-        />
-        <Textarea
-          value={localPrompt.prompt}
-          onChange={(e) => {
-            setLocalPrompt({ ...localPrompt, prompt: e.target.value })
-          }}
-          my="1"
-          variant="subtle"
-          placeholder="Prompt details"
-          height={110}
-        />
-      </DrawerFull>
+        initialValue={{ label, value: prompt }}
+        onSubmit={handleConfirm}
+        onClose={handleModalOpen}
+      />
     </>
   )
 }
