@@ -1,6 +1,6 @@
 import { Card, IconButton } from '@chakra-ui/react'
 import { BsClipboard } from 'react-icons/bs'
-import { DrawerFull } from './Drawer'
+import { DrawerFull } from '../../ui/Drawer'
 import { useState } from 'react'
 import { useStore } from '@renderer/hooks/useStore'
 

@@ -1,7 +1,7 @@
 import { Button, Card, ProgressRoot } from '@chakra-ui/react'
 import { useProfile } from '@renderer/hooks/useProfile'
-import { useAuth } from './providers/AuthProvider'
-import { ProgressBar } from './ui/Progress'
+import { useAuth } from '../../providers/AuthProvider'
+import { ProgressBar } from '../../ui/Progress'
 
 export const Settings = () => {
   const { login, logout, isLoading: isLoggingIn, isLoggedIn } = useAuth()

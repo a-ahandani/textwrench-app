@@ -32,7 +32,7 @@ export const useStore = <K>({ key }: useStoreProps): useStoreReturnType<K> => {
     return () => {
       unsubscribe()
     }
-  }, [key, localValue])
+  }, [])
 
   const handleSetStoreValue = (value: StoreType[keyof StoreType]) => {
     setStoreValue(key, value)

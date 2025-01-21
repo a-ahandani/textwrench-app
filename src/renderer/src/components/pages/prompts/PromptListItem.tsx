@@ -1,10 +1,10 @@
 import { Box, Button, Input, ProgressRoot, Textarea } from '@chakra-ui/react'
-import { RadioCardItem } from './ui/RadioCard'
-import { DrawerFull } from './Drawer'
+import { RadioCardItem } from '../../ui/RadioCard'
+import { DrawerFull } from '../../ui/Drawer'
 import { useState } from 'react'
 import { GoPencil } from 'react-icons/go'
 import { useUpdatePrompts } from '@renderer/hooks/useUpdatePrompts'
-import { ProgressBar } from './ui/Progress'
+import { ProgressBar } from '../../ui/Progress'
 
 type PromptListProps = {
   options?: Array<{ label: string; value: string }>
