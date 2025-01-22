@@ -74,8 +74,9 @@ export const DrawerFull = ({
                 <Button
                   ml={2}
                   aria-label={confirmLabel}
+                  size="xs"
                   variant="solid"
-                  size={'xs'}
+                  colorPalette="green"
                   onClick={onConfirm}
                 >
                   <GoCheck />

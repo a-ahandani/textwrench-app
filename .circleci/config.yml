@@ -82,10 +82,10 @@ jobs:
           path: dist
           destination: build-artifacts/mac
 
-# workflows:
-#   version: 2
-#   build-and-deploy:
-#     jobs:
-#       # - build-linux
-#       # - build-windows
-#       - build-mac
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      # - build-linux
+      - build-windows
+      - build-mac

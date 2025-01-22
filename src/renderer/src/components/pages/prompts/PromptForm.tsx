@@ -42,6 +42,7 @@ export const PromptForm = ({
       onCancel={onClose}
       icon={GoPencil}
       title={isCreate ? 'Add new prompt' : 'Edit prompt'}
+      confirmLabel={isCreate ? 'Create' : 'Update'}
       isLoading={isLoading}
     >
       <Input

@@ -9,7 +9,10 @@ export async function verifyToken() {
   if (!mainWindow) return
   const token = twService.defaults.headers.common['Authorization'] || store.get('token')
 
-  if (!token) return
+  if (!token) {
+    mainWindow.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
+    return
+  }
   twService.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
   try {
