@@ -55,7 +55,10 @@ app.whenReady().then(() => {
   verifyToken()
 
   app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) initializeApp()
+    if (BrowserWindow.getAllWindows().length === 0) {
+      initializeApp()
+      verifyToken()
+    }
   })
 })
 

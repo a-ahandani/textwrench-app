@@ -71,7 +71,7 @@ export const PromptList = ({ label }: PromptListProps) => {
               }
             >
               <Input
-                variant="subtle"
+                variant="flushed"
                 placeholder="Search prompts"
                 value={term}
                 onChange={(e) => {

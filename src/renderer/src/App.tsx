@@ -24,7 +24,7 @@ function App() {
       <Header />
       <Clipboard />
       <Tabs.Root orientation="vertical" size="md" defaultValue={defaultTab} variant="plain">
-        <Tabs.List bg="bg.muted" rounded="l3" p="1" m="0" border={'none'}>
+        <Tabs.List bg="bg.muted" rounded="l3" p="1" mr={2} border={'none'}>
           {filteredTabs.map((tab) => (
             <Tabs.Trigger key={tab.value} value={tab.value}>
               {tab.icon}
