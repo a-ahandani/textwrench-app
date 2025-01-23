@@ -40,6 +40,10 @@ jobs:
       - store_artifacts:
           path: dist
           destination: build-artifacts/linux
+      - run:
+          name: SFTP upload (Linux)
+          command: |
+            curl -T ./dist/* sftp://$FTP_SERVER/var/www/textwrench.ai/public_html/downloads/linux-files/ --user $FTP_USERNAME:$FTP_PASSWORD --insecure
 
   build-windows:
     working_directory: ~/repo
@@ -82,6 +86,10 @@ jobs:
       - store_artifacts:
           path: dist
           destination: build-artifacts/windows
+      - run:
+          name: SFTP upload (Windows)
+          command: |
+            curl -T ./dist/* sftp://$FTP_SERVER/var/www/textwrench.ai/public_html/downloads/windows-files/ --user $FTP_USERNAME:$FTP_PASSWORD --insecure
 
   build-mac:
     macos:
@@ -98,6 +106,10 @@ jobs:
       - store_artifacts:
           path: dist
           destination: build-artifacts/mac
+      - run:
+          name: SFTP upload (macOS)
+          command: |
+            curl -T ./dist/* sftp://$FTP_SERVER/var/www/textwrench.ai/public_html/downloads/mac-files/ --user $FTP_USERNAME:$FTP_PASSWORD --insecure
 
 workflows:
   version: 2

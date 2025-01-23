@@ -15,10 +15,34 @@
     "dev": "electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
-    "build:win": "npm run build && electron-builder --win --x64",
-    "build:mac": "electron-vite build && electron-builder --mac",
-    "build:linux": "electron-vite build && electron-builder --linux",
+    "build:win": "npm run build && electron-builder --win --x64 --config.win.target=nsis",
+    "build:mac": "electron-vite build && electron-builder --mac --config.mac.target=dmg",
+    "build:linux": "electron-vite build && electron-builder --linux --config.linux.target=AppImage",
     "release": "electron-builder --mac --windows --linux --publish always"
+  },
+  "build": {
+    "appId": "com.example.textwrench",
+    "productName": "TextWrench",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "out/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": ["nsis", "zip"],
+      "artifactName": "TextWrench-${version}.${ext}"
+    },
+    "mac": {
+      "target": ["dmg", "zip"],
+      "artifactName": "TextWrench-${version}.${ext}"
+    },
+    "linux": {
+      "target": ["AppImage", "tar.gz"],
+      "artifactName": "TextWrench-${version}.${ext}"
+    }
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
