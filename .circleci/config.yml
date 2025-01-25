@@ -1,120 +1,39 @@
 version: 2.1
-
 jobs:
-  build-linux:
-    working_directory: ~/repo
+  build:
+    working_directory: ~/app
     docker:
-      - image: cimg/node:current
+      - image: cimg/base:2025.01
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
-          name: Update NPM
-          command: "sudo npm install -g npm"
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: Install Required Libraries
+          name: Build Docker image with SSH
           command: |
-            sudo apt-get update -y
-            sudo apt-get install -y \
-              dpkg \
-              fakeroot \
-              rpm \
-              libxtst-dev \
-              libx11-dev \
-              libxkbfile-dev \
-              libpng-dev \
-              make \
-              gcc \
-              g++
-      - run:
-          name: Install Dependencies
-          command: npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
-      - run:
-          name: Build Linux App
-          command: npm run build:linux
-      - store_artifacts:
-          path: dist
-          destination: build-artifacts/linux
-      - run:
-          name: SFTP upload (Linux)
-          command: |
-            curl -T ./dist/* sftp://$FTP_SERVER/var/www/textwrench.ai/public_html/downloads/linux-files/ --user $FTP_USERNAME:$FTP_PASSWORD --insecure
+            TAG="0.1.${CIRCLE_BUILD_NUM}"
+            docker build --platform=linux/amd64 --ssh default --build-arg GIT_REPO=git@github.com:a-ahandani/textwrench-app.git -t $DOCKERHUB_USERNAME/tw-build:$TAG .
 
-  build-windows:
-    working_directory: ~/repo
-    docker:
-      - image: cimg/node:current
-    steps:
-      - checkout
       - run:
-          name: Update NPM
-          command: "sudo npm install -g npm"
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: Install Required Libraries
+          name: Push application Docker image
           command: |
-            sudo dpkg --add-architecture i386
-            sudo apt-get update -y
-            sudo apt-get install -y \
-              dpkg \
-              fakeroot \
-              rpm \
-              libxtst-dev \
-              libx11-dev \
-              libpng-dev \
-              make \
-              gcc \
-              wine \
-              wine32 \
-              g++
-      - run:
-          name: Install Dependencies
-          command: npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
-      - run:
-          name: Build Windows App
-          command: npm run build:win
-      - store_artifacts:
-          path: dist
-          destination: build-artifacts/windows
-      - run:
-          name: SFTP upload (Windows)
-          command: |
-            curl -T ./dist/* sftp://$FTP_SERVER/var/www/textwrench.ai/public_html/downloads/windows-files/ --user $FTP_USERNAME:$FTP_PASSWORD --insecure
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+            docker push $DOCKERHUB_USERNAME/tw-build:$TAG
 
-  build-mac:
-    macos:
-      xcode: 14.0.1
-    working_directory: ~/repo
-    steps:
-      - checkout
       - run:
-          name: Install Dependencies
-          command: npm install
-      - run:
-          name: Build macOS App
-          command: npm run build:mac
-      - store_artifacts:
-          path: dist
-          destination: build-artifacts/mac
-      - run:
-          name: SFTP upload (macOS)
+          name: Run application Docker container with volume mount
           command: |
-            curl -T ./dist/* sftp://$FTP_SERVER/var/www/textwrench.ai/public_html/downloads/mac-files/ --user $FTP_USERNAME:$FTP_PASSWORD --insecure
-
-workflows:
-  version: 2
-  build-and-deploy:
-    jobs:
-      # - build-linux
-      - build-windows
-      # - build-mac
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            sudo apt-get update && sudo apt-get install -y sshpass
+            sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "docker pull $DOCKERHUB_USERNAME/tw-build:$TAG && \
+              docker stop tw-build || true && \
+              docker rm tw-build || true && \
+              docker run --name tw-build --platform=linux/amd64 -d \
+              -e GIT_REPO=git@github.com:a-ahandani/textwrench-app.git \
+              -v /var/www/textwrench.ai/downloads:/app/downloads \
+              -v \$HOME/.ssh:/root/.ssh \
+              $DOCKERHUB_USERNAME/tw-build:$TAG sh -c 'npm install && npm run build:win && cp -r /app/dist/* /app/downloads && tail -f /dev/null'"
