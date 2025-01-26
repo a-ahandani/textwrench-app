@@ -15,7 +15,7 @@ jobs:
           name: Build Docker image with SSH
           command: |
             TAG="0.1.${CIRCLE_BUILD_NUM}"
-            docker build --platform=linux/amd64 --ssh default --build-arg GIT_REPO=git@github.com:a-ahandani/textwrench-app.git -t $DOCKERHUB_USERNAME/tw-build:$TAG .
+            docker build --ssh default --build-arg GIT_REPO=git@github.com:a-ahandani/textwrench-app.git -t $DOCKERHUB_USERNAME/tw-build:$TAG .
 
       - run:
           name: Push application Docker image
@@ -32,8 +32,8 @@ jobs:
             sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "docker pull $DOCKERHUB_USERNAME/tw-build:$TAG && \
               docker stop tw-build || true && \
               docker rm tw-build || true && \
-              docker run --name tw-build --platform=linux/amd64 -d \
+              docker run --name tw-build -d \
               -e GIT_REPO=git@github.com:a-ahandani/textwrench-app.git \
               -v /var/www/textwrench.ai/downloads:/app/downloads \
               -v \$HOME/.ssh:/root/.ssh \
-              $DOCKERHUB_USERNAME/tw-build:$TAG sh -c 'npm install && npm run build:win && cp -r /app/dist/* /app/downloads && tail -f /dev/null'"
+              $DOCKERHUB_USERNAME/tw-build:$TAG sh -c 'rm -rf /app/downloads/* && npm install && npm run build:win && cp -r /app/dist/* /app/downloads && tail -f /dev/null'"
