@@ -2,10 +2,10 @@ name: Build/release
 
 on:
   push:
-    branches:
-      - main
-#   tags:
-#     - 'v*'
+    tags:
+      - 'v*'
+    # branches:
+    #   - main
 
 
 jobs:
@@ -58,7 +58,7 @@ jobs:
         env:
           VITE_API_SERVER: ${{ secrets.VITE_API_SERVER }}
 
-      - name: SFTP upload files only
+      - name: SFTP upload with version folder
         uses: Dylan700/sftp-upload-action@latest
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -66,8 +66,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: 22
           uploads: |
-            ./dist/*.exe => /var/www/textwrench.ai/downloads/${{ matrix.os }}-files
-            ./dist/*.dmg => /var/www/textwrench.ai/downloads/${{ matrix.os }}-files
-            ./dist/*.AppImage => /var/www/textwrench.ai/downloads/${{ matrix.os }}-files
-            ./dist/*.zip => /var/www/textwrench.ai/downloads/${{ matrix.os }}-files
+            ./dist/ => /var/www/textwrench.ai/downloads/${{ matrix.os }}-files
+          ignore: |
+            *pack*
           delete: 'true'
