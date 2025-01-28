@@ -1,4 +1,4 @@
-import { ipcMain, shell } from 'electron'
+import { BrowserWindow, ipcMain, shell } from 'electron'
 import { IPC_EVENTS } from '../../shared/ipc-events'
 import { store } from '../store'
 import { updateStore } from '../store/helpers'
@@ -83,5 +83,10 @@ export function setupIpcHandlers() {
       handleError(error)
     }
     return
+  })
+
+  ipcMain.handle(IPC_EVENTS.CLOSE_WINDOW, () => {
+    const window = BrowserWindow.getFocusedWindow()
+    window?.close()
   })
 }

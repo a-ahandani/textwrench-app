@@ -20,25 +20,27 @@ function App() {
   const defaultTab = isLoggedIn ? 'prompts' : 'settings'
 
   return (
-    <Container p="2">
+    <>
       <Header />
-      <Clipboard />
-      <Tabs.Root orientation="vertical" size="md" defaultValue={defaultTab} variant="plain">
-        <Tabs.List bg="bg.muted" rounded="l3" p="1" mr={2} border={'none'}>
+      <Container p="2">
+        <Clipboard />
+        <Tabs.Root orientation="vertical" size="md" defaultValue={defaultTab} variant="plain">
+          <Tabs.List bg="bg.muted" rounded="l3" p="1" mr={2} border={'none'}>
+            {filteredTabs.map((tab) => (
+              <Tabs.Trigger key={tab.value} value={tab.value}>
+                {tab.icon}
+              </Tabs.Trigger>
+            ))}
+            <Tabs.Indicator rounded="l2" />
+          </Tabs.List>
           {filteredTabs.map((tab) => (
-            <Tabs.Trigger key={tab.value} value={tab.value}>
-              {tab.icon}
-            </Tabs.Trigger>
+            <TabContents key={tab.value} value={tab.value}>
+              {tab.content}
+            </TabContents>
           ))}
-          <Tabs.Indicator rounded="l2" />
-        </Tabs.List>
-        {filteredTabs.map((tab) => (
-          <TabContents key={tab.value} value={tab.value}>
-            {tab.content}
-          </TabContents>
-        ))}
-      </Tabs.Root>
-    </Container>
+        </Tabs.Root>
+      </Container>
+    </>
   )
 }
 

@@ -20,7 +20,8 @@ const api = {
   login: () => ipcRenderer.invoke(IPC_EVENTS.LOGIN),
   logout: () => ipcRenderer.invoke(IPC_EVENTS.LOGOUT),
   onLoggedIn: (callback) =>
-    ipcRenderer.on(IPC_EVENTS.LOGIN_FULFILLED, (_event, value) => callback(value))
+    ipcRenderer.on(IPC_EVENTS.LOGIN_FULFILLED, (_event, value) => callback(value)),
+  closeWindow: () => ipcRenderer.invoke(IPC_EVENTS.CLOSE_WINDOW)
 }
 
 if (process.contextIsolated) {

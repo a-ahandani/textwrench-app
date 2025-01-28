@@ -15,6 +15,7 @@ declare global {
       createPrompt(prompt: Partial<Prompt>): Promise<Prompt>
       deletePrompt(prompt: Partial<Prompt>): Promise<Prompt>
       onLoggedIn(callback: (data) => void): () => void
+      closeWindow(): void
     }
   }
 }
