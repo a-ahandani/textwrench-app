@@ -11,7 +11,7 @@ export const Header = () => {
       display={'flex'}
       flexDirection={isMac ? 'row-reverse' : 'row'}
       alignItems={'center'}
-      height={9}
+      height={8}
     >
       <Box
         mx={2}
@@ -40,9 +40,12 @@ export const Header = () => {
           onClick={() => {
             window.api.closeWindow()
           }}
-          borderRadius={0}
+          borderRadius="l1"
           size="xs"
-          colorPalette="red"
+          variant="plain"
+          _hover={{
+            bg: 'red.500'
+          }}
         >
           <GoX />
         </IconButton>

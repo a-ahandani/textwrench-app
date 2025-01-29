@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { registerShortcut } from './services/shortcuts/shortcuts'
-import { getMainWindow, initializeApp } from './services/window/window'
+import { initializeApp } from './services/window/window'
 import { handleSelectedText } from './ipc/clipboard-handlers'
 import { setupIpcHandlers } from './ipc/handlers'
 import path from 'path'
@@ -9,6 +9,8 @@ import { updateStore } from './store/helpers'
 import { twService } from './services/axios/axios'
 import { IPC_EVENTS } from '../shared/ipc-events'
 import { verifyToken } from './services/auth/verifyToken'
+
+let mainWindow: BrowserWindow | null = null
 
 app.whenReady().then(() => {
   const registerCopy = registerShortcut('Control+Shift+C', handleSelectedText)
@@ -33,10 +35,36 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  app.on('open-url', (_, url) => {
+  const gotTheLock = app.requestSingleInstanceLock()
+
+  if (!gotTheLock) {
+    app.quit()
+  } else {
+    app.on('second-instance', (_event, argv) => {
+      if (mainWindow) {
+        if (mainWindow.isMinimized()) mainWindow.restore()
+        mainWindow.focus()
+      }
+
+      const url = argv.find((arg) => arg.startsWith('textwrench://'))
+      if (url) {
+        handleOpenUrl(url)
+      }
+    })
+
+    app.on('ready', () => {
+      mainWindow = initializeApp()
+    })
+
+    app.on('open-url', (event, url) => {
+      event.preventDefault()
+      handleOpenUrl(url)
+    })
+  }
+
+  function handleOpenUrl(url) {
     const urlParams = new URL(url)
     const token = urlParams.searchParams.get('token')
-    const mainWindow = getMainWindow()
 
     if (token) {
       updateStore('token', token)
@@ -44,13 +72,12 @@ app.whenReady().then(() => {
       if (mainWindow) {
         mainWindow.webContents.send(IPC_EVENTS.LOGIN_FULFILLED, { token })
       }
-    }
-    if (!token && mainWindow) {
+    } else if (mainWindow) {
       mainWindow.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
     }
-  })
+  }
 
-  initializeApp()
+  mainWindow = initializeApp()
   setupIpcHandlers()
   verifyToken()
 
@@ -63,7 +90,6 @@ app.whenReady().then(() => {
 })
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+  // Do not quit the app when all windows are closed
+  // The app will remain running in the background
 })

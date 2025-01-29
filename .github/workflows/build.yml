@@ -2,10 +2,10 @@ name: Build/release
 
 on:
   push:
-    tags:
-      - 'v*'
-    # branches:
-    #   - main
+    branches:
+      - main
+      # tags:
+      #   - 'v*'
 
 
 jobs:
@@ -69,4 +69,10 @@ jobs:
             ./dist/ => /var/www/textwrench.ai/downloads/${{ matrix.os }}-files
           ignore: |
             *pack*
+            *-arm*
+            !macos-latest-files
+            !windows-latest-files
+            !ubuntu-latest-files
+            !*.dmg
+            !*.exe
           delete: 'true'
