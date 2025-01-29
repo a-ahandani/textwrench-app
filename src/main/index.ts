@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { registerShortcut } from './services/shortcuts/shortcuts'
-import { getMainWindow, initializeApp } from './services/window/window'
+import { initializeApp } from './services/window/window'
 import { handleSelectedText } from './ipc/clipboard-handlers'
 import { setupIpcHandlers } from './ipc/handlers'
 import path from 'path'
@@ -19,6 +19,8 @@ app.whenReady().then(() => {
 
   electronApp.setAppUserModelId('com.electron')
 
+  let mainWindow: BrowserWindow | null = null
+
   if (process.defaultApp) {
     if (process.argv.length >= 2) {
       app.setAsDefaultProtocolClient('textwrench', process.execPath, [
@@ -33,10 +35,39 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  app.on('open-url', (_, url) => {
+  const gotTheLock = app.requestSingleInstanceLock()
+
+  if (!gotTheLock) {
+    app.quit()
+  } else {
+    app.on('second-instance', (_event, argv) => {
+      // Someone tried to run a second instance, focus the existing window
+      if (mainWindow) {
+        if (mainWindow.isMinimized()) mainWindow.restore()
+        mainWindow.focus()
+      }
+
+      // Handle 'open-url' argument passed on second instance
+      const url = argv.find((arg) => arg.startsWith('textwrench://'))
+      if (url) {
+        handleOpenUrl(url)
+      }
+    })
+
+    app.on('ready', () => {
+      mainWindow = initializeApp() // Your existing window creation logic
+    })
+
+    // macOS-specific `open-url` handler
+    app.on('open-url', (event, url) => {
+      event.preventDefault()
+      handleOpenUrl(url)
+    })
+  }
+
+  function handleOpenUrl(url) {
     const urlParams = new URL(url)
     const token = urlParams.searchParams.get('token')
-    const mainWindow = getMainWindow()
 
     if (token) {
       updateStore('token', token)
@@ -44,13 +75,12 @@ app.whenReady().then(() => {
       if (mainWindow) {
         mainWindow.webContents.send(IPC_EVENTS.LOGIN_FULFILLED, { token })
       }
-    }
-    if (!token && mainWindow) {
+    } else if (mainWindow) {
       mainWindow.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
     }
-  })
+  }
 
-  initializeApp()
+  mainWindow = initializeApp()
   setupIpcHandlers()
   verifyToken()
 
