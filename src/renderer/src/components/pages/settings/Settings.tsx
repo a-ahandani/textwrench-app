@@ -3,11 +3,13 @@ import { useProfile } from '@renderer/hooks/useProfile'
 import { useAuth } from '../../providers/AuthProvider'
 import { ProgressBar } from '../../ui/Progress'
 import { Button } from '@renderer/components/ui/Button'
+import { labels } from '@shared/constants'
 
 export const Settings = () => {
   const { login, logout, isLoading: isLoggingIn, isLoggedIn } = useAuth()
   const { data: profile, isLoading, isFetched } = useProfile({ enabled: isLoggedIn })
 
+  const isPremium = profile?.user_type !== 'free'
   return (
     <Card.Root>
       <Card.Body>
@@ -17,11 +19,15 @@ export const Settings = () => {
           </ProgressRoot>
         )}
         <Card.Title mt="2">
-          {isLoggedIn && isFetched ? profile?.name : 'Login to your account'}
+          {isLoggedIn && isFetched ? `Hello, ${profile?.name}` : 'Login to your account'}
         </Card.Title>
-        <Card.Description>
-          Hello {isLoggedIn && isFetched ? profile?.name : 'Guest'}
-        </Card.Description>
+        {isLoggedIn ? (
+          <Card.Description>
+            You are using {isPremium ? `active` : `free`} version of the {labels.app}
+          </Card.Description>
+        ) : (
+          <Card.Description>Please login to access the premium features</Card.Description>
+        )}
       </Card.Body>
       <Card.Footer justifyContent="flex-end">
         {!isLoggedIn ? (

@@ -12,7 +12,9 @@ export const Header = () => {
       display={'flex'}
       flexDirection={isMac ? 'row-reverse' : 'row'}
       alignItems={'center'}
-      height={8}
+      height={9}
+      background="#EDA220"
+      color="black"
     >
       <Box
         mx={2}

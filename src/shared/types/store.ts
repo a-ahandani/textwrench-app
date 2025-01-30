@@ -5,6 +5,7 @@ export type Prompt = {
 }
 
 export type UserProfile = {
+  user_type: string
   name: string
   email: string
   ID: string

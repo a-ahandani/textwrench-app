@@ -5,7 +5,7 @@ import macIcon from '../../../../resources/macos/AppIcon.icns?asset'
 import winIcon from '../../../../resources/web/icon-512-maskable.png?asset'
 
 import icon24 from '../../../../resources/icon24.png?asset'
-import { labels } from '@shared/constants'
+import { labels } from '../../../shared/constants'
 
 let tray: Tray | null = null
 
