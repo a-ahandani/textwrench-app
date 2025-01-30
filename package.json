@@ -22,7 +22,7 @@
   },
   "build": {
     "appId": "com.example.textwrench",
-    "productName": "TextWrench",
+    "productName": "Text Wrench",
     "directories": {
       "output": "dist"
     },

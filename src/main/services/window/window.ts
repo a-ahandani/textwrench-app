@@ -5,6 +5,7 @@ import macIcon from '../../../../resources/macos/AppIcon.icns?asset'
 import winIcon from '../../../../resources/web/icon-512-maskable.png?asset'
 
 import icon24 from '../../../../resources/icon24.png?asset'
+import { labels } from '@shared/constants'
 
 let tray: Tray | null = null
 
@@ -63,7 +64,7 @@ export const initializeApp = (): BrowserWindow => {
 
     const contextMenu = Menu.buildFromTemplate([
       {
-        label: 'Show App',
+        label: labels.showApp,
         click: () => {
           if (mainWindow) {
             mainWindow.show()
@@ -71,7 +72,7 @@ export const initializeApp = (): BrowserWindow => {
         }
       },
       {
-        label: 'Quit',
+        label: labels.quit,
         click: () => {
           BrowserWindow.getAllWindows().forEach((window) => {
             window.destroy()
@@ -81,7 +82,7 @@ export const initializeApp = (): BrowserWindow => {
       }
     ])
 
-    tray.setToolTip('TextWrench')
+    tray.setToolTip(labels.app)
     tray.setContextMenu(contextMenu)
 
     tray.on('click', () => {

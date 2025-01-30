@@ -1,6 +1,7 @@
 import { Box, Heading } from '@chakra-ui/react'
 import { GoTools } from 'react-icons/go'
 import { IconButton } from '@chakra-ui/react'
+import { labels } from '@shared/constants'
 import { GoX } from 'react-icons/go'
 
 export const Header = () => {
@@ -31,7 +32,7 @@ export const Header = () => {
         fontWeight={'bold'}
         textAlign={isMac ? 'right' : 'left'}
       >
-        TEXTWRENCH
+        {labels.app}
       </Heading>
 
       {!isMac && (

@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: Text Wrench
+  executableName: ${productName}
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
