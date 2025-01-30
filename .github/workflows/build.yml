@@ -70,9 +70,5 @@ jobs:
           ignore: |
             *pack*
             *-arm*
-            !macos-latest-files
-            !windows-latest-files
-            !ubuntu-latest-files
-            !*.dmg
-            !*.exe
+            *zip*
           delete: 'true'

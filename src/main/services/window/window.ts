@@ -1,10 +1,24 @@
 import { app, BrowserWindow, Menu, shell, Tray } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
-import icon from '../../../../resources/icon.png?asset'
+import macIcon from '../../../../resources/macos/AppIcon.icns?asset'
+import winIcon from '../../../../resources/web/icon-512-maskable.png?asset'
+
+import icon24 from '../../../../resources/icon24.png?asset'
 
 let tray: Tray | null = null
 
+const platformSettings = {
+  darwin: {
+    icon: macIcon
+  },
+  linux: {
+    icon: winIcon
+  },
+  win32: {
+    icon: winIcon
+  }
+}
 export const initializeApp = (): BrowserWindow => {
   const mainWindow = new BrowserWindow({
     show: false,
@@ -13,13 +27,14 @@ export const initializeApp = (): BrowserWindow => {
     resizable: true,
     maximizable: false,
     autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
+    ...platformSettings[process.platform],
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
   })
   createTray()
+
   mainWindow.setBounds({ x: 10, y: 10, width: 480, height: 320 })
   mainWindow.setVisibleOnAllWorkspaces(true)
 
@@ -44,7 +59,7 @@ export const initializeApp = (): BrowserWindow => {
   }
 
   function createTray() {
-    tray = new Tray(icon)
+    tray = new Tray(icon24)
 
     const contextMenu = Menu.buildFromTemplate([
       {
