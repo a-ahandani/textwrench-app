@@ -1,10 +1,10 @@
 {
   "name": "textwrench",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "TextWrench",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "author": "Ahmad Ahandani",
+  "homepage": "https://textwrench.ai",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --fix",
@@ -72,8 +72,7 @@
     "@hurdlegroup/robotjs": "^0.12.2",
     "@typescript-eslint/eslint-plugin": "^8.22.0",
     "axios": "^1.7.9",
-    "electron-updater": "^6.1.7",
-    "openai": "^4.77.0"
+    "electron-updater": "^6.1.7"
   },
   "devDependencies": {
     "@chakra-ui/react": "^3.2.4",
