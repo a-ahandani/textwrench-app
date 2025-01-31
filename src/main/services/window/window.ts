@@ -1,10 +1,9 @@
 import { app, BrowserWindow, Menu, shell, Tray } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
-import macIcon from '../../../../resources/macos/AppIcon.icns?asset'
-import winIcon from '../../../../resources/web/icon-512-maskable.png?asset'
-
-import icon24 from '../../../../resources/icon24.png?asset'
+import macIcon from '../../../../resources/icons/icon.icns?asset'
+import winIcon from '../../../../resources/icons/icon.png?asset'
+import trayIcon from '../../../../build/tray/icon.png?asset'
 import { labels } from '../../../shared/constants'
 
 let tray: Tray | null = null
@@ -60,36 +59,40 @@ export const initializeApp = (): BrowserWindow => {
   }
 
   function createTray() {
-    tray = new Tray(icon24)
+    try {
+      tray = new Tray(trayIcon)
 
-    const contextMenu = Menu.buildFromTemplate([
-      {
-        label: labels.showApp,
-        click: () => {
-          if (mainWindow) {
-            mainWindow.show()
+      const contextMenu = Menu.buildFromTemplate([
+        {
+          label: labels.showApp,
+          click: () => {
+            if (mainWindow) {
+              mainWindow.show()
+            }
+          }
+        },
+        {
+          label: labels.quit,
+          click: () => {
+            BrowserWindow.getAllWindows().forEach((window) => {
+              window.destroy()
+            })
+            app.quit()
           }
         }
-      },
-      {
-        label: labels.quit,
-        click: () => {
-          BrowserWindow.getAllWindows().forEach((window) => {
-            window.destroy()
-          })
-          app.quit()
+      ])
+
+      tray.setToolTip(labels.app)
+      tray.setContextMenu(contextMenu)
+
+      tray.on('click', () => {
+        if (mainWindow) {
+          mainWindow.show()
         }
-      }
-    ])
-
-    tray.setToolTip(labels.app)
-    tray.setContextMenu(contextMenu)
-
-    tray.on('click', () => {
-      if (mainWindow) {
-        mainWindow.show()
-      }
-    })
+      })
+    } catch (error) {
+      console.log('Error creating tray', error)
+    }
   }
 
   return mainWindow

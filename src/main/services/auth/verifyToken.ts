@@ -20,7 +20,7 @@ export async function verifyToken() {
     mainWindow.webContents.send(IPC_EVENTS.LOGIN_FULFILLED, { token: 'verified' })
     console.log('Token verified:', result.data)
     return
-  } catch (error) {
+  } catch {
     updateStore('token', null)
     mainWindow.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
   }

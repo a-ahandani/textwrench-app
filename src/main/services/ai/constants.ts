@@ -29,8 +29,3 @@ export const AI_MODELS = {
   GPT3: 'gpt-3.5-turbo',
   GPT4_MINI: 'gpt-4o-mini'
 }
-
-export enum Roles {
-  System = 'system',
-  User = 'user'
-}

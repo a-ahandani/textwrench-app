@@ -18,6 +18,8 @@ export function setupIpcHandlers() {
   })
 
   ipcMain.handle(IPC_EVENTS.LOGIN, () => {
+    updateStore('token', null)
+    twService.defaults.headers.common['Authorization'] = ''
     return shell.openExternal(`${apiServer}/auth/google`)
   })
 

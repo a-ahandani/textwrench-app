@@ -1,11 +1,10 @@
-import { Roles } from './constants'
 import { store } from '../../store'
 import { twService } from '../axios/axios'
 
 export const processTextWithAI = async (text: string): Promise<string> => {
   const selectedPrompt = await store.get('selectedPrompt')
   const userPrompt = {
-    role: Roles.User,
+    role: 'user',
     content: `${selectedPrompt?.value}: \n\n ${text}`
   }
 
