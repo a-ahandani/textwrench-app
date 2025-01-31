@@ -3,7 +3,8 @@ import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import macIcon from '../../../../resources/icons/icon.icns?asset'
 import winIcon from '../../../../resources/icons/icon.png?asset'
-import trayIcon from '../../../../build/tray/icon.png?asset'
+import trayIcon from '../../../../build/tray/icon-w.png?asset'
+import trayIconColored from '../../../../build/tray/icon-win.png?asset'
 import { labels } from '../../../shared/constants'
 
 let tray: Tray | null = null
@@ -60,7 +61,8 @@ export const initializeApp = (): BrowserWindow => {
 
   function createTray() {
     try {
-      tray = new Tray(trayIcon)
+      const initialTrayIcon = process.platform === 'win32' ? trayIconColored : trayIcon
+      tray = new Tray(initialTrayIcon)
 
       const contextMenu = Menu.buildFromTemplate([
         {
