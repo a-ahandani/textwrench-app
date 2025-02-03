@@ -26,7 +26,9 @@
     "protocols": [
       {
         "name": "TextWrench",
-        "schemes": ["textwrench"]
+        "schemes": [
+          "textwrench"
+        ]
       }
     ],
     "directories": {
@@ -72,7 +74,8 @@
     "@hurdlegroup/robotjs": "^0.12.2",
     "@typescript-eslint/eslint-plugin": "^8.22.0",
     "axios": "^1.7.9",
-    "electron-updater": "^6.1.7"
+    "electron-updater": "^6.1.7",
+    "react-hotkeys-hook": "^4.6.1"
   },
   "devDependencies": {
     "@chakra-ui/react": "^3.2.4",
@@ -97,7 +100,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
-    "typescript": "^5.6.0",
+    "typescript": "^5.7.3",
     "vite": "^5.3.1"
   }
 }
