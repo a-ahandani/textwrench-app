@@ -51,6 +51,7 @@ export const initializeApp = (): BrowserWindow => {
   mainWindow.on('close', function (event) {
     event.preventDefault()
     mainWindow.hide()
+    // mainWindow.close()
   })
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {

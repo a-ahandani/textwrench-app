@@ -1,12 +1,13 @@
-import { Card, ProgressRoot } from '@chakra-ui/react'
+import { Card, IconButton, ProgressRoot, ButtonGroup } from '@chakra-ui/react'
 import { useProfile } from '@renderer/hooks/useProfile'
 import { useAuth } from '../../../providers/AuthProvider'
 import { ProgressBar } from '../../../ui/Progress'
 import { Button } from '@renderer/components/ui/Button'
 import { labels } from '@shared/constants'
+import { GoX } from 'react-icons/go'
 
 export const Auth = () => {
-  const { login, logout, isLoading: isLoggingIn, isLoggedIn } = useAuth()
+  const { login, logout, isLoading: isLoggingIn, isLoggedIn, setIsLoading } = useAuth()
   const { data: profile, isLoading, isFetched } = useProfile({ enabled: isLoggedIn })
   const isPremium = profile?.user_type !== 'free'
 
@@ -31,15 +32,27 @@ export const Auth = () => {
       </Card.Body>
       <Card.Footer justifyContent="flex-end">
         {!isLoggedIn ? (
-          <Button
-            onClick={() => {
-              login()
-            }}
-            variant="outline"
-            loading={isLoggingIn}
-          >
-            Login
-          </Button>
+          <ButtonGroup size="sm" attached>
+            <Button
+              variant="subtle"
+              onClick={() => {
+                login()
+              }}
+              loading={isLoggingIn}
+            >
+              Login
+            </Button>
+            {isLoggingIn && (
+              <IconButton
+                variant="subtle"
+                onClick={() => {
+                  setIsLoading(false)
+                }}
+              >
+                <GoX />
+              </IconButton>
+            )}
+          </ButtonGroup>
         ) : (
           <Button
             onClick={() => {

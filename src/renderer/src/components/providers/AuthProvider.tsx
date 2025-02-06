@@ -5,6 +5,7 @@ type AuthContextType = {
   login: () => void
   logout: () => void
   isLoading: boolean
+  setIsLoading: (isLoading: boolean) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -14,7 +15,7 @@ type AuthProviderProps = {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const { login, logout, onLoggedIn } = window.api
+  const { login, logout, onLoggedIn, verifyToken } = window.api
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -31,6 +32,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(false)
   }
   useEffect(() => {
+    verifyToken()
     onLoggedIn((data) => {
       setIsLoading(false)
       if (data?.token) {
@@ -47,7 +49,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         isLoggedIn,
         isLoading,
         login: handleLogin,
-        logout: handleLogout
+        logout: handleLogout,
+        setIsLoading
       }}
     >
       {children}

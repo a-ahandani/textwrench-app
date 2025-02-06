@@ -21,7 +21,7 @@
     "release": "electron-builder --mac --windows --linux --publish always"
   },
   "build": {
-    "appId": "com.example.textwrench",
+    "appId": "com.tw.textwrench",
     "productName": "Text Wrench",
     "protocols": [
       {
@@ -47,24 +47,13 @@
       }
     ],
     "win": {
-      "target": [
-        "nsis",
-        "zip"
-      ],
       "artifactName": "TextWrench-${version}.${ext}"
     },
     "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ],
+      "category": "public.app-category.developer-tools",
       "artifactName": "TextWrench-${version}.${ext}"
     },
     "linux": {
-      "target": [
-        "AppImage",
-        "tar.gz"
-      ],
       "artifactName": "TextWrench-${version}.${ext}"
     }
   },
@@ -78,7 +67,7 @@
     "react-hotkeys-hook": "^4.6.1"
   },
   "devDependencies": {
-    "@chakra-ui/react": "^3.2.4",
+    "@chakra-ui/react": "^3.7.0",
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
     "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",

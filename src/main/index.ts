@@ -6,14 +6,14 @@ import { handleSelectedText } from './ipc/clipboard-handlers'
 import { setupIpcHandlers } from './ipc/handlers'
 import path from 'path'
 import { updateStore } from './store/helpers'
-import { twService } from './services/axios/axios'
 import { IPC_EVENTS } from '../shared/ipc-events'
-import { verifyToken } from './services/auth/verifyToken'
 
 let mainWindow: BrowserWindow | null = null
 
 app.whenReady().then(() => {
-  const registerCopy = registerShortcut('Control+Shift+C', handleSelectedText)
+  const APP_KEY = 'textwrench'
+
+  const registerCopy = registerShortcut('Shift+Control+C', handleSelectedText)
 
   if (!registerCopy) {
     console.warn('Failed to simulate copy')
@@ -23,12 +23,10 @@ app.whenReady().then(() => {
 
   if (process.defaultApp) {
     if (process.argv.length >= 2) {
-      app.setAsDefaultProtocolClient('textwrench', process.execPath, [
-        path.resolve(process.argv[1])
-      ])
+      app.setAsDefaultProtocolClient(APP_KEY, process.execPath, [path.resolve(process.argv[1])])
     }
   } else {
-    app.setAsDefaultProtocolClient('textwrench')
+    app.setAsDefaultProtocolClient(APP_KEY)
   }
 
   app.on('browser-window-created', (_, window) => {
@@ -42,11 +40,13 @@ app.whenReady().then(() => {
   } else {
     app.on('second-instance', (_event, argv) => {
       if (mainWindow) {
-        if (mainWindow.isMinimized()) mainWindow.restore()
+        if (mainWindow.isMinimized()) {
+          mainWindow.restore()
+        }
         mainWindow.focus()
       }
-
-      const url = argv.find((arg) => arg.startsWith('textwrench://'))
+      console.log('argv------->', argv)
+      const url = argv.find((arg) => arg.startsWith(`${APP_KEY}://`))
       if (url) {
         handleOpenUrl(url)
       }
@@ -68,7 +68,6 @@ app.whenReady().then(() => {
 
     if (token) {
       updateStore('token', token)
-      twService.defaults.headers.common['Authorization'] = `Bearer ${token}`
       if (mainWindow) {
         mainWindow.webContents.send(IPC_EVENTS.LOGIN_FULFILLED, { token })
       }
@@ -79,12 +78,10 @@ app.whenReady().then(() => {
 
   mainWindow = initializeApp()
   setupIpcHandlers()
-  verifyToken()
 
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) {
       initializeApp()
-      verifyToken()
     }
   })
 })

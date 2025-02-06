@@ -11,5 +11,6 @@ export const IPC_EVENTS = {
   DELETE_PROMPT: 'delete-prompt',
   CREATE_PROMPT: 'create-prompt',
   LOGIN_FULFILLED: 'login-fulfilled',
-  CLOSE_WINDOW: 'close-window'
+  CLOSE_WINDOW: 'close-window',
+  VERIFY_TOKEN: 'verify-token'
 }
