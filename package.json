@@ -21,12 +21,14 @@
     "release": "electron-builder --mac --windows --linux --publish always"
   },
   "build": {
-    "appId": "com.example.textwrench",
+    "appId": "com.tw.textwrench",
     "productName": "Text Wrench",
     "protocols": [
       {
         "name": "TextWrench",
-        "schemes": ["textwrench"]
+        "schemes": [
+          "textwrench"
+        ]
       }
     ],
     "directories": {
@@ -45,24 +47,13 @@
       }
     ],
     "win": {
-      "target": [
-        "nsis",
-        "zip"
-      ],
       "artifactName": "TextWrench-${version}.${ext}"
     },
     "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ],
+      "category": "public.app-category.developer-tools",
       "artifactName": "TextWrench-${version}.${ext}"
     },
     "linux": {
-      "target": [
-        "AppImage",
-        "tar.gz"
-      ],
       "artifactName": "TextWrench-${version}.${ext}"
     }
   },
@@ -72,10 +63,12 @@
     "@hurdlegroup/robotjs": "^0.12.2",
     "@typescript-eslint/eslint-plugin": "^8.22.0",
     "axios": "^1.7.9",
-    "electron-updater": "^6.1.7"
+    "electron-updater": "^6.1.7",
+    "electron-app-universal-protocol-client":"2.1.1",
+    "react-hotkeys-hook": "^4.6.1"
   },
   "devDependencies": {
-    "@chakra-ui/react": "^3.2.4",
+    "@chakra-ui/react": "^3.7.0",
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
     "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
@@ -97,7 +90,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
-    "typescript": "^5.6.0",
+    "typescript": "^5.7.3",
     "vite": "^5.3.1"
   }
 }

@@ -43,7 +43,7 @@ jobs:
           python -m pip install setuptools
 
       - name: Install dependencies
-        run: npm i
+        run: yarn
 
       - name: Build/release Electron app
         uses: paneron/action-electron-builder@v1.8.1

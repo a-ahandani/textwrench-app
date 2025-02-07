@@ -4,6 +4,7 @@ import { store } from '../store'
 import { updateStore } from '../store/helpers'
 import { Prompt, StoreType, UserProfile } from '../../shared/types/store'
 import { handleError, twService } from '../services/axios/axios'
+import { verifyToken } from '../services/auth/verifyToken'
 
 const apiServer = import.meta.env.VITE_API_SERVER
 
@@ -90,5 +91,9 @@ export function setupIpcHandlers() {
   ipcMain.handle(IPC_EVENTS.CLOSE_WINDOW, () => {
     const window = BrowserWindow.getFocusedWindow()
     window?.close()
+  })
+
+  ipcMain.handle(IPC_EVENTS.VERIFY_TOKEN, () => {
+    verifyToken()
   })
 }

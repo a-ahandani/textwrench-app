@@ -19,9 +19,15 @@ const api = {
   deletePrompt: (prompt) => ipcRenderer.invoke(IPC_EVENTS.DELETE_PROMPT, prompt),
   login: () => ipcRenderer.invoke(IPC_EVENTS.LOGIN),
   logout: () => ipcRenderer.invoke(IPC_EVENTS.LOGOUT),
-  onLoggedIn: (callback) =>
-    ipcRenderer.on(IPC_EVENTS.LOGIN_FULFILLED, (_event, value) => callback(value)),
-  closeWindow: () => ipcRenderer.invoke(IPC_EVENTS.CLOSE_WINDOW)
+  onLoggedIn: (callback) => {
+    const subscription = (_event, data) => callback(data)
+    ipcRenderer.on(IPC_EVENTS.LOGIN_FULFILLED, subscription)
+    return () => {
+      ipcRenderer.removeListener(IPC_EVENTS.LOGIN_FULFILLED, subscription)
+    }
+  },
+  closeWindow: () => ipcRenderer.invoke(IPC_EVENTS.CLOSE_WINDOW),
+  verifyToken: () => ipcRenderer.invoke(IPC_EVENTS.VERIFY_TOKEN)
 }
 
 if (process.contextIsolated) {

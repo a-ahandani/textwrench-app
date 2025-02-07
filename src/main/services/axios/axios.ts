@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios'
 import { store } from '../../store'
 import { IPC_EVENTS } from '../../../shared/ipc-events'
 import { getMainWindow } from '../window/window'
+import { updateStore } from '../../store/helpers'
 
 const baseURL = import.meta.env.VITE_API_SERVER
 
@@ -17,6 +18,7 @@ twService.interceptors.request.use(
   (config) => {
     const token = store?.get('token')
     config.headers['Authorization'] = `Bearer ${token}`
+    console.log('AXIOS====>', token)
     return config
   },
   (error) => {
@@ -30,7 +32,9 @@ twService.interceptors.response.use(
   },
   (error) => {
     if (error.response.status === 401) {
+      console.log('UNAUTHORIZED REQUEST', error.response.status)
       const mainWindow = getMainWindow()
+      updateStore('token', null)
       mainWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
     }
     return Promise.reject(error.response.status)

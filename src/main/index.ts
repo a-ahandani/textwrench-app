@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from 'electron'
+import { electronAppUniversalProtocolClient } from 'electron-app-universal-protocol-client'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { registerShortcut } from './services/shortcuts/shortcuts'
 import { initializeApp } from './services/window/window'
@@ -6,14 +7,13 @@ import { handleSelectedText } from './ipc/clipboard-handlers'
 import { setupIpcHandlers } from './ipc/handlers'
 import path from 'path'
 import { updateStore } from './store/helpers'
-import { twService } from './services/axios/axios'
 import { IPC_EVENTS } from '../shared/ipc-events'
-import { verifyToken } from './services/auth/verifyToken'
+import { APP_KEY } from '../shared/constants'
 
 let mainWindow: BrowserWindow | null = null
 
-app.whenReady().then(() => {
-  const registerCopy = registerShortcut('Control+Shift+C', handleSelectedText)
+app.whenReady().then(async () => {
+  const registerCopy = registerShortcut('Shift+Control+C', handleSelectedText)
 
   if (!registerCopy) {
     console.warn('Failed to simulate copy')
@@ -23,44 +23,26 @@ app.whenReady().then(() => {
 
   if (process.defaultApp) {
     if (process.argv.length >= 2) {
-      app.setAsDefaultProtocolClient('textwrench', process.execPath, [
-        path.resolve(process.argv[1])
-      ])
+      app.setAsDefaultProtocolClient(APP_KEY, process.execPath, [path.resolve(process.argv[1])])
     }
   } else {
-    app.setAsDefaultProtocolClient('textwrench')
+    app.setAsDefaultProtocolClient(APP_KEY)
   }
 
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  const gotTheLock = app.requestSingleInstanceLock()
+  electronAppUniversalProtocolClient.on('request', async (requestUrl) => {
+    if (requestUrl) {
+      handleOpenUrl(requestUrl)
+    }
+  })
 
-  if (!gotTheLock) {
-    app.quit()
-  } else {
-    app.on('second-instance', (_event, argv) => {
-      if (mainWindow) {
-        if (mainWindow.isMinimized()) mainWindow.restore()
-        mainWindow.focus()
-      }
-
-      const url = argv.find((arg) => arg.startsWith('textwrench://'))
-      if (url) {
-        handleOpenUrl(url)
-      }
-    })
-
-    app.on('ready', () => {
-      mainWindow = initializeApp()
-    })
-
-    app.on('open-url', (event, url) => {
-      event.preventDefault()
-      handleOpenUrl(url)
-    })
-  }
+  await electronAppUniversalProtocolClient.initialize({
+    protocol: APP_KEY,
+    mode: process.env.NODE_ENV === 'development' ? 'development' : 'production'
+  })
 
   function handleOpenUrl(url) {
     const urlParams = new URL(url)
@@ -68,7 +50,6 @@ app.whenReady().then(() => {
 
     if (token) {
       updateStore('token', token)
-      twService.defaults.headers.common['Authorization'] = `Bearer ${token}`
       if (mainWindow) {
         mainWindow.webContents.send(IPC_EVENTS.LOGIN_FULFILLED, { token })
       }
@@ -79,12 +60,10 @@ app.whenReady().then(() => {
 
   mainWindow = initializeApp()
   setupIpcHandlers()
-  verifyToken()
 
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) {
       initializeApp()
-      verifyToken()
     }
   })
 })
