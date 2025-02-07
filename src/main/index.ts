@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from 'electron'
+import { electronAppUniversalProtocolClient } from 'electron-app-universal-protocol-client'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { registerShortcut } from './services/shortcuts/shortcuts'
 import { initializeApp } from './services/window/window'
@@ -7,12 +8,11 @@ import { setupIpcHandlers } from './ipc/handlers'
 import path from 'path'
 import { updateStore } from './store/helpers'
 import { IPC_EVENTS } from '../shared/ipc-events'
+import { APP_KEY } from '../shared/constants'
 
 let mainWindow: BrowserWindow | null = null
 
-app.whenReady().then(() => {
-  const APP_KEY = 'textwrench'
-
+app.whenReady().then(async () => {
   const registerCopy = registerShortcut('Shift+Control+C', handleSelectedText)
 
   if (!registerCopy) {
@@ -33,34 +33,16 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  const gotTheLock = app.requestSingleInstanceLock()
+  electronAppUniversalProtocolClient.on('request', async (requestUrl) => {
+    if (requestUrl) {
+      handleOpenUrl(requestUrl)
+    }
+  })
 
-  if (!gotTheLock) {
-    app.quit()
-  } else {
-    app.on('second-instance', (_event, argv) => {
-      if (mainWindow) {
-        if (mainWindow.isMinimized()) {
-          mainWindow.restore()
-        }
-        mainWindow.focus()
-      }
-      console.log('argv------->', argv)
-      const url = argv.find((arg) => arg.startsWith(`${APP_KEY}://`))
-      if (url) {
-        handleOpenUrl(url)
-      }
-    })
-
-    app.on('ready', () => {
-      mainWindow = initializeApp()
-    })
-
-    app.on('open-url', (event, url) => {
-      event.preventDefault()
-      handleOpenUrl(url)
-    })
-  }
+  await electronAppUniversalProtocolClient.initialize({
+    protocol: APP_KEY,
+    mode: process.env.NODE_ENV === 'development' ? 'development' : 'production'
+  })
 
   function handleOpenUrl(url) {
     const urlParams = new URL(url)

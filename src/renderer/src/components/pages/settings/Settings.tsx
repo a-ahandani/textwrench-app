@@ -7,7 +7,7 @@ export const Settings = () => {
     <Box>
       <Auth />
 
-      <Hotkeys />
+      {/* <Hotkeys /> */}
     </Box>
   )
 }

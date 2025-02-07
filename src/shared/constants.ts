@@ -7,6 +7,8 @@ export const labels = {
   win32: 'Windows'
 }
 
+export const APP_KEY = 'textwrench'
+
 export const MODIFIERS = [
   'ControlLeft',
   'MetaLeft',
