@@ -8,6 +8,7 @@ import trayIconColored from '../../../../build/tray/icon-win.png?asset'
 import { labels } from '../../../shared/constants'
 
 let tray: Tray | null = null
+let isQuitting = false
 
 const platformSettings = {
   darwin: {
@@ -49,9 +50,14 @@ export const initializeApp = (): BrowserWindow => {
   })
 
   mainWindow.on('close', function (event) {
-    event.preventDefault()
-    mainWindow.hide()
-    // mainWindow.close()
+    if (!isQuitting) {
+      event.preventDefault()
+      app.dock?.hide()
+      mainWindow.hide()
+    }
+  })
+  app.on('before-quit', () => {
+    isQuitting = true
   })
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {

@@ -69,6 +69,7 @@ app.whenReady().then(async () => {
 })
 
 app.on('window-all-closed', () => {
+  mainWindow = null
   // Do not quit the app when all windows are closed
   // The app will remain running in the background
 })
