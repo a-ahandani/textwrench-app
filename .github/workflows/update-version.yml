@@ -1,0 +1,31 @@
+name: Update package.json on Tag
+
+on:
+  push:
+    tags:
+      - 'v*'  # Runs when a tag matching "v*" (e.g., v1.0.0) is pushed
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Needed to fetch all tags
+
+      - name: Extract tag version
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Update package.json version
+        run: |
+          jq '.version = "${{ env.VERSION }}"' package.json > temp.json && mv temp.json package.json
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -am "Update package.json version to ${{ env.VERSION }}"
+          git push origin main  # Adjust branch name if needed
