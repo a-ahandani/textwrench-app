@@ -22,6 +22,8 @@ const platformSettings = {
   }
 }
 export const initializeApp = (): BrowserWindow => {
+  if (BrowserWindow.getAllWindows()[0]) return BrowserWindow.getAllWindows()[0]
+
   const mainWindow = new BrowserWindow({
     show: false,
     frame: false,

@@ -44,6 +44,25 @@ app.whenReady().then(async () => {
     mode: process.env.NODE_ENV === 'development' ? 'development' : 'production'
   })
 
+  if (process.platform === 'win32') {
+    const gotTheLock = app.requestSingleInstanceLock()
+    if (!gotTheLock) {
+      app.quit()
+    } else {
+      app.on('second-instance', (_, commandLine) => {
+        if (mainWindow) {
+          if (mainWindow.isMinimized()) mainWindow.restore()
+          mainWindow.focus()
+        }
+        handleOpenUrl(commandLine.pop())
+      })
+
+      app.whenReady().then(() => {
+        initializeApp()
+      })
+    }
+  }
+
   function handleOpenUrl(url) {
     const urlParams = new URL(url)
     const token = urlParams.searchParams.get('token')
