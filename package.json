@@ -1,6 +1,6 @@
 {
   "name": "textwrench",
-  "version": "0.0.2",
+  "version": "0.0.83",
   "description": "TextWrench",
   "main": "./out/main/index.js",
   "author": "Ahmad Ahandani",
@@ -64,7 +64,7 @@
     "@typescript-eslint/eslint-plugin": "^8.22.0",
     "axios": "^1.7.9",
     "electron-updater": "^6.1.7",
-    "electron-app-universal-protocol-client":"2.1.1",
+    "electron-app-universal-protocol-client": "2.1.1",
     "react-hotkeys-hook": "^4.6.1"
   },
   "devDependencies": {
