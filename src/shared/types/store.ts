@@ -12,6 +12,7 @@ export type UserProfile = {
 }
 
 export type StoreType = {
+  appVersion?: string
   selectedText?: string | null
   selectedPrompt?: Prompt
   token?: string | null

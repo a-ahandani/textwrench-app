@@ -13,6 +13,9 @@ import { APP_KEY } from '../shared/constants'
 let mainWindow: BrowserWindow | null = null
 
 app.whenReady().then(async () => {
+  const appVersion = await app.getVersion()
+  updateStore('appVersion', appVersion)
+
   const registerCopy = registerShortcut('Shift+Control+C', handleSelectedText)
 
   if (!registerCopy) {
