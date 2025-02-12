@@ -14,6 +14,7 @@ const api = {
   },
   getProfile: () => ipcRenderer.invoke(IPC_EVENTS.GET_PROFILE),
   getPrompts: () => ipcRenderer.invoke(IPC_EVENTS.GET_PROMPTS),
+  updateShortcuts: (shortcuts) => ipcRenderer.invoke(IPC_EVENTS.UPDATE_SHORTCUTS, shortcuts),
   updatePrompt: (prompt) => ipcRenderer.invoke(IPC_EVENTS.UPDATE_PROMPT, prompt),
   createPrompt: (prompt) => ipcRenderer.invoke(IPC_EVENTS.CREATE_PROMPT, prompt),
   deletePrompt: (prompt) => ipcRenderer.invoke(IPC_EVENTS.DELETE_PROMPT, prompt),

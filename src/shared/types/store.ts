@@ -9,6 +9,7 @@ export type UserProfile = {
   name: string
   email: string
   ID: string
+  shortcuts: Shortcuts
 }
 
 export type StoreType = {

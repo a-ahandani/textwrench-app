@@ -7,6 +7,12 @@ export const labels = {
   win32: 'Windows'
 }
 
+export const PLATFORMS = {
+  darwin: 'mac',
+  win32: 'windows',
+  linux: 'linux'
+}
+
 export const APP_KEY = 'textwrench'
 
 export const MODIFIERS = [

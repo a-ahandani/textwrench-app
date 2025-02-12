@@ -5,6 +5,7 @@ import { ProgressBar } from '../../../../ui/Progress'
 
 import { Hotkeys } from './Hotkeys'
 import { KEY_NAMES } from '@shared/constants'
+import { useUpdateShortcuts } from '@renderer/hooks/useUpdateShortcuts'
 
 const transformValueToKeys = (value?: string[]) =>
   (value?.map((v) => Object.keys(KEY_NAMES).find((key) => KEY_NAMES[key] === v)) || []).filter(
@@ -13,14 +14,26 @@ const transformValueToKeys = (value?: string[]) =>
 
 const transformKeysToValue = (value?: string[]) => value?.map((key) => KEY_NAMES[key])
 
-export const Shortcuts = () => {
-  const { isLoggedIn, setIsLoading } = useAuth()
-  const { data: profile, isLoading } = useProfile({ enabled: isLoggedIn })
+const ACTIONS = {
+  FIX_SELECTED_TEXT: 'fixSelectedText'
+}
+const ACTION_LABELS = {
+  [ACTIONS.FIX_SELECTED_TEXT]: 'Fix text'
+}
+const ACTION_DEFAULT_SHORTCUTS = {
+  [ACTIONS.FIX_SELECTED_TEXT]: ['Meta', 'Shift', 'F']
+}
 
-  const handleSubmit = (value) => {
-    console.log('value submitted', transformKeysToValue(value))
+export const Shortcuts = () => {
+  const { isLoggedIn } = useAuth()
+  const { data: profile, isLoading, isFetched } = useProfile({ enabled: isLoggedIn })
+  const shortcuts = profile?.shortcuts || {}
+
+  const { mutate: updateShortcuts } = useUpdateShortcuts({})
+  const handleSubmit = (key, value) => {
+    updateShortcuts({ ...shortcuts, [key]: transformKeysToValue(value)?.join('+') })
   }
-  if (!isLoggedIn) return null
+  if (!isLoggedIn || !isFetched) return null
   return (
     <Card.Root my={1} variant="subtle">
       <Card.Body>
@@ -33,11 +46,18 @@ export const Shortcuts = () => {
         <Card.Description>
           Start with a modifier key (Ctrl, Alt, or Cmd), then add a letter. You can use up to two
           modifiers and one letter.
-          <Hotkeys
-            label="Action key"
-            value={transformValueToKeys(['Meta', 'Shift', 'C'])}
-            onSubmit={handleSubmit}
-          />
+          {Object.values(ACTIONS).map((action) => {
+            return (
+              <Hotkeys
+                key={action}
+                label={ACTION_LABELS[action]}
+                value={transformValueToKeys(
+                  shortcuts?.[action] || ACTION_DEFAULT_SHORTCUTS[action]
+                )}
+                onSubmit={(value) => handleSubmit(action, value)}
+              />
+            )
+          })}
         </Card.Description>
       </Card.Body>
     </Card.Root>
