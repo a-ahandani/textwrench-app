@@ -4,7 +4,7 @@ import { useAuth } from '../../../../providers/AuthProvider'
 import { ProgressBar } from '../../../../ui/Progress'
 
 import { Hotkeys } from './Hotkeys'
-import { KEY_NAMES } from '@shared/constants'
+import { ACTION_DEFAULT_SHORTCUTS, ACTION_LABELS, ACTIONS, KEY_NAMES } from '@shared/constants'
 import { useUpdateShortcuts } from '@renderer/hooks/useUpdateShortcuts'
 
 const transformValueToKeys = (value?: string[]) =>
@@ -13,16 +13,6 @@ const transformValueToKeys = (value?: string[]) =>
   ) as string[]
 
 const transformKeysToValue = (value?: string[]) => value?.map((key) => KEY_NAMES[key])
-
-const ACTIONS = {
-  FIX_SELECTED_TEXT: 'fixSelectedText'
-}
-const ACTION_LABELS = {
-  [ACTIONS.FIX_SELECTED_TEXT]: 'Fix text'
-}
-const ACTION_DEFAULT_SHORTCUTS = {
-  [ACTIONS.FIX_SELECTED_TEXT]: ['Meta', 'Shift', 'F']
-}
 
 export const Shortcuts = () => {
   const { isLoggedIn } = useAuth()

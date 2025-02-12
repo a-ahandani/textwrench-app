@@ -48,3 +48,13 @@ export const KEY_NAMES = {
     return acc
   }, {})
 }
+
+export const ACTIONS = {
+  FIX_SELECTED_TEXT: 'fixSelectedText'
+}
+export const ACTION_LABELS = {
+  [ACTIONS.FIX_SELECTED_TEXT]: 'Fix text'
+}
+export const ACTION_DEFAULT_SHORTCUTS = {
+  [ACTIONS.FIX_SELECTED_TEXT]: ['Meta', 'Shift', 'F']
+}
