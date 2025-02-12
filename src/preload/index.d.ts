@@ -17,6 +17,7 @@ declare global {
       onLoggedIn(callback: (data) => void): () => void
       closeWindow(): void
       verifyToken(): Promise<void>
+      updateShortcuts(shortcuts: Partial<Shortcuts>): Promise<Shortcuts>
     }
   }
 }

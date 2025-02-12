@@ -12,7 +12,7 @@ export const Auth = () => {
   const isPremium = profile?.user_type !== 'free'
 
   return (
-    <Card.Root>
+    <Card.Root variant="subtle">
       <Card.Body>
         {isLoading && (
           <ProgressRoot shape="square" variant="subtle" animated value={null} size="xs" mb={2}>
