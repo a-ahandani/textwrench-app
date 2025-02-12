@@ -7,6 +7,12 @@ export const labels = {
   win32: 'Windows'
 }
 
+export const PLATFORMS = {
+  darwin: 'mac',
+  win32: 'windows',
+  linux: 'linux'
+}
+
 export const APP_KEY = 'textwrench'
 
 export const MODIFIERS = [
@@ -41,4 +47,14 @@ export const KEY_NAMES = {
     acc[code] = code.replace('Digit', '')
     return acc
   }, {})
+}
+
+export const ACTIONS = {
+  FIX_SELECTED_TEXT: 'fixSelectedText'
+}
+export const ACTION_LABELS = {
+  [ACTIONS.FIX_SELECTED_TEXT]: 'Fix text'
+}
+export const ACTION_DEFAULT_SHORTCUTS = {
+  [ACTIONS.FIX_SELECTED_TEXT]: ['Meta', 'Shift', 'F']
 }

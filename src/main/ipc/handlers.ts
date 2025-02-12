@@ -2,9 +2,10 @@ import { BrowserWindow, ipcMain, shell } from 'electron'
 import { IPC_EVENTS } from '../../shared/ipc-events'
 import { store } from '../store'
 import { updateStore } from '../store/helpers'
-import { Prompt, StoreType, UserProfile } from '../../shared/types/store'
+import { Prompt, Shortcuts, StoreType, UserProfile } from '../../shared/types/store'
 import { handleError, twService } from '../services/axios/axios'
 import { verifyToken } from '../services/auth/verifyToken'
+import { resetShortcuts } from '../services/shortcuts/shortcuts'
 
 const apiServer = import.meta.env.VITE_API_SERVER
 
@@ -31,7 +32,8 @@ export function setupIpcHandlers() {
 
   ipcMain.handle(IPC_EVENTS.GET_PROFILE, async () => {
     try {
-      const result = await twService.get<{ data: UserProfile }>('/protected/profile')
+      const result = await twService.get<UserProfile>('/protected/profile')
+      resetShortcuts(result.data?.shortcuts)
       return result.data
     } catch (error) {
       handleError(error)
@@ -42,6 +44,20 @@ export function setupIpcHandlers() {
   ipcMain.handle(IPC_EVENTS.GET_PROMPTS, async () => {
     try {
       const result = await twService.get<{ data: Prompt[] }>('/protected/prompts')
+      return result.data
+    } catch (error) {
+      handleError(error)
+    }
+    return
+  })
+
+  ipcMain.handle(IPC_EVENTS.UPDATE_SHORTCUTS, async (_event, shortcuts: Shortcuts) => {
+    try {
+      const result = await twService.patch<{ data: Shortcuts }>(
+        `/protected/profile/shortcuts`,
+        shortcuts
+      )
+      resetShortcuts(result.data)
       return result.data
     } catch (error) {
       handleError(error)

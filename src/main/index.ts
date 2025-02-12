@@ -1,9 +1,7 @@
 import { app, BrowserWindow } from 'electron'
 import { electronAppUniversalProtocolClient } from 'electron-app-universal-protocol-client'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import { registerShortcut } from './services/shortcuts/shortcuts'
 import { initializeApp } from './services/window/window'
-import { handleSelectedText } from './ipc/clipboard-handlers'
 import { setupIpcHandlers } from './ipc/handlers'
 import path from 'path'
 import { updateStore } from './store/helpers'
@@ -15,12 +13,6 @@ let mainWindow: BrowserWindow | null = null
 app.whenReady().then(async () => {
   const appVersion = await app.getVersion()
   updateStore('appVersion', appVersion)
-
-  const registerCopy = registerShortcut('Shift+Control+C', handleSelectedText)
-
-  if (!registerCopy) {
-    console.warn('Failed to simulate copy')
-  }
 
   electronApp.setAppUserModelId('com.electron')
 

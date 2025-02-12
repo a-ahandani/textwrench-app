@@ -9,6 +9,7 @@ export type UserProfile = {
   name: string
   email: string
   ID: string
+  shortcuts: Shortcuts
 }
 
 export type StoreType = {
@@ -17,3 +18,22 @@ export type StoreType = {
   selectedPrompt?: Prompt
   token?: string | null
 }
+
+enum OsType {
+  MAC = 'mac',
+  WINDOWS = 'windows',
+  LINUX = 'linux'
+}
+
+
+export type ShortcutList = {
+  [key: string]: string
+}
+
+export type Shortcuts = {
+  [OsType.MAC]: ShortcutList
+  [OsType.WINDOWS]: ShortcutList
+  [OsType.LINUX]: ShortcutList
+}
+
+
