@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          ref: main  # Replace with your default branch name (e.g., main, master)
+          ref: main
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -31,7 +31,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout main  # Replace with your default branch name
+          git checkout main
           git add package.json
           git commit -m "Update package.json version to $TAG_VERSION"
-          git push origin main  # Replace with your default branch name
+          git push origin main
