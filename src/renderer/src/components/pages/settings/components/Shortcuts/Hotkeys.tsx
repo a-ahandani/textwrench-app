@@ -1,4 +1,4 @@
-import { Box, Card, HStack, Kbd, Input, IconButton, Button } from '@chakra-ui/react'
+import { Box, HStack, Kbd, Input, IconButton, Button } from '@chakra-ui/react'
 import { Field } from '@renderer/components/ui/Field'
 import { InputGroup } from '@renderer/components/ui/InputGroup'
 import { KEY_NAMES, LETTER_NUMBER_CODES, MODIFIERS, NON_MODIFIERS } from '@shared/constants'
@@ -69,69 +69,67 @@ export const Hotkeys = ({
   )
 
   return (
-    <Card.Root my="2" variant="subtle">
-      <Box p="4">
-        <HStack gap="1">
-          <Field orientation="horizontal" label={`${label}:`}>
-            <InputGroup
-              flex="1"
-              startElement={
-                <>
-                  {selectedKeys.map((key) => {
-                    return (
-                      <Kbd variant="raised" size="sm" key={key}>
-                        {KEY_NAMES[key]}
-                      </Kbd>
-                    )
-                  })}
-                </>
-              }
-              {...(selectedKeys.length &&
-                isEditing && {
-                  endElement: (
-                    <>
-                      <IconButton
-                        variant="ghost"
-                        size="xs"
-                        rounded="full"
-                        onClick={() => {
-                          setSelectedKeys(selectedKeys.slice(0, -1))
-                        }}
-                      >
-                        <GoArrowLeft />
-                      </IconButton>
-
-                      <IconButton
-                        onClick={() => setSelectedKeys([])}
-                        size="xs"
-                        variant="ghost"
-                        rounded="full"
-                      >
-                        <GoX />
-                      </IconButton>
-                    </>
+    <Box mt="2">
+      <HStack gap="1">
+        <Field orientation="horizontal" label={`${label}:`}>
+          <InputGroup
+            flex="1"
+            startElement={
+              <>
+                {selectedKeys.map((key) => {
+                  return (
+                    <Kbd variant="raised" size="sm" key={key}>
+                      {KEY_NAMES[key]}
+                    </Kbd>
                   )
                 })}
-            >
-              <Input disabled variant={isEditing ? 'outline' : 'subtle'} />
-            </InputGroup>
-            <Button
-              size="sm"
-              variant="subtle"
-              disabled={isEditing && !isValidShortcut}
-              onClick={() => {
-                setIsEditing(!isEditing)
-                if (isEditing) {
-                  onSubmit(selectedKeys)
-                }
-              }}
-              colorPalette={isEditing ? 'green' : undefined}
-            >
-              {isEditing ? 'Save' : 'Edit'}
-            </Button>
-          </Field>
-        </HStack>
-      </Box>
-    </Card.Root>
+              </>
+            }
+            {...(selectedKeys.length &&
+              isEditing && {
+                endElement: (
+                  <>
+                    <IconButton
+                      variant="ghost"
+                      size="xs"
+                      rounded="full"
+                      onClick={() => {
+                        setSelectedKeys(selectedKeys.slice(0, -1))
+                      }}
+                    >
+                      <GoArrowLeft />
+                    </IconButton>
+
+                    <IconButton
+                      onClick={() => setSelectedKeys([])}
+                      size="xs"
+                      variant="ghost"
+                      rounded="full"
+                    >
+                      <GoX />
+                    </IconButton>
+                  </>
+                )
+              })}
+          >
+            <Input disabled variant={isEditing ? 'outline' : 'subtle'} />
+          </InputGroup>
+          <Button
+            size="sm"
+            variant="subtle"
+            disabled={isEditing && !isValidShortcut}
+            onClick={() => {
+              setIsEditing(!isEditing)
+              if (isEditing) {
+                onSubmit(selectedKeys)
+              }
+            }}
+            colorPalette={isEditing ? 'green' : undefined}
+          >
+            {isEditing ? 'Save' : 'Edit'}
+          </Button>
+        </Field>
+      </HStack>
+    </Box>
   )
 }

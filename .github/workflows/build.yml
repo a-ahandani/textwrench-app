@@ -2,9 +2,10 @@ name: Build/release
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - 'v*'
+  workflow_run:
+    workflows: ["Update package.json version on tag"]
+    types:
+      - completed
 
 
 jobs:

@@ -25,7 +25,7 @@ export const Shortcuts = () => {
   }
   if (!isLoggedIn || !isFetched) return null
   return (
-    <Card.Root my={1} variant="subtle">
+    <Card.Root my={2} variant="outline">
       <Card.Body>
         {isLoading && (
           <ProgressRoot shape="square" variant="subtle" animated value={null} size="xs" mb={2}>
