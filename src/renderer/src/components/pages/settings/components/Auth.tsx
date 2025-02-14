@@ -8,7 +8,7 @@ import { GoX } from 'react-icons/go'
 
 export const Auth = () => {
   const { login, logout, isLoading: isLoggingIn, isLoggedIn, setIsLoading } = useAuth()
-  const { data: profile, isLoading, isFetched } = useProfile({ enabled: isLoggedIn })
+  const { data: profile, isLoading } = useProfile({ enabled: isLoggedIn })
   const isPremium = profile?.user_type !== 'free'
 
   return (
@@ -20,7 +20,7 @@ export const Auth = () => {
           </ProgressRoot>
         )}
         <Card.Title mt="2">
-          {isLoggedIn && isFetched ? `Hello, ${profile?.name}` : 'Login to your account'}
+          {isLoggedIn && profile?.name ? `Hello, ${profile?.name}` : 'Login to your account'}
         </Card.Title>
         {isLoggedIn ? (
           <Card.Description>

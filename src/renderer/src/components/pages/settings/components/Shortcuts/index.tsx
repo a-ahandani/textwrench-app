@@ -1,4 +1,4 @@
-import { Card, ProgressRoot } from '@chakra-ui/react'
+import { Card, Kbd, ProgressRoot } from '@chakra-ui/react'
 import { useProfile } from '@renderer/hooks/useProfile'
 import { useAuth } from '../../../../providers/AuthProvider'
 import { ProgressBar } from '../../../../ui/Progress'
@@ -33,9 +33,20 @@ export const Shortcuts = () => {
           </ProgressRoot>
         )}
         <Card.Title fontSize="sm">Modify keyboard Shortcuts</Card.Title>
-        <Card.Description>
-          Start with a modifier key (Ctrl, Alt, or Cmd), then add a letter. You can use up to two
-          modifiers and one letter.
+        <Card.Description as="div">
+          Start with a modifier key
+          <Kbd mx="1" variant="raised" size="sm">
+            Ctrl
+          </Kbd>
+          ,
+          <Kbd mx="1" variant="raised" size="sm">
+            Alt
+          </Kbd>
+          or
+          <Kbd mx="1" variant="raised" size="sm">
+            Cmd
+          </Kbd>
+          , then add a letter. You can use up to two modifiers and one letter.
           {Object.values(ACTIONS).map((action) => {
             return (
               <Hotkeys
