@@ -18,7 +18,7 @@ export const resetShortcuts = (shortcuts) => {
   const updatedShortcuts = shortcuts?.[PLATFORMS[process.platform]]
 
   Object.values(ACTIONS).forEach((action) => {
-    const hotKeys = updatedShortcuts[action] || ACTION_DEFAULT_SHORTCUTS[action]
+    const hotKeys = updatedShortcuts[action] || ACTION_DEFAULT_SHORTCUTS[action].join('+')
     const handler = handlers[action]
     globalShortcut.register(hotKeys, handler)
   })
