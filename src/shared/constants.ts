@@ -56,5 +56,5 @@ export const ACTION_LABELS = {
   [ACTIONS.FIX_SELECTED_TEXT]: 'Fix text'
 }
 export const ACTION_DEFAULT_SHORTCUTS = {
-  [ACTIONS.FIX_SELECTED_TEXT]: ['Meta', 'Shift', 'F']
+  [ACTIONS.FIX_SELECTED_TEXT]: ['Ctrl', 'Shift', 'C']
 }

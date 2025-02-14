@@ -15,6 +15,7 @@ export const useProfile = (props) => {
     queryKey,
     queryFn: getProfile,
     select: (data) => {
+      if (!data?.shortcuts) return data
       const shortcuts = data?.shortcuts?.[PLATFORMS[platform]]
       const shortcutsTransformed = {}
       for (const key in shortcuts) {
