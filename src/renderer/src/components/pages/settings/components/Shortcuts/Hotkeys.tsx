@@ -1,10 +1,11 @@
-import { Box, HStack, Kbd, Input, IconButton, Button } from '@chakra-ui/react'
+import { Box, HStack, Kbd, Input, IconButton } from '@chakra-ui/react'
 import { Field } from '@renderer/components/ui/Field'
 import { InputGroup } from '@renderer/components/ui/InputGroup'
+import { Tooltip } from '@renderer/components/ui/Tooltip'
 import { KEY_NAMES, LETTER_NUMBER_CODES, MODIFIERS, NON_MODIFIERS } from '@shared/constants'
 import { useMemo, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { GoArrowLeft, GoX } from 'react-icons/go'
+import { GoCheck, GoPencil, GoReply, GoX } from 'react-icons/go'
 
 export const Hotkeys = ({
   label,
@@ -78,56 +79,47 @@ export const Hotkeys = ({
               <>
                 {selectedKeys.map((key) => {
                   return (
-                    <Kbd variant="raised" size="sm" key={key}>
+                    <Kbd ml="-1" mr="2" variant="raised" size="sm" key={key}>
                       {KEY_NAMES[key]}
                     </Kbd>
                   )
                 })}
               </>
             }
-            {...(selectedKeys.length &&
-              isEditing && {
-                endElement: (
-                  <>
-                    <IconButton
-                      variant="ghost"
-                      size="xs"
-                      rounded="full"
-                      onClick={() => {
-                        setSelectedKeys(selectedKeys.slice(0, -1))
-                      }}
-                    >
-                      <GoArrowLeft />
-                    </IconButton>
-
-                    <IconButton
-                      onClick={() => setSelectedKeys([])}
-                      size="xs"
-                      variant="ghost"
-                      rounded="full"
-                    >
+            endElement={
+              <>
+                {selectedKeys.length && isEditing ? (
+                  <Tooltip content={'Delete'}>
+                    <IconButton onClick={() => setSelectedKeys([])} size="xs" variant="ghost">
                       <GoX />
                     </IconButton>
-                  </>
-                )
-              })}
+                  </Tooltip>
+                ) : null}
+
+                <Tooltip content={!isValidShortcut ? 'Reset' : isEditing ? 'Save' : 'Edit'}>
+                  <IconButton
+                    mr="-2"
+                    size="xs"
+                    variant="ghost"
+                    onClick={() => {
+                      if (!isValidShortcut) {
+                        setSelectedKeys(value)
+                      }
+                      setIsEditing(!isEditing)
+                      if (isEditing) {
+                        onSubmit(selectedKeys)
+                      }
+                    }}
+                    colorPalette={!isValidShortcut ? 'yellow' : isEditing ? 'green' : 'blue'}
+                  >
+                    {isValidShortcut ? <> {isEditing ? <GoCheck /> : <GoPencil />}</> : <GoReply />}
+                  </IconButton>
+                </Tooltip>
+              </>
+            }
           >
             <Input disabled variant={isEditing ? 'outline' : 'subtle'} />
           </InputGroup>
-          <Button
-            size="sm"
-            variant="subtle"
-            disabled={isEditing && !isValidShortcut}
-            onClick={() => {
-              setIsEditing(!isEditing)
-              if (isEditing) {
-                onSubmit(selectedKeys)
-              }
-            }}
-            colorPalette={isEditing ? 'green' : undefined}
-          >
-            {isEditing ? 'Save' : 'Edit'}
-          </Button>
         </Field>
       </HStack>
     </Box>

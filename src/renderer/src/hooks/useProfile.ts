@@ -19,7 +19,11 @@ export const useProfile = (props) => {
       const shortcuts = data?.shortcuts?.[PLATFORMS[platform]]
       const shortcutsTransformed = {}
       for (const key in shortcuts) {
-        shortcutsTransformed[key] = shortcuts[key].split('+')
+        if (shortcuts?.[key]?.length) {
+          shortcutsTransformed[key] = shortcuts[key].split('+')
+        } else {
+          shortcutsTransformed[key] = null
+        }
       }
       return {
         ...data,
