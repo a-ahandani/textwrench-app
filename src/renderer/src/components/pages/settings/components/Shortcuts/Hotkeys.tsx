@@ -21,6 +21,7 @@ export const Hotkeys = ({
 
   const isValidShortcut = useMemo(() => {
     if (selectedKeys.length < 2) return false
+    if (!LETTER_NUMBER_CODES.includes(selectedKeys[selectedKeys.length - 1])) return false
     if (!MODIFIERS.includes(selectedKeys[0])) return false
     if (selectedKeys.length === 3 && !NON_MODIFIERS.includes(selectedKeys[1])) return false
     if (selectedKeys.length === 3 && !LETTER_NUMBER_CODES.includes(selectedKeys[2])) return false
@@ -33,6 +34,11 @@ export const Hotkeys = ({
     (event) => {
       event.preventDefault()
       const { code } = event
+      if (isValidShortcut) {
+        if (MODIFIERS.includes(code) || NON_MODIFIERS.includes(code)) {
+          setSelectedKeys([code])
+        }
+      }
 
       // Ignore repeated keys
       if (selectedKeys.includes(code)) return
@@ -49,6 +55,13 @@ export const Hotkeys = ({
         return
       }
 
+      // Handle third key (if applicable)
+      if (selectedKeys.length === 2) {
+        if (LETTER_NUMBER_CODES.includes(code)) {
+          setSelectedKeys([...selectedKeys.filter((k) => !LETTER_NUMBER_CODES.includes(k)), code])
+        }
+      }
+
       // Handle second key: Can be another modifier or shift (optional) or letter/number
       if (selectedKeys.length === 1) {
         if (LETTER_NUMBER_CODES.includes(code)) {
@@ -57,13 +70,6 @@ export const Hotkeys = ({
           setSelectedKeys([...selectedKeys, code])
         }
         return
-      }
-
-      // Handle third key (if applicable)
-      if (selectedKeys.length === 2) {
-        if (LETTER_NUMBER_CODES.includes(code)) {
-          setSelectedKeys([...selectedKeys.filter((k) => !LETTER_NUMBER_CODES.includes(k)), code])
-        }
       }
     },
     { keydown: true, keyup: false, enabled: isEditing }
@@ -118,7 +124,11 @@ export const Hotkeys = ({
               </>
             }
           >
-            <Input disabled variant={isEditing ? 'outline' : 'subtle'} />
+            <Input
+              borderColor={!isValidShortcut ? 'yellow' : isEditing ? 'green' : 'inherit'}
+              disabled
+              variant={isEditing ? 'outline' : 'subtle'}
+            />
           </InputGroup>
         </Field>
       </HStack>
