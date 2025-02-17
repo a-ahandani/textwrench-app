@@ -67,9 +67,10 @@ export const PromptList = ({ label }: PromptListProps) => {
                       setOpen(true)
                     }}
                     colorPalette="green"
-                    size="sm"
+                    size="lg"
+                    borderRadius={0}
                     aria-label="Add Prompt"
-                    mr={-0.5}
+                    mr={-2}
                     variant="solid"
                   >
                     <GoPlus />
