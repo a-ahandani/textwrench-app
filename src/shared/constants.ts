@@ -13,6 +13,12 @@ export const PLATFORMS = {
   linux: 'linux'
 }
 
+export const PLATFORMS_DL_URL = {
+  darwin: 'macos-latest-files',
+  win32: 'windows-latest-files',
+  linux: 'linux-latest-files'
+}
+
 export const APP_KEY = 'textwrench'
 
 export const MODIFIERS = [

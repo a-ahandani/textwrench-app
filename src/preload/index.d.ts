@@ -18,6 +18,8 @@ declare global {
       closeWindow(): void
       verifyToken(): Promise<void>
       updateShortcuts(shortcuts: Partial<Shortcuts>): Promise<Shortcuts>
+      getVersion(): Promise<Version>
+      download(): Promise<Version>
     }
   }
 }

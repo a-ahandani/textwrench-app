@@ -32,7 +32,7 @@ function App() {
       <Header />
       <Container maxWidth="full" p="2">
         <Clipboard />
-        <Tabs.Root orientation="vertical" size="md" value={activeTab} variant="plain">
+        <Tabs.Root orientation="vertical" size="md" value={activeTab} variant="plain" unmountOnExit>
           <Tabs.List bg="bg.muted" rounded="l3" p="1" mr={2} border={'none'}>
             {filteredTabs.map((tab) => (
               <Tabs.Trigger

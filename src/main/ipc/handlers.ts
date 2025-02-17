@@ -1,13 +1,17 @@
 import { BrowserWindow, ipcMain, shell } from 'electron'
 import { IPC_EVENTS } from '../../shared/ipc-events'
+import { PLATFORMS_DL_URL } from '../../shared/constants'
 import { store } from '../store'
 import { updateStore } from '../store/helpers'
 import { Prompt, Shortcuts, StoreType, UserProfile } from '../../shared/types/store'
 import { handleError, twService } from '../services/axios/axios'
 import { verifyToken } from '../services/auth/verifyToken'
 import { resetShortcuts } from '../services/shortcuts/shortcuts'
+import axios from 'axios'
 
 const apiServer = import.meta.env.VITE_API_SERVER
+const versionServer = import.meta.env.VITE_APP_VERSION
+const downloadServer = import.meta.env.VITE_DOWNLOAD_SERVER
 
 export function setupIpcHandlers() {
   ipcMain.handle(IPC_EVENTS.GET_STORE_VALUE, (_event, key: keyof StoreType) => {
@@ -23,6 +27,10 @@ export function setupIpcHandlers() {
     updateStore('token', null)
     twService.defaults.headers.common['Authorization'] = ''
     return shell.openExternal(`${apiServer}/auth/google`)
+  })
+
+  ipcMain.handle(IPC_EVENTS.DOWNLOAD, () => {
+    return shell.openExternal(`${downloadServer}/${PLATFORMS_DL_URL[process.platform]}`)
   })
 
   ipcMain.handle(IPC_EVENTS.LOGOUT, () => {
@@ -97,6 +105,16 @@ export function setupIpcHandlers() {
     const { ID } = prompt
     try {
       const result = await twService.delete<{ data: Prompt }>(`/protected/prompts/${ID}`)
+      return result.data
+    } catch (error) {
+      handleError(error)
+    }
+    return
+  })
+
+  ipcMain.handle(IPC_EVENTS.GET_VERSION, async () => {
+    try {
+      const result = await axios.get(versionServer)
       return result.data
     } catch (error) {
       handleError(error)

@@ -12,6 +12,8 @@ const api = {
       ipcRenderer.removeListener(IPC_EVENTS.STORE_CHANGED, subscription)
     }
   },
+  getVersion: () => ipcRenderer.invoke(IPC_EVENTS.GET_VERSION),
+  download: () => ipcRenderer.invoke(IPC_EVENTS.DOWNLOAD),
   getProfile: () => ipcRenderer.invoke(IPC_EVENTS.GET_PROFILE),
   getPrompts: () => ipcRenderer.invoke(IPC_EVENTS.GET_PROMPTS),
   updateShortcuts: (shortcuts) => ipcRenderer.invoke(IPC_EVENTS.UPDATE_SHORTCUTS, shortcuts),

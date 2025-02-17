@@ -13,5 +13,7 @@ export const IPC_EVENTS = {
   LOGIN_FULFILLED: 'login-fulfilled',
   CLOSE_WINDOW: 'close-window',
   VERIFY_TOKEN: 'verify-token',
-  UPDATE_SHORTCUTS: 'update-shortcuts'
+  UPDATE_SHORTCUTS: 'update-shortcuts',
+  GET_VERSION: 'get-version',
+  DOWNLOAD: 'download'
 }
