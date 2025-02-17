@@ -1,12 +1,13 @@
-import { Box, Group, ProgressRoot } from '@chakra-ui/react'
-import { RadioCardItem } from '../../ui/RadioCard'
+import { Box, IconButton, ProgressRoot } from '@chakra-ui/react'
+import { RadioCardItem } from '../../../ui/RadioCard'
 import { useState } from 'react'
 import { GoPencil, GoX } from 'react-icons/go'
 import { useUpdatePrompt } from '@renderer/hooks/useUpdatePrompt'
-import { ProgressBar } from '../../ui/Progress'
+import { ProgressBar } from '../../../ui/Progress'
 import { PromptForm } from './PromptForm'
-import { Button } from '@renderer/components/ui/Button'
 import { useDeletePrompt } from '@renderer/hooks/useDeletePrompt'
+import { Tooltip } from '@renderer/components/ui/Tooltip'
+import { DeleteConfirmation } from './DeleteConfirmation'
 
 type PromptListProps = {
   options?: Array<{ label: string; value: string }>
@@ -17,24 +18,29 @@ type PromptListProps = {
 }
 
 export const PromptListItem = ({ onChange, label, value, prompt }: PromptListProps) => {
-  const [open, setOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   const { mutate: updatePrompt, isPending: isUpdating } = useUpdatePrompt({
     id: value,
     onSuccess: () => {
-      setOpen(false)
+      setIsEditModalOpen(false)
     }
   })
 
   const { mutate: deletePrompt, isPending: isDeleting } = useDeletePrompt({
     id: value,
     onSuccess: () => {
-      setOpen(false)
+      setIsEditModalOpen(false)
     }
   })
 
-  const handleModalOpen = () => {
-    setOpen(!open)
+  const handleEditModalModalOpen = () => {
+    setIsEditModalOpen(!isEditModalOpen)
+  }
+
+  const handleDeleteConfirmationOpen = () => {
+    setIsDeleteModalOpen(!isDeleteModalOpen)
   }
 
   const handleUpdate = (prompt) => {
@@ -42,7 +48,7 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
       value: prompt.prompt,
       label: prompt.label
     })
-    setOpen(false)
+    setIsEditModalOpen(false)
   }
 
   const handleDelete = () => {
@@ -75,15 +81,26 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
             <Box flex="1" display="flex" alignItems={'center'}>
               {label}
             </Box>
-            <Group attached>
-              <Button variant="subtle" color="red.400" size="xs" onClick={handleDelete}>
+            <Tooltip content={'Delete'}>
+              <IconButton
+                colorPalette="red"
+                onClick={handleDeleteConfirmationOpen}
+                size="xs"
+                variant="ghost"
+              >
                 <GoX />
-              </Button>
-              <Button variant="subtle" size="xs" onClick={handleModalOpen}>
+              </IconButton>
+            </Tooltip>
+            <Tooltip content={'Edit Prompt'}>
+              <IconButton
+                colorPalette="blue"
+                onClick={handleEditModalModalOpen}
+                size="xs"
+                variant="ghost"
+              >
                 <GoPencil />
-                Edit Prompt
-              </Button>
-            </Group>
+              </IconButton>
+            </Tooltip>
           </Box>
         }
         key={value}
@@ -92,12 +109,18 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
           onChange?.(value)
         }}
       />
+      <DeleteConfirmation
+        open={isDeleteModalOpen}
+        onSubmit={handleDelete}
+        label={label}
+        onClose={handleDeleteConfirmationOpen}
+      />
       <PromptForm
-        open={open}
+        open={isEditModalOpen}
         isLoading={isUpdating}
         initialValue={{ label, value: prompt }}
         onSubmit={handleUpdate}
-        onClose={handleModalOpen}
+        onClose={handleEditModalModalOpen}
       />
     </>
   )

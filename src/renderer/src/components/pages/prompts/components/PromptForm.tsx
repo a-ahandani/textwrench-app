@@ -1,5 +1,5 @@
 import { Input, Textarea } from '@chakra-ui/react'
-import { DrawerFull } from '../../ui/Drawer'
+import { DrawerFull } from '../../../ui/Drawer'
 import { useState } from 'react'
 import { GoPencil } from 'react-icons/go'
 import { Prompt } from '@shared/types/store'
@@ -39,6 +39,7 @@ export const PromptForm = ({
     <DrawerFull
       open={open}
       onConfirm={handleConfirm}
+      cancelLabel="Cancel & return"
       onCancel={onClose}
       icon={GoPencil}
       title={isCreate ? 'Add new prompt' : 'Edit prompt'}

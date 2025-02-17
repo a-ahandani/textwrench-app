@@ -1,8 +1,9 @@
-import { Box, Drawer as ChakraDrawer, Portal, ProgressRoot } from '@chakra-ui/react'
+import { Box, Drawer as ChakraDrawer, IconButton, Portal, ProgressRoot } from '@chakra-ui/react'
 import * as React from 'react'
-import { GoCheck, GoX } from 'react-icons/go'
+import { GoCheck, GoArrowLeft } from 'react-icons/go'
 import { ProgressBar } from './Progress'
 import { Button } from '@renderer/components/ui/Button'
+import { Tooltip } from './Tooltip'
 
 interface DrawerContentProps extends ChakraDrawer.ContentProps {
   portalled?: boolean
@@ -35,6 +36,8 @@ type DrawerFullProps = {
   title?: string
   icon?: React.ComponentType
   isLoading?: boolean
+  confirmButtonProps?: React.ComponentProps<typeof Button>
+  confirmIcon?: React.ComponentType
 }
 
 export const DrawerFull = ({
@@ -46,7 +49,9 @@ export const DrawerFull = ({
   children,
   title,
   icon: Icon,
-  isLoading
+  isLoading,
+  confirmButtonProps,
+  confirmIcon: ConfirmIcon = GoCheck
 }: DrawerFullProps) => (
   <DrawerRoot open={open} placement="bottom" size="full">
     <DrawerBackdrop />
@@ -65,21 +70,23 @@ export const DrawerFull = ({
                 {title}
               </Box>
               {onCancel && (
-                <Button aria-label={cancelLabel} size={'xs'} variant="ghost" onClick={onCancel}>
-                  <GoX />
-                  {cancelLabel}
-                </Button>
+                <Tooltip content={cancelLabel} aria-label={cancelLabel}>
+                  <IconButton onClick={onCancel} size="sm" aria-label={cancelLabel} variant="ghost">
+                    <GoArrowLeft />
+                  </IconButton>
+                </Tooltip>
               )}
               {onConfirm && (
                 <Button
                   ml={2}
                   aria-label={confirmLabel}
-                  size="xs"
+                  size="sm"
                   variant="solid"
                   colorPalette="green"
                   onClick={onConfirm}
+                  {...confirmButtonProps}
                 >
-                  <GoCheck />
+                  <ConfirmIcon />
                   {confirmLabel}
                 </Button>
               )}

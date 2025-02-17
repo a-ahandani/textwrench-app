@@ -1,4 +1,4 @@
-import { PromptList } from './components/pages/prompts/PromptList'
+import { Prompts } from './components/pages/prompts/Prompts'
 import { Settings } from './components/pages/settings/Settings'
 import { Container, Tabs } from '@chakra-ui/react'
 import { Clipboard } from './components/pages/clipboard/Clipboard'
@@ -13,7 +13,7 @@ function App() {
   const { isLoggedIn } = useAuth()
 
   const tabs = [
-    { value: 'prompts', icon: <GoPencil />, content: <PromptList />, isProtected: true },
+    { value: 'prompts', icon: <GoPencil />, content: <Prompts />, isProtected: true },
     { value: 'settings', icon: <GoGear />, content: <Settings />, isProtected: false },
     { value: 'about', icon: <GoTools />, content: <About />, isProtected: false }
   ]

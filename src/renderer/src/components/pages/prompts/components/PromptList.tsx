@@ -1,14 +1,14 @@
-import { Box, DataListRoot, Flex, Group, Input, RadioCardLabel } from '@chakra-ui/react'
-import { RadioCardRoot } from '../../ui/RadioCard'
+import { Box, DataListRoot, Flex, Group, IconButton, Input, RadioCardLabel } from '@chakra-ui/react'
+import { RadioCardRoot } from '../../../ui/RadioCard'
 import { PromptListItem } from './PromptListItem'
-import { useStore } from '../../../hooks/useStore'
-import { SkeletonText } from '../../ui/Skeleton'
+import { useStore } from '../../../../hooks/useStore'
+import { SkeletonText } from '../../../ui/Skeleton'
 import { LuSearch } from 'react-icons/lu'
-import { InputGroup } from '../../ui/InputGroup'
+import { InputGroup } from '../../../ui/InputGroup'
 import { usePrompts } from '@renderer/hooks/usePrompts'
 import { Prompt } from '@shared/types/store'
 import { useState } from 'react'
-import { Button } from '@renderer/components/ui/Button'
+import { Tooltip } from '@renderer/components/ui/Tooltip'
 import { GoPlus } from 'react-icons/go'
 import { PromptForm } from './PromptForm'
 import { useCreatePrompt } from '@renderer/hooks/useCreatePrompt'
@@ -52,26 +52,44 @@ export const PromptList = ({ label }: PromptListProps) => {
         <SkeletonText noOfLines={4} />
       ) : (
         <DataListRoot unstyled>
-          <Flex align={'center'} justify={'space-between'} mb={2}>
+          <Flex alignItems={'center'} justifyContent={'center'} mb={2}>
             <InputGroup
               width="full"
-              mb="2"
               startElement={<LuSearch />}
               endElement={
-                <Button
-                  onClick={() => {
-                    setOpen(true)
-                  }}
-                  size="xs"
-                  variant="solid"
-                  colorPalette="green"
+                <Tooltip
+                  content="Add Prompt"
+                  aria-label="Add Prompt"
+                  positioning={{ placement: 'left' }}
                 >
-                  <GoPlus /> Add Prompt
-                </Button>
+                  <IconButton
+                    onClick={() => {
+                      setOpen(true)
+                    }}
+                    colorPalette="green"
+                    size="sm"
+                    aria-label="Add Prompt"
+                    mr={-0.5}
+                    variant="solid"
+                  >
+                    <GoPlus />
+                  </IconButton>
+                </Tooltip>
               }
             >
               <Input
-                variant="flushed"
+                variant="subtle"
+                _active={{
+                  borderColor: 'transparent',
+                  boxShadow: 'none'
+                }}
+                _focus={{
+                  borderColor: 'transparent',
+                  boxShadow: 'none'
+                }}
+                colorPalette="green"
+                borderRadius={0}
+                size={'lg'}
                 placeholder="Search prompts"
                 value={term}
                 onChange={(e) => {
