@@ -4,14 +4,16 @@ import { getCommandKey } from '../../utils/platform'
 import { wait } from '../../utils/wait'
 
 export const getSelectedText = async (): Promise<string> => {
-  await wait()
-
+  if (process.platform === 'darwin') {
+    await wait()
+  }
   const currentClipboardContent = clipboard.readText()
   clipboard.clear()
 
   keyTap('c', getCommandKey())
-  await wait()
-
+  if (process.platform === 'darwin') {
+    await wait()
+  }
   const selectedText = clipboard.readText()
   clipboard.writeText(currentClipboardContent)
   return selectedText
