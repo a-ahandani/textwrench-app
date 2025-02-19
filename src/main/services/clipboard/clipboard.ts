@@ -4,25 +4,23 @@ import { getCommandKey } from '../../utils/platform'
 import { wait } from '../../utils/wait'
 
 export const getSelectedText = async (): Promise<string> => {
-  if (process.platform === 'darwin') {
-    await wait()
-  }
+  await wait()
   const currentClipboardContent = clipboard.readText()
   clipboard.clear()
+  await wait()
 
   keyTap('c', getCommandKey())
-  if (process.platform === 'darwin') {
-    await wait()
-  }
+
+  await wait()
+
   const selectedText = clipboard.readText()
+  console.log('Selected text:', selectedText)
   clipboard.writeText(currentClipboardContent)
+  await wait()
   return selectedText
 }
 
-export const writeToClipboard = (text: string): void => {
-  clipboard.writeText(text)
-}
-
-export const pasteContent = (): void => {
+export const pasteContent = async (): Promise<void> => {
+  await wait()
   keyTap('v', getCommandKey())
 }
