@@ -75,3 +75,15 @@ jobs:
             *-arm*
             *zip*
           delete: 'true'
+
+      - name: Zip macOS build after upload
+        if: matrix.os == 'macos-latest'
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: 22
+          script: |
+            cd /var/www/textwrench.ai/downloads/macos-latest-files
+            zip -r mac_build.zip *
