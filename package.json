@@ -20,43 +20,6 @@
     "build:linux": "electron-vite build && electron-builder --linux --config.linux.target=AppImage",
     "release": "electron-builder --mac --windows --linux --publish always"
   },
-  "build": {
-    "appId": "com.tw.textwrench",
-    "productName": "Text Wrench",
-    "protocols": [
-      {
-        "name": "TextWrench",
-        "schemes": [
-          "textwrench"
-        ]
-      }
-    ],
-    "directories": {
-      "output": "dist"
-    },
-    "files": [
-      "out/**/*",
-      "node_modules/**/*",
-      "package.json",
-      {
-        "from": "resources",
-        "to": "build",
-        "filter": [
-          "**/*"
-        ]
-      }
-    ],
-    "win": {
-      "artifactName": "TextWrench-${version}.${ext}"
-    },
-    "mac": {
-      "category": "public.app-category.developer-tools",
-      "artifactName": "TextWrench-${version}.${ext}"
-    },
-    "linux": {
-      "artifactName": "TextWrench-${version}.${ext}"
-    }
-  },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",

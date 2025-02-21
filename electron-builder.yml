@@ -1,20 +1,29 @@
-appId: com.electron.app
+appId: com.tw.textwrench
 productName: Text Wrench
+
+protocols:
+  - name: TextWrench
+    schemes:
+      - textwrench
+
 directories:
   buildResources: build
+  output: dist
+
 files:
-  - '!**/.vscode/*'
-  - '!src/*'
-  - '!electron.vite.config.{js,ts,mjs,cjs}'
-  - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
-  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
-  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  - out/**/*
+  - node_modules/**/*
+  - package.json
+  - resources/**/*
+
 asarUnpack:
   - resources/**
 
 win:
   executableName: ${productName}
   icon: "resources/icons/icon.png"
+  artifactName: "TextWrench-${version}.${ext}"
+
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -23,12 +32,14 @@ nsis:
 
 mac:
   icon: "resources/icons/icon.icns"
+  category: public.app-category.developer-tools
+  artifactName: "TextWrench-${version}.${ext}"
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
-    - NSCameraUsageDescription: Application requests access to the device's camera.
-    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
-    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
-    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+    NSCameraUsageDescription: Application requests access to the device's camera.
+    NSMicrophoneUsageDescription: Application requests access to the device's microphone.
+    NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
+    NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: false
 
 dmg:
@@ -42,6 +53,7 @@ linux:
     - deb
   maintainer: electronjs.org
   category: Utility
+  artifactName: "TextWrench-${version}.${ext}"
 
 appImage:
   artifactName: ${name}-${version}.${ext}
