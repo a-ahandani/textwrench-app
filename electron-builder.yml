@@ -1,5 +1,5 @@
 appId: ai.textwrench.app
-productName: Text Wrench
+productName: Textwrench
 
 protocols:
   - name: TextWrench
@@ -29,17 +29,13 @@ nsis:
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+  warningsAsErrors: false
 
 mac:
   icon: "resources/icons/icon.icns"
   category: public.app-category.developer-tools
   artifactName: "TextWrench-${version}.${ext}"
   entitlementsInherit: build/entitlements.mac.plist
-  extendInfo:
-    NSCameraUsageDescription: Application requests access to the device's camera.
-    NSMicrophoneUsageDescription: Application requests access to the device's microphone.
-    NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
-    NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: false
 
 dmg:
