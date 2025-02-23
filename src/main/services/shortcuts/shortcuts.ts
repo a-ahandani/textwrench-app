@@ -2,24 +2,23 @@ import { ACTION_DEFAULT_SHORTCUTS, ACTIONS, PLATFORMS } from '../../../shared/co
 import { globalShortcut } from 'electron'
 import { handlers } from '../../ipc'
 
-export const registerShortcut = (
-  accelerator: Electron.Accelerator,
-  callback: () => void
-): boolean => {
-  return globalShortcut.register(accelerator, callback)
-}
-
-export const unregisterShortcut = (accelerator: Electron.Accelerator): void => {
-  globalShortcut.unregister(accelerator)
-}
-
-export const resetShortcuts = (shortcuts) => {
+export const resetShortcuts = (shortcuts: Record<string, Record<string, string>>) => {
   globalShortcut.unregisterAll()
-  const updatedShortcuts = shortcuts?.[PLATFORMS[process.platform]]
 
-  Object.values(ACTIONS).forEach((action) => {
-    const hotKeys = updatedShortcuts[action] || ACTION_DEFAULT_SHORTCUTS[action].join('+')
+  const updatedShortcuts = shortcuts?.[PLATFORMS[process.platform]] || {}
+
+  Object.entries(ACTIONS).forEach(([actionKey, action]) => {
+    const defaultShortcut = ACTION_DEFAULT_SHORTCUTS[action]?.join('+') || 'Ctrl+Shift+C'
+    const customShortcut = updatedShortcuts[action] ?? defaultShortcut
     const handler = handlers[action]
-    globalShortcut.register(hotKeys, handler)
+    if (!handler) {
+      console.warn(`No handler found for action: ${actionKey}`)
+      return
+    }
+
+    const success = globalShortcut.register(customShortcut, handler)
+    if (!success) {
+      console.error(`Failed to register shortcut: ${customShortcut} for action: ${actionKey}`)
+    }
   })
 }

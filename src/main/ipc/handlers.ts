@@ -9,6 +9,7 @@ import { verifyToken } from '../services/auth/verifyToken'
 import { resetShortcuts } from '../services/shortcuts/shortcuts'
 import axios from 'axios'
 
+
 const apiServer = import.meta.env.VITE_API_SERVER
 const versionServer = import.meta.env.VITE_APP_VERSION
 const downloadServer = import.meta.env.VITE_DOWNLOAD_SERVER
@@ -51,7 +52,7 @@ export function setupIpcHandlers() {
 
   ipcMain.handle(IPC_EVENTS.GET_PROMPTS, async () => {
     try {
-      const result = await twService.get<{ data: Prompt[] }>('/protected/prompts')
+      const result = await twService.get<Prompt[]>('/protected/prompts')
       return result.data
     } catch (error) {
       handleError(error)
@@ -61,7 +62,7 @@ export function setupIpcHandlers() {
 
   ipcMain.handle(IPC_EVENTS.UPDATE_SHORTCUTS, async (_event, shortcuts: Shortcuts) => {
     try {
-      const result = await twService.patch<{ data: Shortcuts }>(
+      const result = await twService.patch<Shortcuts>(
         `/protected/profile/shortcuts`,
         shortcuts
       )
@@ -76,7 +77,7 @@ export function setupIpcHandlers() {
   ipcMain.handle(IPC_EVENTS.UPDATE_PROMPT, async (_event, prompt: Prompt) => {
     const { ID, value, label } = prompt
     try {
-      const result = await twService.put<{ data: Prompt }>(`/protected/prompts/${ID}`, {
+      const result = await twService.put<Prompt>(`/protected/prompts/${ID}`, {
         value,
         label
       })
@@ -90,7 +91,7 @@ export function setupIpcHandlers() {
   ipcMain.handle(IPC_EVENTS.CREATE_PROMPT, async (_event, prompt: Prompt) => {
     const { value, label } = prompt
     try {
-      const result = await twService.post<{ data: Prompt }>(`/protected/prompts`, {
+      const result = await twService.post<Prompt>(`/protected/prompts`, {
         value,
         label
       })
@@ -104,7 +105,7 @@ export function setupIpcHandlers() {
   ipcMain.handle(IPC_EVENTS.DELETE_PROMPT, async (_event, prompt: Prompt) => {
     const { ID } = prompt
     try {
-      const result = await twService.delete<{ data: Prompt }>(`/protected/prompts/${ID}`)
+      const result = await twService.delete<Prompt>(`/protected/prompts/${ID}`)
       return result.data
     } catch (error) {
       handleError(error)
