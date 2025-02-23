@@ -1,6 +1,6 @@
 {
   "name": "textwrench",
-  "version": "0.1.66",
+  "version": "0.1.67",
   "description": "TextWrench",
   "main": "./out/main/index.js",
   "author": "Ahmad Ahandani",
