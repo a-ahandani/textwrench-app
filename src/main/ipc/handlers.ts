@@ -42,7 +42,7 @@ export function setupIpcHandlers() {
   ipcMain.handle(IPC_EVENTS.GET_PROFILE, async () => {
     try {
       const result = await twService.get<UserProfile>('/protected/profile')
-      resetShortcuts(result.data?.shortcuts)
+      resetShortcuts(result.data?.shortcuts || {})
       return result.data
     } catch (error) {
       handleError(error)

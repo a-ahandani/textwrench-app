@@ -7,13 +7,14 @@ import path from 'path'
 import { updateStore } from './store/helpers'
 import { IPC_EVENTS } from '../shared/ipc-events'
 import { APP_KEY } from '../shared/constants'
+import { resetShortcuts } from './services/shortcuts/shortcuts'
 
 let mainWindow: BrowserWindow | null = null
 
 app.whenReady().then(async () => {
   const appVersion = await app.getVersion()
   updateStore('appVersion', appVersion)
-
+  resetShortcuts({})
   electronApp.setAppUserModelId('com.electron')
 
   if (process.defaultApp) {
