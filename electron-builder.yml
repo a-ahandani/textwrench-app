@@ -2,7 +2,7 @@ appId: ai.textwrench.app
 productName: Textwrench
 
 protocols:
-  - name: TextWrench
+  - name: Textwrench
     schemes:
       - textwrench
 
@@ -22,7 +22,7 @@ asarUnpack:
 win:
   executableName: ${productName}
   icon: "resources/icons/icon.png"
-  artifactName: "TextWrench-${version}.${ext}"
+  artifactName: "Textwrench-${version}.${ext}"
 
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
@@ -34,7 +34,7 @@ nsis:
 mac:
   icon: "resources/icons/icon.icns"
   category: public.app-category.developer-tools
-  artifactName: "TextWrench-${version}.${ext}"
+  artifactName: "Textwrench-${version}.${ext}"
   entitlementsInherit: build/entitlements.mac.plist
   notarize: false
 
@@ -49,7 +49,7 @@ linux:
     - deb
   maintainer: electronjs.org
   category: Utility
-  artifactName: "TextWrench-${version}.${ext}"
+  artifactName: "Textwrench-${version}.${ext}"
 
 appImage:
   artifactName: ${name}-${version}.${ext}
