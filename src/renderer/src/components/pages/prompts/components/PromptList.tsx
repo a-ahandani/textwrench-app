@@ -11,21 +11,18 @@ import { useState } from 'react'
 import { Tooltip } from '@renderer/components/ui/Tooltip'
 import { GoPlus } from 'react-icons/go'
 import { PromptForm } from './PromptForm'
-import { useCreatePrompt } from '@renderer/hooks/useCreatePrompt'
+import { usePromptsContext } from './PromptsContext'
 
 type PromptListProps = {
   label?: string
 }
 
 export const PromptList = ({ label }: PromptListProps) => {
-  const [term, setTerm] = useState<string>('')
-  const [open, setOpen] = useState(false)
 
-  const { mutate: createPrompt, isPending } = useCreatePrompt({
-    onSuccess: () => {
-      setOpen(false)
-    }
-  })
+  const { setEditingId } = usePromptsContext()
+  const [term, setTerm] = useState<string>('')
+
+
 
   const { data: prompts, isLoading } = usePrompts({
     term
@@ -35,16 +32,13 @@ export const PromptList = ({ label }: PromptListProps) => {
     key: 'selectedPrompt'
   })
 
-  const handleChange = (e) => {
+  const handleSelectPrompt = (e) => {
     const promptId = e?.target?.value
     const prompt = prompts?.find((item) => item.ID == promptId)
     setSelectedPrompt(prompt)
   }
 
-  const handleSubmitNewPrompt = (prompt: Partial<Prompt>) => {
-    createPrompt(prompt)
-    setOpen(false)
-  }
+
 
   return (
     <Box>
@@ -64,7 +58,7 @@ export const PromptList = ({ label }: PromptListProps) => {
                 >
                   <IconButton
                     onClick={() => {
-                      setOpen(true)
+                      setEditingId('new')
                     }}
                     colorPalette="green"
                     size="lg"
@@ -103,7 +97,7 @@ export const PromptList = ({ label }: PromptListProps) => {
           <RadioCardRoot
             size="sm"
             variant="surface"
-            onChange={handleChange}
+            onChange={handleSelectPrompt}
             value={String(selectedPrompt?.ID || prompts?.[0]?.ID)}
           >
             <RadioCardLabel>{label}</RadioCardLabel>
@@ -111,21 +105,15 @@ export const PromptList = ({ label }: PromptListProps) => {
               {prompts?.map((item) => (
                 <PromptListItem
                   key={item.ID}
-                  value={String(item.ID)}
+                  id={String(item.ID)}
                   label={item.label}
-                  prompt={item.value}
                 />
               ))}
             </Group>
           </RadioCardRoot>
         </DataListRoot>
       )}
-      <PromptForm
-        isLoading={isPending}
-        open={open}
-        onSubmit={handleSubmitNewPrompt}
-        onClose={() => setOpen(false)}
-      />
+      <PromptForm />
     </Box>
   )
 }

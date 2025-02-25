@@ -14,11 +14,12 @@ export const useUpdatePrompt = ({
   onSuccess?: (data: Prompt) => void
   onError?: (error) => void
 }) => {
+
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationKey,
-    mutationFn: (prompt: Partial<Prompt>) => updatePrompt({ ...prompt, ID: id }),
+    mutationFn: (prompt: Partial<Prompt>) => updatePrompt({ ...prompt, ID: id ?? undefined }),
     onMutate: (prompt) => {
       queryClient.cancelQueries({ queryKey })
       const previousValue = queryClient.getQueryData<Prompt[]>(queryKey)

@@ -2,53 +2,39 @@ import { Box, IconButton, ProgressRoot } from '@chakra-ui/react'
 import { RadioCardItem } from '../../../ui/RadioCard'
 import { useState } from 'react'
 import { GoPencil, GoX } from 'react-icons/go'
-import { useUpdatePrompt } from '@renderer/hooks/useUpdatePrompt'
 import { ProgressBar } from '../../../ui/Progress'
-import { PromptForm } from './PromptForm'
 import { useDeletePrompt } from '@renderer/hooks/useDeletePrompt'
 import { Tooltip } from '@renderer/components/ui/Tooltip'
 import { DeleteConfirmation } from './DeleteConfirmation'
+import { usePromptsContext } from './PromptsContext'
 
 type PromptListProps = {
   options?: Array<{ label: string; value: string }>
   onChange?: (value: string) => void
   label?: string
-  value: string
-  prompt: string
+  id: string
+  isLoading?: boolean
 }
 
-export const PromptListItem = ({ onChange, label, value, prompt }: PromptListProps) => {
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+export const PromptListItem = ({ onChange, label, id, isLoading }: PromptListProps) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const { setEditingId } = usePromptsContext()
 
-  const { mutate: updatePrompt, isPending: isUpdating } = useUpdatePrompt({
-    id: value,
-    onSuccess: () => {
-      setIsEditModalOpen(false)
-    }
-  })
+
 
   const { mutate: deletePrompt, isPending: isDeleting } = useDeletePrompt({
-    id: value,
+    id,
     onSuccess: () => {
-      setIsEditModalOpen(false)
+      setEditingId(null)
     }
   })
 
   const handleEditModalModalOpen = () => {
-    setIsEditModalOpen(!isEditModalOpen)
+    setEditingId(id)
   }
 
   const handleDeleteConfirmationOpen = () => {
     setIsDeleteModalOpen(!isDeleteModalOpen)
-  }
-
-  const handleUpdate = (prompt) => {
-    updatePrompt({
-      value: prompt.prompt,
-      label: prompt.label
-    })
-    setIsEditModalOpen(false)
   }
 
   const handleDelete = () => {
@@ -62,7 +48,7 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
         indicatorPlacement="start"
         label={
           <Box display="flex" width="100%">
-            {(isUpdating || isDeleting) && (
+            {(isLoading || isDeleting) && (
               <ProgressRoot
                 position={'absolute'}
                 top="0"
@@ -103,10 +89,9 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
             </Tooltip>
           </Box>
         }
-        key={value}
-        value={value}
+        value={id}
         onChange={() => {
-          onChange?.(value)
+          onChange?.(id)
         }}
       />
       <DeleteConfirmation
@@ -114,13 +99,6 @@ export const PromptListItem = ({ onChange, label, value, prompt }: PromptListPro
         onSubmit={handleDelete}
         label={label}
         onClose={handleDeleteConfirmationOpen}
-      />
-      <PromptForm
-        open={isEditModalOpen}
-        isLoading={isUpdating}
-        initialValue={{ label, value: prompt }}
-        onSubmit={handleUpdate}
-        onClose={handleEditModalModalOpen}
       />
     </>
   )

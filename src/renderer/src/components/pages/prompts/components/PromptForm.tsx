@@ -1,46 +1,76 @@
 import { Input, Textarea } from '@chakra-ui/react'
 import { DrawerFull } from '../../../ui/Drawer'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { GoPencil } from 'react-icons/go'
-import { Prompt } from '@shared/types/store'
+import { usePromptsContext } from './PromptsContext'
+import { useCreatePrompt } from '@renderer/hooks/useCreatePrompt'
+import { useUpdatePrompt } from '@renderer/hooks/useUpdatePrompt'
+import { usePrompts } from '@renderer/hooks/usePrompts'
 
-type PromptFormProps = {
-  onSubmit?: (prompt: Partial<Prompt>) => void
-  onClose?: () => void
-  id?: string
-  open: boolean
-  isLoading?: boolean
-  initialValue?: Partial<Prompt>
-}
 
-export const PromptForm = ({
-  onSubmit,
-  open,
-  onClose,
-  isLoading,
-  initialValue
-}: PromptFormProps) => {
-  const isCreate = !initialValue
+export const PromptForm = () => {
 
-  const [localPrompt, setLocalPrompt] = useState({
-    label: initialValue?.label || '',
-    prompt: initialValue?.value || ''
+  const { editingId, setEditingId } = usePromptsContext()
+  const { data: prompts, isLoading: isFetching } = usePrompts()
+  const { mutate: createPrompt, isPending: isCreating } = useCreatePrompt({
+    onSuccess: () => {
+      setEditingId(null)
+    }
+  })
+  const { mutate: updatePrompt, isPending: isUpdating } = useUpdatePrompt({
+    id: editingId ?? undefined,
+    onSuccess: () => {
+      setEditingId(null)
+    }
   })
 
+  const initialValue = useMemo(() => {
+    if (!editingId) return { label: '', prompt: '' }
+    const prompt = prompts?.find((item) => item.ID == editingId)
+    return {
+      label: prompt?.label || '',
+      prompt: prompt?.value || ''
+
+    }
+  }, [editingId, prompts])
+
+  const isCreate = editingId === 'new'
+
+  const [localPrompt, setLocalPrompt] = useState(initialValue)
+
+
   const handleConfirm = () => {
-    onSubmit?.({
+    const newPrompt = {
       ...localPrompt,
       value: localPrompt.prompt,
       label: localPrompt.label
-    })
+    }
+    if (isCreate) {
+      createPrompt?.(newPrompt)
+      return
+    }
+    updatePrompt(newPrompt)
   }
+
+  const handleClose = () => {
+    setEditingId(null)
+  }
+
+
+  useEffect(() => {
+    if (editingId) {
+      setLocalPrompt(initialValue)
+    }
+  }, [editingId])
+
+  const isLoading = isFetching || isCreating || isUpdating
 
   return (
     <DrawerFull
-      open={open}
+      open={!!editingId}
       onConfirm={handleConfirm}
       cancelLabel="Cancel & return"
-      onCancel={onClose}
+      onCancel={handleClose}
       icon={GoPencil}
       title={isCreate ? 'Add new prompt' : 'Edit prompt'}
       confirmLabel={isCreate ? 'Create' : 'Update'}
@@ -49,7 +79,7 @@ export const PromptForm = ({
       <Input
         value={localPrompt.label}
         onChange={(e) => {
-          setLocalPrompt({ ...localPrompt, label: e.target.value })
+          setLocalPrompt({ ...initialValue, ...localPrompt, label: e.target.value })
         }}
         my="1"
         placeholder="Prompt title"
@@ -58,7 +88,7 @@ export const PromptForm = ({
       <Textarea
         value={localPrompt.prompt}
         onChange={(e) => {
-          setLocalPrompt({ ...localPrompt, prompt: e.target.value })
+          setLocalPrompt({ ...initialValue, ...localPrompt, prompt: e.target.value })
         }}
         my="1"
         variant="subtle"
