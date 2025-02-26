@@ -16,7 +16,7 @@ app.whenReady().then(async () => {
   await initializeAppSettings()
   setupProtocolHandling()
   setupSingleInstanceLock()
-  checkForUpdates() // 🔹 Start checking for updates
+  checkForUpdates()
 
   mainWindow = initializeApp()
   setupIpcHandlers()
@@ -30,6 +30,7 @@ app.whenReady().then(async () => {
 
 async function initializeAppSettings() {
   const appVersion = await app.getVersion()
+  console.log('App Version:', appVersion)
   updateStore('appVersion', appVersion)
   resetShortcuts({})
   electronApp.setAppUserModelId('com.electron')
