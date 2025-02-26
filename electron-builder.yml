@@ -29,7 +29,9 @@ nsis:
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
-  warningsAsErrors: false
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  runAfterFinish: true
 
 mac:
   icon: "resources/icons/icon.icns"
@@ -57,5 +59,8 @@ appImage:
 npmRebuild: false
 
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: github
+  owner: a-ahandani
+  repo: textwrench-app
+  releaseType: release
+  updaterCacheDirName: "textwrench-updater"

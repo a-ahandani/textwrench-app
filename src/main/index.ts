@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, dialog } from 'electron'
 import { electronAppUniversalProtocolClient } from 'electron-app-universal-protocol-client'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { initializeApp } from './services/window/window'
@@ -8,6 +8,7 @@ import { updateStore } from './store/helpers'
 import { IPC_EVENTS } from '../shared/ipc-events'
 import { APP_KEY } from '../shared/constants'
 import { resetShortcuts } from './services/shortcuts/shortcuts'
+import { autoUpdater } from 'electron-updater'
 
 let mainWindow: BrowserWindow | null = null
 
@@ -15,6 +16,7 @@ app.whenReady().then(async () => {
   await initializeAppSettings()
   setupProtocolHandling()
   setupSingleInstanceLock()
+  checkForUpdates() // 🔹 Start checking for updates
 
   mainWindow = initializeApp()
   setupIpcHandlers()
@@ -82,6 +84,35 @@ function handleOpenUrl(url) {
   } else {
     mainWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
   }
+}
+
+
+function checkForUpdates() {
+  autoUpdater.checkForUpdatesAndNotify()
+
+  autoUpdater.on('update-available', () => {
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Update Available',
+      message: 'A new version is available. It will be downloaded in the background.',
+      buttons: ['OK']
+    })
+  })
+
+  autoUpdater.on('update-downloaded', () => {
+    dialog.showMessageBox({
+      type: 'info',
+      title: 'Update Ready',
+      message: 'A new version has been downloaded. Restart the app to apply updates.',
+      buttons: ['Restart Now', 'Later']
+    }).then(({ response }) => {
+      if (response === 0) autoUpdater.quitAndInstall()
+    })
+  })
+
+  autoUpdater.on('error', (error) => {
+    console.error('Update Error:', error)
+  })
 }
 
 
