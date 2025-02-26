@@ -12,15 +12,28 @@ import { resetShortcuts } from './services/shortcuts/shortcuts'
 let mainWindow: BrowserWindow | null = null
 
 app.whenReady().then(async () => {
+  await initializeAppSettings()
+  setupProtocolHandling()
+  setupSingleInstanceLock()
+
+  mainWindow = initializeApp()
+  setupIpcHandlers()
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      initializeApp()
+    }
+  })
+})
+
+async function initializeAppSettings() {
   const appVersion = await app.getVersion()
   updateStore('appVersion', appVersion)
   resetShortcuts({})
   electronApp.setAppUserModelId('com.electron')
 
-  if (process.defaultApp) {
-    if (process.argv.length >= 2) {
-      app.setAsDefaultProtocolClient(APP_KEY, process.execPath, [path.resolve(process.argv[1])])
-    }
+  if (process.defaultApp && process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient(APP_KEY, process.execPath, [path.resolve(process.argv[1])])
   } else {
     app.setAsDefaultProtocolClient(APP_KEY)
   }
@@ -28,60 +41,49 @@ app.whenReady().then(async () => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
+}
 
+function setupProtocolHandling() {
   electronAppUniversalProtocolClient.on('request', async (requestUrl) => {
-    if (requestUrl) {
-      handleOpenUrl(requestUrl)
-    }
+    if (requestUrl) handleOpenUrl(requestUrl)
   })
 
-  await electronAppUniversalProtocolClient.initialize({
+  electronAppUniversalProtocolClient.initialize({
     protocol: APP_KEY,
     mode: process.env.NODE_ENV === 'development' ? 'development' : 'production'
   })
+}
 
-  if (process.platform === 'win32') {
-    const gotTheLock = app.requestSingleInstanceLock()
-    if (!gotTheLock) {
-      app.quit()
-    } else {
-      app.on('second-instance', (_, commandLine) => {
-        if (mainWindow) {
-          if (mainWindow.isMinimized()) mainWindow.restore()
-          mainWindow.focus()
-        }
-        handleOpenUrl(commandLine.pop())
-      })
+function setupSingleInstanceLock() {
+  if (process.platform !== 'win32') return
 
-      app.whenReady().then(() => {
-        initializeApp()
-      })
-    }
+  const gotTheLock = app.requestSingleInstanceLock()
+  if (!gotTheLock) {
+    app.quit()
+    return
   }
 
-  function handleOpenUrl(url) {
-    const urlParams = new URL(url)
-    const token = urlParams.searchParams.get('token')
-
-    if (token) {
-      updateStore('token', token)
-      if (mainWindow) {
-        mainWindow.webContents.send(IPC_EVENTS.LOGIN_FULFILLED, { token })
-      }
-    } else if (mainWindow) {
-      mainWindow.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
+  app.on('second-instance', (_, commandLine) => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
     }
-  }
-
-  mainWindow = initializeApp()
-  setupIpcHandlers()
-
-  app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      initializeApp()
-    }
+    handleOpenUrl(commandLine.pop())
   })
-})
+}
+
+function handleOpenUrl(url) {
+  const urlParams = new URL(url)
+  const token = urlParams.searchParams.get('token')
+
+  if (token) {
+    updateStore('token', token)
+    mainWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED, { token })
+  } else {
+    mainWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
+  }
+}
+
 
 app.on('window-all-closed', () => {
   mainWindow = null
