@@ -54,16 +54,6 @@ jobs:
           VITE_DOWNLOAD_SERVER: ${{ secrets.VITE_DOWNLOAD_SERVER }}
           VITE_APP_VERSION: ${{ secrets.VITE_APP_VERSION }}
 
-      - name: List output files
-        run: ls -R dist
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: electron-build-${{ matrix.os }}
-          path: dist/
-
-
       # - name: SFTP upload with version folder
       #   uses: Dylan700/sftp-upload-action@latest
       #   with:
