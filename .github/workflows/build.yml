@@ -44,9 +44,6 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      - name: Force Electron build
-        run: yarn electron-builder --dir
-
       - name: Build/release Electron app
         uses: paneron/action-electron-builder@v1.8.1
         with:
