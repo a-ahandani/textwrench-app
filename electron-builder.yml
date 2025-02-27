@@ -32,6 +32,7 @@ nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
   runAfterFinish: true
+  warningsAsErrors: false
 
 mac:
   icon: "resources/icons/icon.icns"
@@ -59,8 +60,7 @@ appImage:
 npmRebuild: false
 
 publish:
-  provider: github
-  owner: a-ahandani
-  repo: textwrench-app
-  releaseType: release
+  provider: generic
+  url: "https://versions.textwrench.ai/"
   updaterCacheDirName: "textwrench-updater"
+
