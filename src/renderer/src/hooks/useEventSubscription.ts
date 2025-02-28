@@ -5,7 +5,7 @@ type EventCallback<T> = (data: T) => void
 type UseEventSubscriptionProps<T> = {
   eventName: string
   callback: EventCallback<T>
-  dependencies?: any[]
+  dependencies?: unknown[]
 }
 
 export const useEventSubscription = <T>({

@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query'
 import { IPC_EVENTS } from '@shared/ipc-events'
 import { Shortcuts } from '@shared/types/store'
 import { PLATFORMS } from '@shared/constants'
@@ -14,7 +14,7 @@ export const useUpdateShortcuts = ({
 }: {
   onSuccess?: (data: Shortcuts) => void
   onError?: (error) => void
-}) => {
+}): UseMutationResult<Shortcuts, unknown, Partial<Shortcuts>, unknown> => {
   const queryClient = useQueryClient()
 
   return useMutation({

@@ -7,9 +7,7 @@ import { useCreatePrompt } from '@renderer/hooks/useCreatePrompt'
 import { useUpdatePrompt } from '@renderer/hooks/useUpdatePrompt'
 import { usePrompts } from '@renderer/hooks/usePrompts'
 
-
 export const PromptForm = () => {
-
   const { editingId, setEditingId } = usePromptsContext()
   const { data: prompts, isLoading: isFetching } = usePrompts()
   const { mutate: createPrompt, isPending: isCreating } = useCreatePrompt({
@@ -30,14 +28,12 @@ export const PromptForm = () => {
     return {
       label: prompt?.label || '',
       prompt: prompt?.value || ''
-
     }
   }, [editingId, prompts])
 
   const isCreate = editingId === 'new'
 
   const [localPrompt, setLocalPrompt] = useState(initialValue)
-
 
   const handleConfirm = () => {
     const newPrompt = {
@@ -55,7 +51,6 @@ export const PromptForm = () => {
   const handleClose = () => {
     setEditingId(null)
   }
-
 
   useEffect(() => {
     if (editingId) {

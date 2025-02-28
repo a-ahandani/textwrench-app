@@ -20,15 +20,13 @@ type UpdateProviderProps = {
 export const UpdateProvider: React.FC<UpdateProviderProps> = ({ children }) => {
   const { quitAndInstall } = window.api
 
-
   const { value: currentVersion } = useStore<string>({
     key: 'appVersion'
   })
   const [isUpdateAvailable, setIsUpdateAvailable] = useState<boolean>(false)
-  const [latestVersion, setLatestVersion] = useState<string>("")
-  const [releaseNotes, setReleaseNotes] = useState<string>("")
+  const [latestVersion, setLatestVersion] = useState<string>('')
+  const [releaseNotes, setReleaseNotes] = useState<string>('')
   const [isUpdateDownloaded, setIsUpdateDownloaded] = useState<boolean>(false)
-
 
   useEventSubscription({
     eventName: 'onUpdateDownloaded',
@@ -39,13 +37,12 @@ export const UpdateProvider: React.FC<UpdateProviderProps> = ({ children }) => {
 
   useEventSubscription({
     eventName: 'onUpdateAvailable',
-    callback: (data: { version: string, releaseNotes: string }) => {
+    callback: (data: { version: string; releaseNotes: string }) => {
       setLatestVersion(data.version)
       setReleaseNotes(data.releaseNotes)
       setIsUpdateAvailable(true)
     }
   })
-
 
   return (
     <UpdateContext.Provider
@@ -56,7 +53,6 @@ export const UpdateProvider: React.FC<UpdateProviderProps> = ({ children }) => {
         latestVersion,
         releaseNotes,
         quitAndInstall: () => quitAndInstall()
-
       }}
     >
       {children}
@@ -64,6 +60,7 @@ export const UpdateProvider: React.FC<UpdateProviderProps> = ({ children }) => {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useUpdate = (): UpdateContextType => {
   const context = useContext(UpdateContext)
   if (!context) {

@@ -1,8 +1,8 @@
 import { resolve } from 'path'
-import { defineConfig, externalizeDepsPlugin, loadEnv } from 'electron-vite'
+import { defineConfig, ElectronViteConfig, externalizeDepsPlugin, loadEnv } from 'electron-vite'
 import react from '@vitejs/plugin-react'
 
-export default ({ mode }) => {
+export default ({ mode }): ElectronViteConfig => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
 
   return defineConfig({

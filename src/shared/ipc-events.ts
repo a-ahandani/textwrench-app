@@ -17,5 +17,5 @@ export const IPC_EVENTS = {
   GET_VERSION: 'get-version',
   UPDATE_AVAILABLE: 'update-available',
   UPDATE_DOWNLOADED: 'update-downloaded',
-  QUIT_AND_INSTALL: 'quit-and-install',
+  QUIT_AND_INSTALL: 'quit-and-install'
 }

@@ -25,7 +25,6 @@ enum OsType {
   LINUX = 'linux'
 }
 
-
 export type ShortcutList = {
   [key: string]: string
 }
@@ -35,5 +34,3 @@ export type Shortcuts = {
   [OsType.WINDOWS]: ShortcutList
   [OsType.LINUX]: ShortcutList
 }
-
-

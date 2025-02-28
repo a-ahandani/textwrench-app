@@ -20,8 +20,6 @@ export const PromptListItem = ({ onChange, label, id, isLoading }: PromptListPro
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const { setEditingId } = usePromptsContext()
 
-
-
   const { mutate: deletePrompt, isPending: isDeleting } = useDeletePrompt({
     id,
     onSuccess: () => {

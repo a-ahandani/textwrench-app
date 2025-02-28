@@ -11,25 +11,20 @@ import { resetShortcuts } from './services/shortcuts/shortcuts'
 import { autoUpdater } from 'electron-updater'
 import log from 'electron-log'
 
-
 let mainWindow: BrowserWindow | null = null
-const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
+const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 log.initialize()
 
 app.whenReady().then(async () => {
-
-
   if (isDev) {
     // autoUpdater.autoDownload = false;
-    autoUpdater.forceDevUpdateConfig = true;
+    autoUpdater.forceDevUpdateConfig = true
   }
 
   await initializeAppSettings()
   setupProtocolHandling()
   setupSingleInstanceLock()
   checkForUpdates()
-
-
 
   mainWindow = initializeApp()
   setupIpcHandlers()
@@ -100,7 +95,6 @@ function handleOpenUrl(url) {
   }
 }
 
-
 async function checkForUpdates() {
   autoUpdater.checkForUpdatesAndNotify()
   autoUpdater.on('update-available', (version) => {
@@ -109,7 +103,7 @@ async function checkForUpdates() {
   })
 
   autoUpdater.on('update-downloaded', () => {
-    log.info('Update downloaded');
+    log.info('Update downloaded')
     mainWindow?.webContents.send(IPC_EVENTS.UPDATE_DOWNLOADED)
   })
 
@@ -118,7 +112,6 @@ async function checkForUpdates() {
     console.error('Update Error:', error)
   })
 }
-
 
 app.on('window-all-closed', () => {
   mainWindow = null

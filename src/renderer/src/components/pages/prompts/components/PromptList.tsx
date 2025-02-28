@@ -18,11 +18,8 @@ type PromptListProps = {
 }
 
 export const PromptList = ({ label }: PromptListProps) => {
-
   const { setEditingId } = usePromptsContext()
   const [term, setTerm] = useState<string>('')
-
-
 
   const { data: prompts, isLoading } = usePrompts({
     term
@@ -37,8 +34,6 @@ export const PromptList = ({ label }: PromptListProps) => {
     const prompt = prompts?.find((item) => item.ID == promptId)
     setSelectedPrompt(prompt)
   }
-
-
 
   return (
     <Box>
@@ -103,11 +98,7 @@ export const PromptList = ({ label }: PromptListProps) => {
             <RadioCardLabel>{label}</RadioCardLabel>
             <Group attached orientation="vertical">
               {prompts?.map((item) => (
-                <PromptListItem
-                  key={item.ID}
-                  id={String(item.ID)}
-                  label={item.label}
-                />
+                <PromptListItem key={item.ID} id={String(item.ID)} label={item.label} />
               ))}
             </Group>
           </RadioCardRoot>

@@ -9,4 +9,6 @@ const queryClient = new QueryClient({
   }
 })
 
-export const ReactQueryProvider = (props) => <QueryClientProvider {...props} client={queryClient} />
+export const ReactQueryProvider = (props: object): JSX.Element => (
+  <QueryClientProvider {...props} client={queryClient} />
+)

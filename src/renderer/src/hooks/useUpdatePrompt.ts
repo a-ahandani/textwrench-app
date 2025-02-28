@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query'
 import { IPC_EVENTS } from '@shared/ipc-events'
 import { Prompt } from '@shared/types/store'
 
@@ -13,8 +13,7 @@ export const useUpdatePrompt = ({
   id?: Prompt['ID']
   onSuccess?: (data: Prompt) => void
   onError?: (error) => void
-}) => {
-
+}): UseMutationResult<Prompt, unknown, Partial<Prompt>, unknown> => {
   const queryClient = useQueryClient()
 
   return useMutation({

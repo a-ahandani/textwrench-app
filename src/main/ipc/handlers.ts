@@ -1,18 +1,14 @@
 import { BrowserWindow, ipcMain, shell } from 'electron'
 import { IPC_EVENTS } from '../../shared/ipc-events'
-import { PLATFORMS_DL_URL } from '../../shared/constants'
 import { store } from '../store'
 import { updateStore } from '../store/helpers'
 import { Prompt, Shortcuts, StoreType, UserProfile } from '../../shared/types/store'
 import { handleError, twService } from '../services/axios/axios'
 import { verifyToken } from '../services/auth/verifyToken'
 import { resetShortcuts } from '../services/shortcuts/shortcuts'
-import axios from 'axios'
 import { autoUpdater } from 'electron-updater'
 
-
 const apiServer = import.meta.env.VITE_API_SERVER
-const downloadServer = import.meta.env.VITE_DOWNLOAD_SERVER
 
 export function setupIpcHandlers() {
   ipcMain.handle(IPC_EVENTS.GET_STORE_VALUE, (_event, key: keyof StoreType) => {
@@ -63,10 +59,7 @@ export function setupIpcHandlers() {
 
   ipcMain.handle(IPC_EVENTS.UPDATE_SHORTCUTS, async (_event, shortcuts: Shortcuts) => {
     try {
-      const result = await twService.patch<Shortcuts>(
-        `/protected/profile/shortcuts`,
-        shortcuts
-      )
+      const result = await twService.patch<Shortcuts>(`/protected/profile/shortcuts`, shortcuts)
       resetShortcuts(result.data)
       return result.data
     } catch (error) {

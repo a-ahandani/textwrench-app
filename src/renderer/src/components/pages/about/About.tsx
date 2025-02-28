@@ -2,8 +2,9 @@ import { Card } from '@chakra-ui/react'
 import { useUpdate } from '@renderer/components/providers/UpdateProvider'
 import { Button } from '@renderer/components/ui/Button'
 
-export const About = () => {
+import { FC } from 'react'
 
+export const About: FC = () => {
   const {
     quitAndInstall,
     isUpdateAvailable,
@@ -29,15 +30,15 @@ export const About = () => {
                 <Card.Description>
                   Downloading version {latestVersion}...
                   <br />
-                  You can manually update to version {latestVersion} or wait for the automatic update.
+                  You can manually update to version {latestVersion} or wait for the automatic
+                  update.
                 </Card.Description>
               )}
-              {
-                isUpdateDownloaded && (
-                  <Button my="2" as="a" onClick={() => quitAndInstall()} colorPalette="green">
-                    Update now
-                  </Button>)
-              }
+              {isUpdateDownloaded && (
+                <Button my="2" as="a" onClick={() => quitAndInstall()} colorPalette="green">
+                  Update now
+                </Button>
+              )}
             </Card.Description>
           )}
         </Card.Body>
