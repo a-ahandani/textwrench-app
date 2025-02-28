@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { StoreType } from 'src/shared/types/store'
 import { isEqual } from 'lodash'
+import { useEventSubscription } from './useEventSubscription'
 
 export type useStoreReturnType<K> = {
   value: K
@@ -15,7 +16,7 @@ type useStoreProps = {
 export const useStore = <K>({ key }: useStoreProps): useStoreReturnType<K> => {
   const [localValue, setLocalValue] = useState<StoreType[keyof StoreType]>()
 
-  const { getStoreValue, setStoreValue, onStoreChange } = window.api
+  const { getStoreValue, setStoreValue } = window.api
 
   useEffect(() => {
     const loadStoreData = async () => {
@@ -23,16 +24,17 @@ export const useStore = <K>({ key }: useStoreProps): useStoreReturnType<K> => {
       setLocalValue(storeValue)
     }
     loadStoreData()
+  }, [key])
 
-    const unsubscribe = onStoreChange((data) => {
+  useEventSubscription({
+    eventName: 'onStoreChange',
+    callback: (data: { key: keyof StoreType; value: StoreType[keyof StoreType] }) => {
       if (data.key === key && !isEqual(data.value, localValue)) {
         setLocalValue(data.value)
       }
-    })
-    return () => {
-      unsubscribe()
-    }
-  }, [])
+    },
+    dependencies: [key, localValue]
+  })
 
   const handleSetStoreValue = (value: StoreType[keyof StoreType]) => {
     setStoreValue(key, value)

@@ -1,13 +1,14 @@
 import { Prompts } from './components/pages/prompts/Prompts'
 import { Settings } from './components/pages/settings/Settings'
-import { Container, Tabs } from '@chakra-ui/react'
+import { Alert, Container, Link, Tabs } from '@chakra-ui/react'
 import { Clipboard } from './components/pages/clipboard/Clipboard'
 import { Header } from './components/ui/Header'
 import { TabContents } from './components/ui/TabContents'
-import { GoGear, GoPencil, GoTools } from 'react-icons/go'
+import { GoBookmarkFill, GoGear, GoPencil, GoTools } from 'react-icons/go'
 import { useAuth } from './components/providers/AuthProvider'
 import { useEffect, useState } from 'react'
 import { About } from './components/pages/about/About'
+import { UpdateAlert } from './components/ui/UpdateAlert'
 
 function App() {
   const { isLoggedIn } = useAuth()
@@ -30,6 +31,7 @@ function App() {
   return (
     <>
       <Header />
+      <UpdateAlert />
       <Container maxWidth="full" p="2">
         <Clipboard />
         <Tabs.Root orientation="vertical" size="md" value={activeTab} variant="plain" unmountOnExit>

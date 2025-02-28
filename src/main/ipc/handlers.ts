@@ -8,10 +8,10 @@ import { handleError, twService } from '../services/axios/axios'
 import { verifyToken } from '../services/auth/verifyToken'
 import { resetShortcuts } from '../services/shortcuts/shortcuts'
 import axios from 'axios'
+import { autoUpdater } from 'electron-updater'
 
 
 const apiServer = import.meta.env.VITE_API_SERVER
-const versionServer = import.meta.env.VITE_APP_VERSION
 const downloadServer = import.meta.env.VITE_DOWNLOAD_SERVER
 
 export function setupIpcHandlers() {
@@ -30,8 +30,9 @@ export function setupIpcHandlers() {
     return shell.openExternal(`${apiServer}/auth/google`)
   })
 
-  ipcMain.handle(IPC_EVENTS.DOWNLOAD, () => {
-    return shell.openExternal(`${downloadServer}/${PLATFORMS_DL_URL[process.platform]}`)
+  ipcMain.handle(IPC_EVENTS.QUIT_AND_INSTALL, () => {
+    autoUpdater.quitAndInstall()
+    return
   })
 
   ipcMain.handle(IPC_EVENTS.LOGOUT, () => {
@@ -106,16 +107,6 @@ export function setupIpcHandlers() {
     const { ID } = prompt
     try {
       const result = await twService.delete<Prompt>(`/protected/prompts/${ID}`)
-      return result.data
-    } catch (error) {
-      handleError(error)
-    }
-    return
-  })
-
-  ipcMain.handle(IPC_EVENTS.GET_VERSION, async () => {
-    try {
-      const result = await axios.get(versionServer)
       return result.data
     } catch (error) {
       handleError(error)

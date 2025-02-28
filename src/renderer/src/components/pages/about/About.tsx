@@ -1,43 +1,52 @@
 import { Card } from '@chakra-ui/react'
+import { useUpdate } from '@renderer/components/providers/UpdateProvider'
 import { Button } from '@renderer/components/ui/Button'
-import { useStore } from '@renderer/hooks/useStore'
-import { useVersion } from '@renderer/hooks/useVersion'
 
 export const About = () => {
-  const { value: version } = useStore<string>({
-    key: 'appVersion'
-  })
 
-  const { data, download } = useVersion()
+  const {
+    quitAndInstall,
+    isUpdateAvailable,
+    latestVersion,
+    currentVersion,
+    isUpdateDownloaded,
+    releaseNotes
+  } = useUpdate()
 
-  const latestVersion = data?.tag_name?.replace(/[a-zA-Z]/g, '')
-  const isUpdated = version == latestVersion
-
+  const isUpdateDownloading = isUpdateAvailable && !isUpdateDownloaded
   return (
     <>
       <Card.Root>
         <Card.Body>
           <Card.Title mt="2">About</Card.Title>
-          {isUpdated ? (
-            <Card.Description>You are using the latest version: {latestVersion}</Card.Description>
+          {!isUpdateAvailable ? (
+            <Card.Description>You are using the latest version: {currentVersion}</Card.Description>
           ) : (
             <Card.Description>
               There is a new version available!
               <br />
-              Please update to the latest version: {latestVersion}
-              <br />
-              <Button my="2" as="a" onClick={() => download()} colorPalette="green">
-                Update now
-              </Button>
+              {isUpdateDownloading && (
+                <Card.Description>
+                  Downloading version {latestVersion}...
+                  <br />
+                  You can manually update to version {latestVersion} or wait for the automatic update.
+                </Card.Description>
+              )}
+              {
+                isUpdateDownloaded && (
+                  <Button my="2" as="a" onClick={() => quitAndInstall()} colorPalette="green">
+                    Update now
+                  </Button>)
+              }
             </Card.Description>
           )}
         </Card.Body>
       </Card.Root>
-      {!isUpdated && (
+      {releaseNotes && (
         <Card.Root mt={2}>
           <Card.Body>
             <Card.Title mt="2">Change log:</Card.Title>
-            <Card.Description>{data?.body}</Card.Description>
+            <Card.Description dangerouslySetInnerHTML={{ __html: releaseNotes }}></Card.Description>
           </Card.Body>
         </Card.Root>
       )}

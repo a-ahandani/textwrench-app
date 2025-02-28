@@ -15,5 +15,7 @@ export const IPC_EVENTS = {
   VERIFY_TOKEN: 'verify-token',
   UPDATE_SHORTCUTS: 'update-shortcuts',
   GET_VERSION: 'get-version',
-  DOWNLOAD: 'download'
+  UPDATE_AVAILABLE: 'update-available',
+  UPDATE_DOWNLOADED: 'update-downloaded',
+  QUIT_AND_INSTALL: 'quit-and-install',
 }

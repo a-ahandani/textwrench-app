@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import { electronAppUniversalProtocolClient } from 'electron-app-universal-protocol-client'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { initializeApp } from './services/window/window'
@@ -9,14 +9,27 @@ import { IPC_EVENTS } from '../shared/ipc-events'
 import { APP_KEY } from '../shared/constants'
 import { resetShortcuts } from './services/shortcuts/shortcuts'
 import { autoUpdater } from 'electron-updater'
+import log from 'electron-log'
+
 
 let mainWindow: BrowserWindow | null = null
+const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
+log.initialize()
 
 app.whenReady().then(async () => {
+
+
+  if (isDev) {
+    // autoUpdater.autoDownload = false;
+    autoUpdater.forceDevUpdateConfig = true;
+  }
+
   await initializeAppSettings()
   setupProtocolHandling()
   setupSingleInstanceLock()
   checkForUpdates()
+
+
 
   mainWindow = initializeApp()
   setupIpcHandlers()
@@ -88,30 +101,20 @@ function handleOpenUrl(url) {
 }
 
 
-function checkForUpdates() {
+async function checkForUpdates() {
   autoUpdater.checkForUpdatesAndNotify()
-
-  autoUpdater.on('update-available', () => {
-    dialog.showMessageBox({
-      type: 'info',
-      title: 'Update Available',
-      message: 'A new version is available. It will be downloaded in the background.',
-      buttons: ['OK']
-    })
+  autoUpdater.on('update-available', (version) => {
+    log.info('Update available:', version)
+    mainWindow?.webContents.send(IPC_EVENTS.UPDATE_AVAILABLE, version)
   })
 
   autoUpdater.on('update-downloaded', () => {
-    dialog.showMessageBox({
-      type: 'info',
-      title: 'Update Ready',
-      message: 'A new version has been downloaded. Restart the app to apply updates.',
-      buttons: ['Restart Now', 'Later']
-    }).then(({ response }) => {
-      if (response === 0) autoUpdater.quitAndInstall()
-    })
+    log.info('Update downloaded');
+    mainWindow?.webContents.send(IPC_EVENTS.UPDATE_DOWNLOADED)
   })
 
   autoUpdater.on('error', (error) => {
+    log.error('Update Error:', error)
     console.error('Update Error:', error)
   })
 }

@@ -12,8 +12,21 @@ const api = {
       ipcRenderer.removeListener(IPC_EVENTS.STORE_CHANGED, subscription)
     }
   },
-  getVersion: () => ipcRenderer.invoke(IPC_EVENTS.GET_VERSION),
-  download: () => ipcRenderer.invoke(IPC_EVENTS.DOWNLOAD),
+  onUpdateDownloaded: (callback) => {
+    const subscription = (_event, data) => callback(data)
+    ipcRenderer.on(IPC_EVENTS.UPDATE_DOWNLOADED, subscription)
+    return () => {
+      ipcRenderer.removeListener(IPC_EVENTS.UPDATE_DOWNLOADED, subscription)
+    }
+  },
+  onUpdateAvailable: (callback) => {
+    const subscription = (_event, data) => callback(data)
+    ipcRenderer.on(IPC_EVENTS.UPDATE_AVAILABLE, subscription)
+    return () => {
+      ipcRenderer.removeListener(IPC_EVENTS.UPDATE_AVAILABLE, subscription)
+    }
+  },
+  quitAndInstall: () => ipcRenderer.invoke(IPC_EVENTS.QUIT_AND_INSTALL),
   getProfile: () => ipcRenderer.invoke(IPC_EVENTS.GET_PROFILE),
   getPrompts: () => ipcRenderer.invoke(IPC_EVENTS.GET_PROMPTS),
   updateShortcuts: (shortcuts) => ipcRenderer.invoke(IPC_EVENTS.UPDATE_SHORTCUTS, shortcuts),

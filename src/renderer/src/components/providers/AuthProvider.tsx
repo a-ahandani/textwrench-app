@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react'
+import { useEventSubscription } from '@renderer/hooks/useEventSubscription'
 
 type AuthContextType = {
   isLoggedIn: boolean
@@ -15,7 +16,7 @@ type AuthProviderProps = {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const { login, logout, onLoggedIn, verifyToken } = window.api
+  const { login, logout, verifyToken } = window.api
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -31,16 +32,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoggedIn(false)
     setIsLoading(false)
   }
-  useEffect(() => {
-    verifyToken()
-    onLoggedIn((data) => {
+
+  useEventSubscription({
+    eventName: 'onLoggedIn',
+    callback: (data: { token?: string }) => {
       setIsLoading(false)
       if (data?.token) {
         setIsLoggedIn(true)
       } else {
         setIsLoggedIn(false)
       }
-    })
+    }
+  })
+
+  useEffect(() => {
+    verifyToken()
   }, [])
 
   return (

@@ -52,7 +52,6 @@ jobs:
         env:
           VITE_API_SERVER: ${{ secrets.VITE_API_SERVER }}
           VITE_DOWNLOAD_SERVER: ${{ secrets.VITE_DOWNLOAD_SERVER }}
-          VITE_APP_VERSION: ${{ secrets.VITE_APP_VERSION }}
 
       # - name: SFTP upload with version folder
       #   uses: Dylan700/sftp-upload-action@latest
