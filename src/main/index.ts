@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import { electronAppUniversalProtocolClient } from 'electron-app-universal-protocol-client'
-import { electronApp, optimizer } from '@electron-toolkit/utils'
+import { optimizer } from '@electron-toolkit/utils'
 import { initializeApp } from './services/window/window'
 import { setupIpcHandlers } from './ipc/handlers'
 import path from 'path'
@@ -28,7 +28,6 @@ app.whenReady().then(async () => {
 
   mainWindow = initializeApp()
   setupIpcHandlers()
-
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       initializeApp()
@@ -38,10 +37,9 @@ app.whenReady().then(async () => {
 
 async function initializeAppSettings(): Promise<void> {
   const appVersion = await app.getVersion()
-  console.log('App Version:', appVersion)
+  log.info('App Version:', appVersion)
   updateStore('appVersion', appVersion)
   resetShortcuts({})
-  electronApp.setAppUserModelId('com.electron')
 
   if (process.defaultApp && process.argv.length >= 2) {
     app.setAsDefaultProtocolClient(APP_KEY, process.execPath, [path.resolve(process.argv[1])])
