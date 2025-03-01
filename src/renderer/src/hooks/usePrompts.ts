@@ -6,7 +6,10 @@ import { useAuth } from '@renderer/components/providers/AuthProvider'
 const { getPrompts } = window.api
 const queryKey = [IPC_EVENTS.GET_PROMPTS]
 
-export const usePrompts = (props?: { term?: string; id?: Prompt['ID'] } | undefined) => {
+type usePromptsProps = { term?: string; id?: Prompt['ID'] }
+type usePromptsReturn = ReturnType<typeof useQuery<Prompt[]>> & { removeQuery: () => void }
+
+export const usePrompts = (props?: usePromptsProps): usePromptsReturn => {
   const { term, id } = props || {}
 
   const { isLoggedIn } = useAuth()
@@ -32,7 +35,7 @@ export const usePrompts = (props?: { term?: string; id?: Prompt['ID'] } | undefi
 
   return {
     ...query,
-    removeQuery: () => {
+    removeQuery: (): void => {
       queryClient.resetQueries({ queryKey, exact: true })
     }
   }

@@ -12,10 +12,10 @@ export const useEventSubscription = <T>({
   eventName,
   callback,
   dependencies = []
-}: UseEventSubscriptionProps<T>) => {
+}: UseEventSubscriptionProps<T>): void => {
   useEffect(() => {
     const unsubscribe = window.api[eventName](callback)
-    return () => {
+    return (): void => {
       unsubscribe()
     }
   }, dependencies)

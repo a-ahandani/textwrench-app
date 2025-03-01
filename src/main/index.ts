@@ -36,7 +36,7 @@ app.whenReady().then(async () => {
   })
 })
 
-async function initializeAppSettings() {
+async function initializeAppSettings(): Promise<void> {
   const appVersion = await app.getVersion()
   console.log('App Version:', appVersion)
   updateStore('appVersion', appVersion)
@@ -54,7 +54,7 @@ async function initializeAppSettings() {
   })
 }
 
-function setupProtocolHandling() {
+function setupProtocolHandling(): void {
   electronAppUniversalProtocolClient.on('request', async (requestUrl) => {
     if (requestUrl) handleOpenUrl(requestUrl)
   })
@@ -65,7 +65,7 @@ function setupProtocolHandling() {
   })
 }
 
-function setupSingleInstanceLock() {
+function setupSingleInstanceLock(): void {
   if (process.platform !== 'win32') return
 
   const gotTheLock = app.requestSingleInstanceLock()
@@ -83,7 +83,7 @@ function setupSingleInstanceLock() {
   })
 }
 
-function handleOpenUrl(url) {
+function handleOpenUrl(url): void {
   const urlParams = new URL(url)
   const token = urlParams.searchParams.get('token')
 
@@ -95,7 +95,7 @@ function handleOpenUrl(url) {
   }
 }
 
-async function checkForUpdates() {
+async function checkForUpdates(): Promise<void> {
   autoUpdater.checkForUpdatesAndNotify()
   autoUpdater.on('update-available', (version) => {
     log.info('Update available:', version)

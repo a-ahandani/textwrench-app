@@ -5,6 +5,12 @@ import { Prompt } from '@shared/types/store'
 const { deletePrompt } = window.api
 const mutationKey = [IPC_EVENTS.DELETE_PROMPT]
 const queryKey = [IPC_EVENTS.GET_PROMPTS]
+
+type useDeletePromptReturn = {
+  mutate: () => void
+  isPending: boolean
+}
+
 export const useDeletePrompt = ({
   id,
   onSuccess,
@@ -13,7 +19,7 @@ export const useDeletePrompt = ({
   id?: Prompt['ID']
   onSuccess?: () => void
   onError?: (error) => void
-}) => {
+}): useDeletePromptReturn => {
   const queryClient = useQueryClient()
 
   return useMutation({

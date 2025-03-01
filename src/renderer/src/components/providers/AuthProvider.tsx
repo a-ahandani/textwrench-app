@@ -22,12 +22,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const handleLogin = () => {
+  const handleLogin = (): void => {
     setIsLoading(true)
     login()
   }
 
-  const handleLogout = () => {
+  const handleLogout = (): void => {
     setIsLoading(true)
     logout()
     setIsLoggedIn(false)
@@ -48,7 +48,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     verifyToken()
-  }, [])
+  }, [verifyToken])
 
   return (
     <AuthContext.Provider

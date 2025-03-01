@@ -10,11 +10,15 @@ import { LuMoon, LuSun } from 'react-icons/lu'
 
 export type ColorModeProviderProps = ThemeProviderProps
 
-export function ColorModeProvider(props: ColorModeProviderProps) {
+export function ColorModeProvider(props: ColorModeProviderProps): JSX.Element {
   return <ThemeProvider attribute="class" disableTransitionOnChange {...props} />
 }
 
-export function useColorMode() {
+export function useColorMode(): {
+  colorMode: string | undefined
+  setColorMode: (theme: string) => void
+  toggleColorMode: () => void
+} {
   const { resolvedTheme, setTheme } = useTheme()
   const toggleColorMode = () => {
     setTheme(resolvedTheme === 'light' ? 'dark' : 'light')
@@ -26,12 +30,12 @@ export function useColorMode() {
   }
 }
 
-export function useColorModeValue<T>(light: T, dark: T) {
+export function useColorModeValue<T>(light: T, dark: T): T {
   const { colorMode } = useColorMode()
   return colorMode === 'light' ? light : dark
 }
 
-export function ColorModeIcon() {
+export function ColorModeIcon(): JSX.Element {
   const { colorMode } = useColorMode()
   return colorMode === 'light' ? <LuSun /> : <LuMoon />
 }

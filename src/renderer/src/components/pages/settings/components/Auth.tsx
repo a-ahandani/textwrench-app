@@ -6,7 +6,9 @@ import { Button } from '@renderer/components/ui/Button'
 import { labels } from '@shared/constants'
 import { GoX } from 'react-icons/go'
 
-export const Auth = () => {
+import { FC } from 'react'
+
+export const Auth: FC = () => {
   const { login, logout, isLoading: isLoggingIn, isLoggedIn, setIsLoading } = useAuth()
   const { data: profile, isLoading } = useProfile({ enabled: isLoggedIn })
   const isPremium = profile?.user_type !== 'free'

@@ -4,7 +4,9 @@ import { IconButton } from '@chakra-ui/react'
 import { labels } from '@shared/constants'
 import { GoX } from 'react-icons/go'
 
-export const Header = () => {
+import { FC } from 'react'
+
+export const Header: FC = () => {
   const platform = window?.electron?.process?.platform
   const isMac = platform === 'darwin'
   return (

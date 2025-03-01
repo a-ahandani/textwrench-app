@@ -16,7 +16,12 @@ type PromptListProps = {
   isLoading?: boolean
 }
 
-export const PromptListItem = ({ onChange, label, id, isLoading }: PromptListProps) => {
+export const PromptListItem = ({
+  onChange,
+  label,
+  id,
+  isLoading
+}: PromptListProps): JSX.Element => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const { setEditingId } = usePromptsContext()
 
@@ -27,15 +32,15 @@ export const PromptListItem = ({ onChange, label, id, isLoading }: PromptListPro
     }
   })
 
-  const handleEditModalModalOpen = () => {
+  const handleEditModalModalOpen = (): void => {
     setEditingId(id)
   }
 
-  const handleDeleteConfirmationOpen = () => {
+  const handleDeleteConfirmationOpen = (): void => {
     setIsDeleteModalOpen(!isDeleteModalOpen)
   }
 
-  const handleDelete = () => {
+  const handleDelete = (): void => {
     deletePrompt()
   }
 

@@ -68,7 +68,7 @@ export const initializeApp = (): BrowserWindow => {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
-  function createTray() {
+  function createTray(): void {
     try {
       const initialTrayIcon = process.platform === 'win32' ? trayIconColored : trayIcon
       tray = new Tray(initialTrayIcon)
@@ -76,7 +76,7 @@ export const initializeApp = (): BrowserWindow => {
       const contextMenu = Menu.buildFromTemplate([
         {
           label: labels.showApp,
-          click: () => {
+          click: (): void => {
             if (mainWindow) {
               mainWindow.show()
             }
@@ -84,7 +84,7 @@ export const initializeApp = (): BrowserWindow => {
         },
         {
           label: labels.quit,
-          click: () => {
+          click: (): void => {
             BrowserWindow.getAllWindows().forEach((window) => {
               window.destroy()
             })

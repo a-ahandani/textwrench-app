@@ -19,12 +19,12 @@ export const useStore = <K>({ key }: useStoreProps): useStoreReturnType<K> => {
   const { getStoreValue, setStoreValue } = window.api
 
   useEffect(() => {
-    const loadStoreData = async () => {
+    const loadStoreData = async (): Promise<void> => {
       const storeValue = await getStoreValue(key)
       setLocalValue(storeValue)
     }
     loadStoreData()
-  }, [key])
+  }, [getStoreValue, key])
 
   useEventSubscription({
     eventName: 'onStoreChange',
@@ -36,7 +36,7 @@ export const useStore = <K>({ key }: useStoreProps): useStoreReturnType<K> => {
     dependencies: [key, localValue]
   })
 
-  const handleSetStoreValue = (value: StoreType[keyof StoreType]) => {
+  const handleSetStoreValue = (value: StoreType[keyof StoreType]): void => {
     setStoreValue(key, value)
   }
 

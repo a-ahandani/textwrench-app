@@ -14,15 +14,18 @@ const transformValueToKeys = (value?: string[]) =>
 
 const transformKeysToValue = (value?: string[]) => value?.map((key) => KEY_NAMES[key])
 
-export const Shortcuts = () => {
+import { FC } from 'react'
+
+export const Shortcuts: FC = () => {
   const { isLoggedIn } = useAuth()
   const { data: profile, isLoading, isFetched } = useProfile({ enabled: isLoggedIn })
   const shortcuts = profile?.shortcuts || {}
 
   const { mutate: updateShortcuts } = useUpdateShortcuts({})
-  const handleSubmit = (key, value) => {
+  const handleSubmit = (key, value): void => {
     updateShortcuts({ ...shortcuts, [key]: transformKeysToValue(value)?.join('+') })
   }
+
   if (!isLoggedIn || !isFetched) return null
   return (
     <Card.Root my={2} variant="outline">

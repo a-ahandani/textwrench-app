@@ -8,7 +8,8 @@ const queryKey = [IPC_EVENTS.GET_PROFILE]
 
 const platform = window?.electron?.process?.platform
 
-export const useProfile = (props) => {
+type useProfileReturn = ReturnType<typeof useQuery<UserProfile>> & { removeQuery: () => void }
+export const useProfile = (props): useProfileReturn => {
   const queryClient = useQueryClient()
 
   const query = useQuery<UserProfile>({
@@ -35,7 +36,7 @@ export const useProfile = (props) => {
 
   return {
     ...query,
-    removeQuery: () => {
+    removeQuery: (): void => {
       queryClient.resetQueries({ queryKey, exact: true })
     }
   }
