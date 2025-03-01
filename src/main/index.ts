@@ -5,17 +5,19 @@ import { initializeApp } from './services/window/window'
 import { setupIpcHandlers } from './ipc/handlers'
 import path from 'path'
 import { updateStore } from './store/helpers'
-import { IPC_EVENTS } from '../shared/ipc-events'
 import { APP_KEY } from '../shared/constants'
 import { resetShortcuts } from './services/shortcuts/shortcuts'
 import { autoUpdater } from 'electron-updater'
 import log from 'electron-log'
+import { checkForUpdates } from './services/updater/updater'
+import { handleOpenUrl } from './services/url/url'
 
-let mainWindow: BrowserWindow | null = null
+let mw: BrowserWindow | null = null
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 log.initialize()
 
 app.whenReady().then(async () => {
+  mw = initializeApp()
   if (isDev) {
     // autoUpdater.autoDownload = false;
     autoUpdater.forceDevUpdateConfig = true
@@ -25,9 +27,9 @@ app.whenReady().then(async () => {
   setupProtocolHandling()
   setupSingleInstanceLock()
   checkForUpdates()
-
-  mainWindow = initializeApp()
   setupIpcHandlers()
+  resetShortcuts({})
+
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       initializeApp()
@@ -39,7 +41,6 @@ async function initializeAppSettings(): Promise<void> {
   const appVersion = await app.getVersion()
   log.info('App Version:', appVersion)
   updateStore('appVersion', appVersion)
-  resetShortcuts({})
 
   if (process.defaultApp && process.argv.length >= 2) {
     app.setAsDefaultProtocolClient(APP_KEY, process.execPath, [path.resolve(process.argv[1])])
@@ -73,46 +74,16 @@ function setupSingleInstanceLock(): void {
   }
 
   app.on('second-instance', (_, commandLine) => {
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) mainWindow.restore()
-      mainWindow.focus()
+    if (mw) {
+      if (mw.isMinimized()) mw.restore()
+      mw.focus()
     }
     handleOpenUrl(commandLine.pop())
   })
 }
 
-function handleOpenUrl(url): void {
-  const urlParams = new URL(url)
-  const token = urlParams.searchParams.get('token')
-
-  if (token) {
-    updateStore('token', token)
-    mainWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED, { token })
-  } else {
-    mainWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
-  }
-}
-
-async function checkForUpdates(): Promise<void> {
-  autoUpdater.checkForUpdatesAndNotify()
-  autoUpdater.on('update-available', (version) => {
-    log.info('Update available:', version)
-    mainWindow?.webContents.send(IPC_EVENTS.UPDATE_AVAILABLE, version)
-  })
-
-  autoUpdater.on('update-downloaded', () => {
-    log.info('Update downloaded')
-    mainWindow?.webContents.send(IPC_EVENTS.UPDATE_DOWNLOADED)
-  })
-
-  autoUpdater.on('error', (error) => {
-    log.error('Update Error:', error)
-    console.error('Update Error:', error)
-  })
-}
-
 app.on('window-all-closed', () => {
-  mainWindow = null
+  mw = null
   // Do not quit the app when all windows are closed
   // The app will remain running in the background
 })

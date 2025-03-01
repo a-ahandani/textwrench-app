@@ -2,7 +2,7 @@ import { ACTION_DEFAULT_SHORTCUTS, ACTIONS, PLATFORMS } from '../../../shared/co
 import { globalShortcut } from 'electron'
 import { handlers } from '../../ipc'
 
-export const resetShortcuts = (shortcuts: Record<string, Record<string, string>>) => {
+export const resetShortcuts = (shortcuts: Record<string, Record<string, string>>): void => {
   globalShortcut.unregisterAll()
 
   const updatedShortcuts = shortcuts?.[PLATFORMS[process.platform]] || {}

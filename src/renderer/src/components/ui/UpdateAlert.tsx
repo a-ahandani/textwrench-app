@@ -9,15 +9,24 @@ export const UpdateAlert = () => {
     return null
   }
   return (
-    <Alert.Root py={2} title="Update available" status="success" variant="solid" borderRadius={0}>
-      <Alert.Indicator>
-        <GoBookmarkFill />
-      </Alert.Indicator>
-      <Alert.Content color="fg">
-        <Alert.Title>The latest version is ready to install</Alert.Title>
-      </Alert.Content>
-      <Link alignSelf="center" onClick={() => quitAndInstall()} fontWeight="bold">
-        Update to {latestVersion} now!
+    <Alert.Root
+      position={'fixed'}
+      zIndex={2}
+      bottom={0}
+      py={1}
+      title="The latest version is ready to install"
+      status="success"
+      variant="solid"
+      borderRadius={0}
+      size={'sm'}
+      display={'flex'}
+      justifyContent={'center'}
+    >
+      <Link alignSelf="center" onClick={() => quitAndInstall()} color={'white'}>
+        <Alert.Indicator>
+          <GoBookmarkFill />
+        </Alert.Indicator>
+        The latest version is ready to install, <b>Update to {latestVersion} now!</b>
       </Link>
     </Alert.Root>
   )

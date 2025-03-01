@@ -3,7 +3,7 @@ import { twService } from '../axios/axios'
 import { getMainWindow } from '../window/window'
 import { store } from '../../store'
 
-export async function verifyToken() {
+export async function verifyToken(): Promise<void> {
   const mainWindow = getMainWindow()
   if (!mainWindow) return
   const token = store.get('token')

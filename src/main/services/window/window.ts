@@ -6,6 +6,7 @@ import winIcon from '../../../../resources/icons/icon.png?asset'
 import trayIcon from '../../../../build/tray/icon-w.png?asset'
 import trayIconColored from '../../../../build/tray/icon-win.png?asset'
 import { labels } from '../../../shared/constants'
+import { checkForUpdates } from '../updater/updater'
 
 let tray: Tray | null = null
 let isQuitting = false
@@ -41,6 +42,9 @@ export const initializeApp = (): BrowserWindow => {
 
   mainWindow.setBounds({ x: 10, y: 10, width: 480, height: 320 })
   mainWindow.setVisibleOnAllWorkspaces(true)
+  mainWindow.on('focus', () => {
+    checkForUpdates()
+  })
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
