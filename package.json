@@ -24,6 +24,8 @@
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^4.0.0",
     "@hurdlegroup/robotjs": "^0.12.3",
+    "@sentry/electron": "^6.1.0",
+    "@sentry/vite-plugin": "^3.2.1",
     "@typescript-eslint/eslint-plugin": "^8.25.0",
     "axios": "^1.8.1",
     "electron-app-universal-protocol-client": "2.1.1",

@@ -1,7 +1,7 @@
-import { IPC_EVENTS } from '../../../shared/ipc-events'
 import { twService } from '../axios/axios'
 import { getMainWindow } from '../window/window'
 import { store } from '../../store'
+import { IPC_EVENTS } from '@shared/ipc-events'
 
 export async function verifyToken(): Promise<void> {
   const mainWindow = getMainWindow()

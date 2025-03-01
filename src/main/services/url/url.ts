@@ -1,7 +1,7 @@
 import log from 'electron-log'
-import { IPC_EVENTS } from '../../../shared/ipc-events'
 import { updateStore } from '../../store/helpers'
 import { getMainWindow } from '../window/window'
+import { IPC_EVENTS } from '@shared/ipc-events'
 
 export function handleOpenUrl(url): void {
   const mainWindow = getMainWindow()

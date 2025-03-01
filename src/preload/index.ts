@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import { IPC_EVENTS } from '../shared/ipc-events'
+import { IPC_EVENTS } from '@shared/ipc-events'
 
 const api = {
   getStoreValue: (key: string): Promise<unknown> =>

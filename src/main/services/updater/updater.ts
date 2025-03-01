@@ -1,7 +1,7 @@
-import { IPC_EVENTS } from '../../../shared/ipc-events'
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
 import { getMainWindow } from '../window/window'
+import { IPC_EVENTS } from '@shared/ipc-events'
 
 export async function checkForUpdates(): Promise<void> {
   log.info('Checking for updates...')

@@ -1,9 +1,9 @@
 import { store } from './index'
 import { getMainWindow } from '../services/window/window'
-import { StoreType } from '../../shared/types/store'
-import { IPC_EVENTS } from '../../shared/ipc-events'
+import { StoreType } from '@shared/types/store'
+import { IPC_EVENTS } from '@shared/ipc-events'
 
-export const updateStore = (key: keyof StoreType, value) => {
+export const updateStore = (key: keyof StoreType, value): void => {
   const mainWindow = getMainWindow()
 
   store.set(key, value)

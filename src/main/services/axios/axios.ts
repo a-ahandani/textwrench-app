@@ -1,9 +1,9 @@
 import axios, { AxiosError } from 'axios'
 import { store } from '../../store'
-import { IPC_EVENTS } from '../../../shared/ipc-events'
 import { getMainWindow } from '../window/window'
 import { updateStore } from '../../store/helpers'
 import log from 'electron-log'
+import { IPC_EVENTS } from '@shared/ipc-events'
 
 const baseURL = import.meta.env.VITE_API_SERVER
 
