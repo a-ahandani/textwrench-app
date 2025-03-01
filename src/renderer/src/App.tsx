@@ -1,6 +1,6 @@
 import { Prompts } from './components/pages/prompts/Prompts'
 import { Settings } from './components/pages/settings/Settings'
-import { Box, Container, Tabs } from '@chakra-ui/react'
+import { Container, Tabs } from '@chakra-ui/react'
 import { Clipboard } from './components/pages/clipboard/Clipboard'
 import { Header } from './components/ui/Header'
 import { TabContents } from './components/ui/TabContents'
@@ -29,41 +29,39 @@ function App(): JSX.Element {
   }, [isLoggedIn])
 
   return (
-    <Box>
+    <>
       <Header />
       <UpdateAlert />
-      <Container maxWidth="full" p="0" >
-        <Box height={'calc(100vh - 53px)'} width={'full'} display={'flex'} overflow={'auto'} p={2}>
-          <Clipboard />
-          <Tabs.Root
-            orientation="vertical"
-            flex={1}
-            size="md"
-            value={activeTab}
-            variant="plain"
-            unmountOnExit
-          >
-            <Tabs.List bg="bg.muted" rounded="l3" p="1" mr={2} border={'none'}>
-              {filteredTabs.map((tab) => (
-                <Tabs.Trigger
-                  key={tab.value}
-                  value={tab.value}
-                  onClick={() => setActiveTab(tab.value)}
-                >
-                  {tab.icon}
-                </Tabs.Trigger>
-              ))}
-              <Tabs.Indicator rounded="l2" />
-            </Tabs.List>
+      <Container maxWidth="full" p="0" pr="0">
+        <Clipboard />
+        <Tabs.Root
+          orientation="vertical"
+          size="lg"
+          value={activeTab}
+          variant="line"
+          borderRadius={0}
+          unmountOnExit
+        >
+          <Tabs.List borderRadius={0} pl={'2px'} pr={0} bg="bg.muted">
             {filteredTabs.map((tab) => (
-              <TabContents key={tab.value} value={tab.value} flex={1}>
-                {tab.content}
-              </TabContents>
+              <Tabs.Trigger
+                key={tab.value}
+                value={tab.value}
+                onClick={() => setActiveTab(tab.value)}
+              >
+                {tab.icon}
+              </Tabs.Trigger>
             ))}
-          </Tabs.Root>
-        </Box>
+            <Tabs.Indicator />
+          </Tabs.List>
+          {filteredTabs.map((tab) => (
+            <TabContents key={tab.value} value={tab.value} flex={1}>
+              {tab.content}
+            </TabContents>
+          ))}
+        </Tabs.Root>
       </Container>
-    </Box>
+    </>
   )
 }
 
