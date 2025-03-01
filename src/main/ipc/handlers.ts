@@ -10,7 +10,7 @@ import { autoUpdater } from 'electron-updater'
 
 const apiServer = import.meta.env.VITE_API_SERVER
 
-export function setupIpcHandlers() {
+export function setupIpcHandlers(): void {
   ipcMain.handle(IPC_EVENTS.GET_STORE_VALUE, (_event, key: keyof StoreType) => {
     return store.get(key)
   })

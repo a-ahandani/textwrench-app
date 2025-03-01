@@ -2,7 +2,9 @@ import { Alert, Link } from '@chakra-ui/react'
 import { GoBookmarkFill } from 'react-icons/go'
 import { useUpdate } from '../providers/UpdateProvider'
 
-export const UpdateAlert = () => {
+import { FC } from 'react';
+
+export const UpdateAlert: FC = () => {
   const { isUpdateDownloaded, quitAndInstall, latestVersion } = useUpdate()
 
   if (!isUpdateDownloaded) {

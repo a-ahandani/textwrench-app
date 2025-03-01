@@ -3,6 +3,7 @@ import { store } from '../../store'
 import { IPC_EVENTS } from '../../../shared/ipc-events'
 import { getMainWindow } from '../window/window'
 import { updateStore } from '../../store/helpers'
+import log from 'electron-log'
 
 const baseURL = import.meta.env.VITE_API_SERVER
 
@@ -32,7 +33,7 @@ twService.interceptors.response.use(
   },
   (error) => {
     if (error.response.status === 401) {
-      console.log('UNAUTHORIZED REQUEST', error.response.status)
+      log.warn('UNAUTHORIZED REQUEST', error.response.status)
       const mainWindow = getMainWindow()
       updateStore('token', null)
       mainWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)

@@ -7,6 +7,7 @@ import trayIcon from '../../../../build/tray/icon-w.png?asset'
 import trayIconColored from '../../../../build/tray/icon-win.png?asset'
 import { labels } from '../../../shared/constants'
 import { checkForUpdates } from '../updater/updater'
+import log from 'electron-log'
 
 let tray: Tray | null = null
 let isQuitting = false
@@ -106,7 +107,7 @@ export const initializeApp = (): BrowserWindow => {
         }
       })
     } catch (error) {
-      console.log('Error creating tray', error)
+      log.error('Error creating tray', error)
     }
   }
 
