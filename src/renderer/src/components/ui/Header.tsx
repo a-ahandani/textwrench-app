@@ -41,15 +41,19 @@ export const Header: FC = () => {
 
       {!isMac && (
         <IconButton
-          mx={2}
+          mx={0}
+          height={'36px'}
+          width={'36px'}
+
           onClick={() => {
             window.api.closeWindow()
           }}
-          borderRadius="l1"
+          borderRadius="0"
           size="xs"
           variant="plain"
           _hover={{
-            bg: 'red.500'
+            bg: 'red.600',
+            color: 'white'
           }}
         >
           <GoX />
