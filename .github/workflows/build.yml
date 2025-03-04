@@ -66,21 +66,6 @@ jobs:
           VITE_API_SERVER: ${{ secrets.VITE_API_SERVER }}
           VITE_DOWNLOAD_SERVER: ${{ secrets.VITE_DOWNLOAD_SERVER }}
 
-      # 🔹 Verify Notarization (Only for macOS)
-      - name: Check Notarization Status
-        if: matrix.os == 'macos-latest'
-        run: |
-          xcrun notarytool history --apple-id "${{ secrets.APPLE_ID }}" --team-id "${{ secrets.APPLE_TEAM_ID }}"
-        shell: bash
-
-      # 🔹 Upload Notarized Artifacts
-      - name: Upload notarized macOS build
-        if: matrix.os == 'macos-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: notarized-mac-build
-          path: dist/*.dmg
-
       # 🔹 SFTP Upload (For All Platforms)
       - name: SFTP upload with version folder
         uses: Dylan700/sftp-upload-action@latest
