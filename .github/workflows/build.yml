@@ -44,6 +44,19 @@ jobs:
       - name: Install dependencies
         run: yarn
 
+      # 🔹 Setup Apple Notarization Credentials (Only for macOS)
+      - name: Set up Apple Notarization
+        if: matrix.os == 'macos-latest'
+        run: |
+          echo "${{ secrets.APPLE_API_KEY_P8 }}" > AuthKey.p8
+          export CSC_IDENTITY_AUTO_DISCOVERY=true
+          export APPLE_API_KEY_ID="${{ secrets.APPLE_API_KEY_ID }}"
+          export APPLE_API_ISSUER_ID="${{ secrets.APPLE_API_ISSUER_ID }}"
+          export APPLE_TEAM_ID="${{ secrets.APPLE_TEAM_ID }}"
+          export CSC_LINK=AuthKey.p8
+        shell: bash
+
+      # 🔹 Build/Release Electron App (Includes Notarization for macOS)
       - name: Build/release Electron app
         uses: paneron/action-electron-builder@v1.8.1
         with:
@@ -53,6 +66,22 @@ jobs:
           VITE_API_SERVER: ${{ secrets.VITE_API_SERVER }}
           VITE_DOWNLOAD_SERVER: ${{ secrets.VITE_DOWNLOAD_SERVER }}
 
+      # 🔹 Verify Notarization (Only for macOS)
+      - name: Check Notarization Status
+        if: matrix.os == 'macos-latest'
+        run: |
+          xcrun notarytool history --apple-id "${{ secrets.APPLE_ID }}" --team-id "${{ secrets.APPLE_TEAM_ID }}"
+        shell: bash
+
+      # 🔹 Upload Notarized Artifacts
+      - name: Upload notarized macOS build
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: notarized-mac-build
+          path: dist/*.dmg
+
+      # 🔹 SFTP Upload (For All Platforms)
       - name: SFTP upload with version folder
         uses: Dylan700/sftp-upload-action@latest
         with:
