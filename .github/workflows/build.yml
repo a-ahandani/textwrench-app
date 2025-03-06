@@ -46,7 +46,7 @@ jobs:
 
       # 🔹 Build/Release Electron App (Includes Notarization for macOS)
       - name: Build/release Electron app
-        run: npm run package:publish
+        run: yarn release
         env:
           VITE_API_SERVER: ${{ secrets.VITE_API_SERVER }}
           VITE_DOWNLOAD_SERVER: ${{ secrets.VITE_DOWNLOAD_SERVER }}
