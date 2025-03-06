@@ -10,7 +10,12 @@ import { checkForUpdates } from '../updater/updater'
 import log from 'electron-log'
 
 let tray: Tray | null = null
+
 let isQuitting = false
+export const getIsQuitting = (): boolean => isQuitting
+export const setIsQuitting = (value: boolean): void => {
+  isQuitting = value
+}
 
 const platformSettings = {
   darwin: {
@@ -57,6 +62,7 @@ export const initializeApp = (): BrowserWindow => {
   })
 
   mainWindow.on('close', function (event) {
+    const isQuitting = getIsQuitting()
     if (!isQuitting) {
       event.preventDefault()
       app.dock?.hide()
@@ -64,7 +70,7 @@ export const initializeApp = (): BrowserWindow => {
     }
   })
   app.on('before-quit', () => {
-    isQuitting = true
+    setIsQuitting(true)
   })
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {

@@ -61,18 +61,18 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      # 🔹 SFTP Upload (For All Platforms)
-      - name: SFTP upload with version folder
-        uses: Dylan700/sftp-upload-action@latest
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: 22
-          uploads: |
-            ./dist/ => /var/www/textwrench.ai/downloads/${{ matrix.os }}-files
-          ignore: |
-            *pack*
-            *-arm*
-            *zip*
-          delete: 'true'
+      # # 🔹 SFTP Upload (For All Platforms)
+      # - name: SFTP upload with version folder
+      #   uses: Dylan700/sftp-upload-action@latest
+      #   with:
+      #     server: ${{ secrets.FTP_SERVER }}
+      #     username: ${{ secrets.FTP_USERNAME }}
+      #     password: ${{ secrets.FTP_PASSWORD }}
+      #     port: 22
+      #     uploads: |
+      #       ./dist/ => /var/www/textwrench.ai/downloads/${{ matrix.os }}-files
+      #     ignore: |
+      #       *pack*
+      #       *-arm*
+      #       *zip*
+      #     delete: 'true'

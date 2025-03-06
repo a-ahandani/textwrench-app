@@ -7,7 +7,7 @@ import { handleError, twService } from '../services/axios/axios'
 import { verifyToken } from '../services/auth/verifyToken'
 import { resetShortcuts } from '../services/shortcuts/shortcuts'
 import { autoUpdater } from 'electron-updater'
-
+import { setIsQuitting } from '../services/window/window'
 const apiServer = import.meta.env.VITE_API_SERVER
 
 export function setupIpcHandlers(): void {
@@ -27,6 +27,7 @@ export function setupIpcHandlers(): void {
   })
 
   ipcMain.handle(IPC_EVENTS.QUIT_AND_INSTALL, () => {
+    setIsQuitting(true)
     autoUpdater.quitAndInstall()
     return
   })

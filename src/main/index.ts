@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron'
 import { electronAppUniversalProtocolClient } from 'electron-app-universal-protocol-client'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import { initializeApp } from './services/window/window'
+import { initializeApp, setIsQuitting } from './services/window/window'
 import { setupIpcHandlers } from './ipc/handlers'
 import path from 'path'
 import { updateStore } from './store/helpers'
@@ -75,6 +75,7 @@ function setupSingleInstanceLock(): void {
 
   const gotTheLock = app.requestSingleInstanceLock()
   if (!gotTheLock) {
+    setIsQuitting(true)
     app.quit()
     return
   }
