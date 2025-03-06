@@ -39,8 +39,6 @@ mac:
   category: public.app-category.developer-tools
   artifactName: "Textwrench-${version}.${ext}"
   entitlementsInherit: build/entitlements.mac.plist
-  hardenedRuntime: true
-  gatekeeperAssess: false
   notarize: true
 
 dmg:

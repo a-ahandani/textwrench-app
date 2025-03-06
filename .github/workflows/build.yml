@@ -46,7 +46,10 @@ jobs:
 
       # 🔹 Build/Release Electron App (Includes Notarization for macOS)
       - name: Build/release Electron app
-        run: yarn build && yarn release
+        uses: paneron/action-electron-builder@v1.8.1
+        with:
+          github_token: ${{ secrets.github_token }}
+          release: true
         env:
           VITE_API_SERVER: ${{ secrets.VITE_API_SERVER }}
           VITE_DOWNLOAD_SERVER: ${{ secrets.VITE_DOWNLOAD_SERVER }}
@@ -57,24 +60,6 @@ jobs:
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-
-      # # 🔹 Build/Release Electron App (Includes Notarization for macOS)
-      # - name: Build/release Electron app
-      #   uses: paneron/action-electron-builder@v1.8.1
-      #   with:
-      #     github_token: ${{ secrets.github_token }}
-      #     release: true
-      #   env:
-      #     VITE_API_SERVER: ${{ secrets.VITE_API_SERVER }}
-      #     VITE_DOWNLOAD_SERVER: ${{ secrets.VITE_DOWNLOAD_SERVER }}
-      #     APPLE_ID: ${{ secrets.APPLE_ID }}
-      #     APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-      #     APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-      #     CSC_LINK: ${{ secrets.CSC_LINK }}
-      #     CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       # 🔹 SFTP Upload (For All Platforms)
       - name: SFTP upload with version folder

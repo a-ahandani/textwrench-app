@@ -17,8 +17,7 @@
     "postinstall": "electron-builder install-app-deps",
     "build:win": "npm run build && electron-builder --win --x64 --config.win.target=nsis",
     "build:mac": "electron-vite build && electron-builder --mac --config.mac.target=dmg",
-    "build:linux": "electron-vite build && electron-builder --linux --config.linux.target=AppImage",
-    "release": "electron-builder --mac --windows --publish always"
+    "build:linux": "electron-vite build && electron-builder --linux --config.linux.target=AppImage"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
