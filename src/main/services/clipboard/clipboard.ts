@@ -2,7 +2,6 @@ import { clipboard } from 'electron'
 import { keyTap } from '@hurdlegroup/robotjs'
 import { getCommandKey } from '../../utils/platform'
 import { wait } from '../../utils/wait'
-import log from 'electron-log'
 
 export const getSelectedText = async (): Promise<string> => {
   await wait()
@@ -15,7 +14,7 @@ export const getSelectedText = async (): Promise<string> => {
   await wait()
 
   const selectedText = clipboard.readText()
-  log.info('Selected text:', selectedText)
+
   clipboard.writeText(currentClipboardContent)
   await wait()
   return selectedText

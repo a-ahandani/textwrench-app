@@ -36,10 +36,14 @@ nsis:
 
 mac:
   icon: "resources/icons/icon.icns"
-  category: public.app-category.developer-tools
   artifactName: "Textwrench-${version}.${ext}"
   entitlementsInherit: build/entitlements.mac.plist
   notarize: true
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  extendInfo:
+    NSSystemPolicyAllFiles: Application requires access to system files.
+    NSScreenCaptureDescription: Application requires access to capture the screen.
 
 dmg:
   artifactName: ${name}-${version}.${ext}
@@ -56,8 +60,6 @@ linux:
 
 appImage:
   artifactName: ${name}-${version}.${ext}
-
-npmRebuild: false
 
 publish:
   provider: github

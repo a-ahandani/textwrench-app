@@ -3,11 +3,22 @@ import { autoUpdater } from 'electron-updater'
 import { getMainWindow } from '../window/window'
 import { IPC_EVENTS } from '@shared/ipc-events'
 
-export async function checkForUpdates(): Promise<void> {
-  log.info('Checking for updates...')
-  const mainWindow = getMainWindow()
+let lastUpdateCheck = 0
 
+export async function checkForUpdates(): Promise<void> {
+  const now = Date.now()
+  const FIVE_MINUTES = 5 * 60 * 1000
+
+  if (now - lastUpdateCheck < FIVE_MINUTES) {
+    return
+  }
+
+  lastUpdateCheck = now
+  log.info('Checking for updates...')
+
+  const mainWindow = getMainWindow()
   autoUpdater.checkForUpdatesAndNotify()
+
   autoUpdater.on('update-available', (version) => {
     log.info('Update available:', version)
     mainWindow?.webContents.send(IPC_EVENTS.UPDATE_AVAILABLE, version)

@@ -2,6 +2,10 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { IPC_EVENTS } from '@shared/ipc-events'
 
+import log from 'electron-log'
+
+window.__electronLog = log
+
 const api = {
   getStoreValue: (key: string): Promise<unknown> =>
     ipcRenderer.invoke(IPC_EVENTS.GET_STORE_VALUE, key),
