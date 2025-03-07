@@ -1,4 +1,4 @@
-import { app, BrowserWindow, systemPreferences } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import { electronAppUniversalProtocolClient } from 'electron-app-universal-protocol-client'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { initializeApp, setIsQuitting } from './services/window/window'
@@ -11,29 +11,13 @@ import log from 'electron-log'
 import { checkForUpdates } from './services/updater/updater'
 import { handleOpenUrl } from './services/url/url'
 import { APP_KEY, labels } from '@shared/constants'
+import { checkPermissions } from './services/permissions/permissions'
 
 let mw: BrowserWindow | null = null
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 log.initialize()
 log.transports.console.format = '{h}:{i}:{s} [{level}] {text}'
 log.transports.console.level = 'info'
-
-function checkPermissions(): void {
-  if (process.platform !== 'darwin') return
-
-  const permissions = {
-    access: systemPreferences.isTrustedAccessibilityClient(false)
-  }
-
-  log.info('Checking macOS permissions...');
-  Object.entries(permissions).forEach(([key, value]) => {
-    log.info(`----> ${key}: ${value}`)
-  })
-  if (!permissions.access) {
-    log.info('Requesting macOS permissions...')
-    systemPreferences.isTrustedAccessibilityClient(true)
-  }
-}
 
 app.whenReady().then(async () => {
   checkPermissions()

@@ -5,6 +5,7 @@ import { updateStore } from '../store/helpers'
 
 export const handleSelectedText = async (): Promise<void> => {
   const selectedText = await getSelectedText()
+  if (!selectedText) return
   updateStore('selectedText', selectedText)
 
   const processedText = await processTextWithAI(selectedText)
