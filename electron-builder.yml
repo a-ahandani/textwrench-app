@@ -44,6 +44,7 @@ mac:
   extendInfo:
     NSSystemPolicyAllFiles: Application requires access to system files.
     NSScreenCaptureDescription: Application requires access to capture the screen.
+    NSAccessibilityUsageDescription: "Application requires access to macOS accessibility features."
 
 dmg:
   artifactName: ${name}-${version}.${ext}

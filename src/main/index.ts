@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, systemPreferences } from 'electron'
 import { electronAppUniversalProtocolClient } from 'electron-app-universal-protocol-client'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { initializeApp, setIsQuitting } from './services/window/window'
@@ -18,7 +18,25 @@ log.initialize()
 log.transports.console.format = '{h}:{i}:{s} [{level}] {text}'
 log.transports.console.level = 'info'
 
+function checkPermissions(): void {
+  if (process.platform !== 'darwin') return
+
+  const permissions = {
+    access: systemPreferences.isTrustedAccessibilityClient(false)
+  }
+
+  log.info('Checking macOS permissions...');
+  Object.entries(permissions).forEach(([key, value]) => {
+    log.info(`----> ${key}: ${value}`)
+  })
+  if (!permissions.access) {
+    log.info('Requesting macOS permissions...')
+    systemPreferences.isTrustedAccessibilityClient(true)
+  }
+}
+
 app.whenReady().then(async () => {
+  checkPermissions()
   mw = initializeApp()
   if (isDev) {
     // autoUpdater.autoDownload = false;

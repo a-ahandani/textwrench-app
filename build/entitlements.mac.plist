@@ -14,5 +14,7 @@
     <true/>
     <key>com.apple.security.screen.capture</key>
     <true/>
+    <key>com.apple.security.accessibility</key>
+    <true/>
   </dict>
 </plist>
