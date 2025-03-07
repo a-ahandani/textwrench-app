@@ -1,7 +1,6 @@
 import { resolve } from 'path'
 import { defineConfig, ElectronViteConfig, externalizeDepsPlugin, loadEnv } from 'electron-vite'
 import react from '@vitejs/plugin-react'
-import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 export default ({ mode }): ElectronViteConfig => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
@@ -16,14 +15,7 @@ export default ({ mode }): ElectronViteConfig => {
       build: {
         sourcemap: true
       },
-      plugins: [
-        externalizeDepsPlugin(),
-        sentryVitePlugin({
-          authToken: process.env.SENTRY_AUTH_TOKEN,
-          org: 'textwrench',
-          project: 'electron'
-        })
-      ]
+      plugins: [externalizeDepsPlugin()]
     },
     preload: {
       resolve: {
@@ -34,14 +26,7 @@ export default ({ mode }): ElectronViteConfig => {
       build: {
         sourcemap: true
       },
-      plugins: [
-        externalizeDepsPlugin(),
-        sentryVitePlugin({
-          authToken: process.env.SENTRY_AUTH_TOKEN,
-          org: 'textwrench',
-          project: 'electron'
-        })
-      ]
+      plugins: [externalizeDepsPlugin()]
     },
     renderer: {
       resolve: {
@@ -53,14 +38,7 @@ export default ({ mode }): ElectronViteConfig => {
       build: {
         sourcemap: true
       },
-      plugins: [
-        react(),
-        sentryVitePlugin({
-          authToken: process.env.SENTRY_AUTH_TOKEN,
-          org: 'textwrench',
-          project: 'electron'
-        })
-      ]
+      plugins: [react()]
     }
   })
 }
