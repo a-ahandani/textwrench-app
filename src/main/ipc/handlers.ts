@@ -8,7 +8,6 @@ import { verifyToken } from '../services/auth/verifyToken'
 import { resetShortcuts } from '../services/shortcuts/shortcuts'
 import { autoUpdater } from 'electron-updater'
 import { setIsQuitting } from '../services/window/window'
-import * as Sentry from '@sentry/node'
 
 const apiServer = import.meta.env.VITE_API_SERVER
 
@@ -43,14 +42,6 @@ export function setupIpcHandlers(): void {
     try {
       const result = await twService.get<UserProfile>('/protected/profile')
       resetShortcuts(result.data?.shortcuts || {})
-
-      Sentry.setUser({
-        id: result.data?.ID,
-        email: result.data?.email,
-        username: result.data?.name,
-        userType: result.data?.user_type
-      })
-
       return result.data
     } catch (error) {
       handleError(error)
