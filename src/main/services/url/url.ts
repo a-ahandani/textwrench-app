@@ -2,9 +2,11 @@ import log from 'electron-log'
 import { updateStore } from '../../store/helpers'
 import { getMainWindow } from '../window/window'
 import { IPC_EVENTS } from '@shared/ipc-events'
+import { bringToFront } from '../../utils/bringToFront'
 
 export function handleOpenUrl(url): void {
   const mainWindow = getMainWindow()
+  bringToFront()
 
   try {
     const urlParams = new URL(url)
