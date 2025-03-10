@@ -2,4 +2,4 @@ provider: github
 owner: a-ahandani
 repo: textwrench-app
 releaseType: release
-updaterCacheDirName: "textwrench-updater"
+updaterCacheDirName: 'textwrench-updater'

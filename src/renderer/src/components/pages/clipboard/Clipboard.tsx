@@ -17,7 +17,7 @@ export const Clipboard = () => {
   return (
     <div>
       <IconButton
-        variant="subtle"
+        variant='subtle'
         rounded="full"
         size={'sm'}
         css={{

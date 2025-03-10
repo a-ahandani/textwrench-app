@@ -21,8 +21,8 @@ asarUnpack:
 
 win:
   executableName: ${productName}
-  icon: "resources/icons/icon.png"
-  artifactName: "Textwrench-${version}.${ext}"
+  icon: 'resources/icons/icon.png'
+  artifactName: 'Textwrench-${version}.${ext}'
 
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
@@ -35,8 +35,8 @@ nsis:
   warningsAsErrors: false
 
 mac:
-  icon: "resources/icons/icon.icns"
-  artifactName: "Textwrench-${version}.${ext}"
+  icon: 'resources/icons/icon.icns'
+  artifactName: 'Textwrench-${version}.${ext}'
   entitlementsInherit: build/entitlements.mac.plist
   notarize: true
   hardenedRuntime: true
@@ -44,20 +44,20 @@ mac:
   extendInfo:
     NSSystemPolicyAllFiles: Application requires access to system files.
     NSScreenCaptureDescription: Application requires access to capture the screen.
-    NSAccessibilityUsageDescription: "Application requires access to macOS accessibility features."
+    NSAccessibilityUsageDescription: 'Application requires access to macOS accessibility features.'
 
 dmg:
   artifactName: ${name}-${version}.${ext}
 
 linux:
-  icon: "resources/icons/icon.png"
+  icon: 'resources/icons/icon.png'
   target:
     - AppImage
     - snap
     - deb
   maintainer: electronjs.org
   category: Utility
-  artifactName: "Textwrench-${version}.${ext}"
+  artifactName: 'Textwrench-${version}.${ext}'
 
 appImage:
   artifactName: ${name}-${version}.${ext}
@@ -67,4 +67,4 @@ publish:
   owner: a-ahandani
   repo: textwrench-app
   releaseType: release
-  updaterCacheDirName: "textwrench-updater"
+  updaterCacheDirName: 'textwrench-updater'

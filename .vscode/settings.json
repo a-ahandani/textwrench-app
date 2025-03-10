@@ -8,8 +8,6 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": [
-    "Chakra"
-  ],
+  "cSpell.words": ["Chakra"],
   "postman.settings.dotenv-detection-notification-visibility": false
 }

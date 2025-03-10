@@ -8,7 +8,7 @@ export const checkPermissions = async () => {
     access: systemPreferences.isTrustedAccessibilityClient(false)
   }
 
-  log.info('Checking macOS permissions...');
+  log.info('Checking macOS permissions...')
   Object.entries(permissions).forEach(([key, value]) => {
     log.info(`----> ${key}: ${value}`)
   })

@@ -44,7 +44,6 @@ export const Header: FC = () => {
           mx={0}
           height={'36px'}
           width={'36px'}
-
           onClick={() => {
             window.api.closeWindow()
           }}
