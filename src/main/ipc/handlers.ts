@@ -8,8 +8,7 @@ import { verifyToken } from '../services/auth/verifyToken'
 import { resetShortcuts } from '../services/shortcuts/shortcuts'
 import { autoUpdater } from 'electron-updater'
 import { setIsQuitting } from '../services/window/window'
-
-const apiServer = import.meta.env.VITE_API_SERVER
+import { BASE_URL } from '@shared/constants'
 
 export function setupIpcHandlers(): void {
   ipcMain.handle(IPC_EVENTS.GET_STORE_VALUE, (_event, key: keyof StoreType) => {
@@ -24,7 +23,7 @@ export function setupIpcHandlers(): void {
   ipcMain.handle(IPC_EVENTS.LOGIN, () => {
     updateStore('token', null)
     twService.defaults.headers.common['Authorization'] = ''
-    return shell.openExternal(`${apiServer}/auth/google`)
+    return shell.openExternal(`${BASE_URL}/auth/google`)
   })
 
   ipcMain.handle(IPC_EVENTS.QUIT_AND_INSTALL, () => {

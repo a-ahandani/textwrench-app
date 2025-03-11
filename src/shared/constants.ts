@@ -1,3 +1,6 @@
+export const BASE_URL = (import.meta.env as ImportMetaEnv & { VITE_API_SERVER: string })
+  .VITE_API_SERVER
+
 export const labels = {
   app: 'Text Wrench',
   showApp: 'Show App',

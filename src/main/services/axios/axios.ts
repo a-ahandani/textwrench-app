@@ -4,11 +4,10 @@ import { getMainWindow } from '../window/window'
 import { updateStore } from '../../store/helpers'
 import log from 'electron-log'
 import { IPC_EVENTS } from '@shared/ipc-events'
-
-const baseURL = import.meta.env.VITE_API_SERVER
+import { BASE_URL } from '@shared/constants'
 
 export const twService = axios.create({
-  baseURL,
+  baseURL: BASE_URL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json'
