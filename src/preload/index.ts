@@ -32,6 +32,13 @@ const api = {
       ipcRenderer.removeListener(IPC_EVENTS.UPDATE_AVAILABLE, subscription)
     }
   },
+  onOpenModal: (callback) => {
+    const subscription = (_event: Electron.IpcRendererEvent, data: unknown): void => callback(data)
+    ipcRenderer.on(IPC_EVENTS.OPEN_MODAL, subscription)
+    return (): void => {
+      ipcRenderer.removeListener(IPC_EVENTS.OPEN_MODAL, subscription)
+    }
+  },
   quitAndInstall: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.QUIT_AND_INSTALL),
   getProfile: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.GET_PROFILE),
   getPrompts: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.GET_PROMPTS),

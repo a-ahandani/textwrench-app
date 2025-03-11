@@ -53,11 +53,14 @@ export const KEY_NAMES = {
 }
 
 export const ACTIONS = {
-  FIX_SELECTED_TEXT: 'fixSelectedText'
+  REVISE_TEXT: 'fixSelectedText',
+  EXPLAIN_TEXT: 'explainSelectedText'
 }
 export const ACTION_LABELS = {
-  [ACTIONS.FIX_SELECTED_TEXT]: 'Fix text'
+  [ACTIONS.REVISE_TEXT]: 'Revise it',
+  [ACTIONS.EXPLAIN_TEXT]: 'Explain it'
 }
 export const ACTION_DEFAULT_SHORTCUTS = {
-  [ACTIONS.FIX_SELECTED_TEXT]: ['Ctrl', 'Shift', 'C']
+  [ACTIONS.REVISE_TEXT]: ['Ctrl', 'Shift', 'C'],
+  [ACTIONS.EXPLAIN_TEXT]: ['Ctrl', 'Shift', 'E']
 }

@@ -28,7 +28,8 @@
     "electron-app-universal-protocol-client": "2.1.1",
     "electron-log": "^5.3.1",
     "electron-updater": "^6.3.9",
-    "react-hotkeys-hook": "^4.6.1"
+    "react-hotkeys-hook": "^4.6.1",
+    "react-markdown": "^10.1.0"
   },
   "devDependencies": {
     "@chakra-ui/react": "^3.9.0",

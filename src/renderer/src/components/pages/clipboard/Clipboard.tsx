@@ -10,14 +10,14 @@ export const Clipboard = () => {
   })
   const [open, setOpen] = useState(false)
 
-  const handleClick = () => {
+  const handleClick = (): void => {
     setOpen(!open)
   }
 
   return (
     <div>
       <IconButton
-        variant='subtle'
+        variant="subtle"
         rounded="full"
         size={'sm'}
         css={{

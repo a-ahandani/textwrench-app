@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import { AuthProvider } from '@renderer/components/providers/AuthProvider'
 import { UpdateProvider } from './components/providers/UpdateProvider'
+import { ModalProvider } from './components/providers/ModalProvider'
 
 const rootElement = document.getElementById('root')
 if (rootElement) {
@@ -14,7 +15,9 @@ if (rootElement) {
         <AuthProvider>
           <ChakraProvider>
             <ReactQueryProvider>
-              <App />
+              <ModalProvider>
+                <App />
+              </ModalProvider>
             </ReactQueryProvider>
           </ChakraProvider>
         </AuthProvider>

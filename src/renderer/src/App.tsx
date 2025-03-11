@@ -9,6 +9,7 @@ import { useAuth } from './components/providers/AuthProvider'
 import { useEffect, useState } from 'react'
 import { About } from './components/pages/about/About'
 import { UpdateAlert } from './components/ui/UpdateAlert'
+import { Explain } from './components/pages/explain/Explain'
 
 function App(): JSX.Element {
   const { isLoggedIn } = useAuth()
@@ -34,6 +35,7 @@ function App(): JSX.Element {
       <UpdateAlert />
       <Container maxWidth="full" p="0" pr="0">
         <Clipboard />
+        <Explain />
         <Tabs.Root
           orientation="vertical"
           size="lg"
