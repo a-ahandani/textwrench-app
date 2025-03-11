@@ -18,9 +18,15 @@ export const Explain = () => {
           <Card.Body>
             <Markdown
               components={{
-                h1: (props) => <Heading style={{ fontSize: '3.5em' }} {...props} />,
-                h2: (props) => <Heading style={{ fontSize: '2.5em' }} {...props} />,
-                h3: (props) => <Heading style={{ fontSize: '2em' }} {...props} />,
+                h1: (props) => (
+                  <Heading style={{ fontSize: '3.5em', marginBottom: '1em' }} {...props} />
+                ),
+                h2: (props) => (
+                  <Heading style={{ fontSize: '2.5em', marginBottom: '1em' }} {...props} />
+                ),
+                h3: (props) => (
+                  <Heading style={{ fontSize: '2em', marginBottom: '0.7em' }} {...props} />
+                ),
                 ul: (props) => (
                   <ul style={{ listStyleType: 'disc', margin: '0 0 1.5em 1.5em' }} {...props} />
                 ),
