@@ -1,19 +1,14 @@
 import { clipboard } from 'electron'
-import { keyTap } from '@hurdlegroup/robotjs'
-import { getCommandKey } from '../../utils/platform'
-import { wait } from '../../utils/wait'
 import log from 'electron-log'
 import { checkPermissions } from '../permissions/permissions'
+import { Key, keyboard } from '@nut-tree-fork/nut-js'
+import { getCommandKey } from '../../utils/platform'
 
 export const getSelectedText = async (): Promise<string> => {
-  await wait()
-  const currentClipboardContent = clipboard.readText()
   clipboard.clear()
-  await wait()
 
-  keyTap('c', getCommandKey())
-
-  await wait()
+  await keyboard.pressKey(getCommandKey(), Key.C)
+  await keyboard.releaseKey(getCommandKey(), Key.C)
 
   const selectedText = clipboard.readText()
   log.info('Selected text:', selectedText, !selectedText)
@@ -21,12 +16,10 @@ export const getSelectedText = async (): Promise<string> => {
     checkPermissions()
   }
 
-  clipboard.writeText(currentClipboardContent)
-  await wait()
   return selectedText
 }
 
 export const pasteContent = async (): Promise<void> => {
-  await wait()
-  keyTap('v', getCommandKey())
+  await keyboard.pressKey(getCommandKey(), Key.V)
+  await keyboard.releaseKey(getCommandKey(), Key.V)
 }

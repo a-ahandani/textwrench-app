@@ -4,6 +4,8 @@ import { getSelectedText, pasteContent } from '../services/clipboard/clipboard'
 import { updateStore } from '../store/helpers'
 
 export const handleSelectedText = async (): Promise<void> => {
+  const currentClipboardContent = clipboard.readText()
+
   const selectedText = await getSelectedText()
   if (!selectedText) return
   updateStore('selectedText', selectedText)
@@ -11,4 +13,6 @@ export const handleSelectedText = async (): Promise<void> => {
   const processedText = await processTextWithAI(selectedText)
   clipboard.writeText(processedText)
   await pasteContent()
+
+  clipboard.writeText(currentClipboardContent)
 }
