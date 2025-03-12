@@ -20,6 +20,9 @@ declare global {
       updateShortcuts(shortcuts: Partial<Shortcuts>): Promise<Shortcuts>
       quitAndInstall(): Promise<Version>
       onUpdateDownloaded(callback: (data) => void): () => void
+      onUpdateAvailable(callback: (data) => void): () => void
+      onUpdateProgress(callback: (data) => void): () => void
+      onOpenModal(callback: (data) => void): () => void
     }
   }
 }

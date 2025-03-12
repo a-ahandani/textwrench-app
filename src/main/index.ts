@@ -23,7 +23,7 @@ app.whenReady().then(async () => {
   checkPermissions()
   mw = initializeApp()
   if (isDev) {
-    // autoUpdater.autoDownload = false;
+    // autoUpdater.autoDownload = false
     autoUpdater.forceDevUpdateConfig = true
   }
 

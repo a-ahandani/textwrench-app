@@ -5,8 +5,6 @@
   "compilerOptions": {
     "composite": true,
     "types": ["electron-vite/node"],
-    // "target": "ESNext",
-    // "types": ["electron-vite/node","vite/client"],
     "baseUrl": ".",
     "paths": {
       "@shared/*": ["src/shared/*"]

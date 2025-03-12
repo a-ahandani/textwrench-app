@@ -24,6 +24,10 @@ export async function checkForUpdates(): Promise<void> {
     mainWindow?.webContents.send(IPC_EVENTS.UPDATE_AVAILABLE, version)
   })
 
+  autoUpdater.on('download-progress', (progress) => {
+    mainWindow?.webContents.send(IPC_EVENTS.UPDATE_PROGRESS, progress)
+  })
+
   autoUpdater.on('update-downloaded', () => {
     log.info('Update downloaded')
     mainWindow?.webContents.send(IPC_EVENTS.UPDATE_DOWNLOADED)

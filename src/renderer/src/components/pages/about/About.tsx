@@ -1,4 +1,4 @@
-import { Card } from '@chakra-ui/react'
+import { Card, Progress } from '@chakra-ui/react'
 import { useUpdate } from '@renderer/components/providers/UpdateProvider'
 import { Button } from '@renderer/components/ui/Button'
 
@@ -11,7 +11,8 @@ export const About: FC = () => {
     latestVersion,
     currentVersion,
     isUpdateDownloaded,
-    releaseNotes
+    releaseNotes,
+    progress
   } = useUpdate()
 
   const isUpdateDownloading = isUpdateAvailable && !isUpdateDownloaded
@@ -24,15 +25,20 @@ export const About: FC = () => {
             <Card.Description>You are using the latest version: {currentVersion}</Card.Description>
           ) : (
             <Card.Description>
-              There is a new version available!
+              You are using version: {currentVersion}, There is a new version available!
               <br />
               {isUpdateDownloading && (
-                <Card.Description>
+                <>
                   Downloading version {latestVersion}...
                   <br />
+                  <Progress.Root value={progress} striped animated>
+                    <Progress.Track>
+                      <Progress.Range />
+                    </Progress.Track>
+                  </Progress.Root>
                   You can manually update to version {latestVersion} or wait for the automatic
                   update.
-                </Card.Description>
+                </>
               )}
               {isUpdateDownloaded && (
                 <Button my="2" as="a" onClick={() => quitAndInstall()} colorPalette="green">

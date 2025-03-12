@@ -8,6 +8,7 @@ type UpdateContextType = {
   latestVersion: string
   currentVersion: string
   releaseNotes: string
+  progress: number
   quitAndInstall: () => void
 }
 
@@ -27,11 +28,19 @@ export const UpdateProvider: React.FC<UpdateProviderProps> = ({ children }) => {
   const [latestVersion, setLatestVersion] = useState<string>('')
   const [releaseNotes, setReleaseNotes] = useState<string>('')
   const [isUpdateDownloaded, setIsUpdateDownloaded] = useState<boolean>(false)
+  const [progress, setProgress] = useState<number>(0)
 
   useEventSubscription({
     eventName: 'onUpdateDownloaded',
     callback: () => {
       setIsUpdateDownloaded(true)
+    }
+  })
+
+  useEventSubscription({
+    eventName: 'onUpdateProgress',
+    callback: (data: { percent: number }) => {
+      setProgress(data?.percent)
     }
   })
 
@@ -52,6 +61,7 @@ export const UpdateProvider: React.FC<UpdateProviderProps> = ({ children }) => {
         currentVersion,
         latestVersion,
         releaseNotes,
+        progress,
         quitAndInstall: () => quitAndInstall()
       }}
     >

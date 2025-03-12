@@ -16,6 +16,7 @@ export const IPC_EVENTS = {
   UPDATE_SHORTCUTS: 'update-shortcuts',
   GET_VERSION: 'get-version',
   UPDATE_AVAILABLE: 'update-available',
+  UPDATE_PROGRESS: 'update-progress',
   UPDATE_DOWNLOADED: 'update-downloaded',
   QUIT_AND_INSTALL: 'quit-and-install',
   OPEN_MODAL: 'open-modal'
