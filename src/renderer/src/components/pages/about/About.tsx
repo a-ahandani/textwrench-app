@@ -29,15 +29,12 @@ export const About: FC = () => {
               <br />
               {isUpdateDownloading && (
                 <>
-                  Downloading version {latestVersion}...
-                  <br />
-                  <Progress.Root value={progress} striped animated>
+                  <Progress.Root my={1} value={progress} striped animated>
                     <Progress.Track>
                       <Progress.Range />
                     </Progress.Track>
                   </Progress.Root>
-                  You can manually update to version {latestVersion} or wait for the automatic
-                  update.
+                  Downloading version {latestVersion}...
                 </>
               )}
               {isUpdateDownloaded && (
