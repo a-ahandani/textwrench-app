@@ -1,6 +1,6 @@
 import { Box, Drawer as ChakraDrawer, IconButton, Portal, ProgressRoot } from '@chakra-ui/react'
 import * as React from 'react'
-import { GoCheck, GoArrowLeft } from 'react-icons/go'
+import { GoCheck, GoX } from 'react-icons/go'
 import { ProgressBar } from './Progress'
 import { Button } from '@renderer/components/ui/Button'
 import { Tooltip } from './Tooltip'
@@ -43,7 +43,7 @@ type DrawerFullProps = {
 export const DrawerFull = ({
   open,
   confirmLabel,
-  cancelLabel,
+  cancelLabel = 'Cancel',
   onConfirm,
   onCancel,
   children,
@@ -69,18 +69,10 @@ export const DrawerFull = ({
               <Box ml={2} flex={'1'}>
                 {title}
               </Box>
-              {onCancel && (
-                <Tooltip content={cancelLabel} aria-label={cancelLabel}>
-                  <IconButton onClick={onCancel} size="sm" aria-label={cancelLabel} variant="ghost">
-                    <GoArrowLeft />
-                  </IconButton>
-                </Tooltip>
-              )}
               {onConfirm && (
                 <Button
-                  ml={2}
                   aria-label={confirmLabel}
-                  size="sm"
+                  size="xs"
                   variant="solid"
                   colorPalette="green"
                   onClick={onConfirm}
@@ -89,6 +81,20 @@ export const DrawerFull = ({
                   <ConfirmIcon />
                   {confirmLabel}
                 </Button>
+              )}
+              {onCancel && (
+                <Tooltip content={cancelLabel} aria-label={cancelLabel}>
+                  <IconButton
+                    ml={2}
+                    onClick={onCancel}
+                    size="xs"
+                    aria-label={cancelLabel}
+                    variant="ghost"
+                    borderRadius={2}
+                  >
+                    <GoX />
+                  </IconButton>
+                </Tooltip>
               )}
             </Box>
           </DrawerTitle>
