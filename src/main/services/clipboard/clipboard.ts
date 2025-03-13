@@ -4,6 +4,7 @@ import { checkPermissions } from '../permissions/permissions'
 import { Key, keyboard } from '@nut-tree-fork/nut-js'
 import { getCommandKey } from '../../utils/platform'
 
+keyboard.config.autoDelayMs = 50
 export const getSelectedText = async (): Promise<string> => {
   clipboard.clear()
 
