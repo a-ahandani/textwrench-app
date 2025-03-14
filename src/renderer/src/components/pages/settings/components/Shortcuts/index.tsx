@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import { Card, Kbd, ProgressRoot } from '@chakra-ui/react'
 import { useProfile } from '@renderer/hooks/useProfile'
 import { useAuth } from '../../../../providers/AuthProvider'
@@ -14,8 +15,6 @@ const transformValueToKeys = (value?: string[]) =>
 
 const transformKeysToValue = (value?: string[]) => value?.map((key) => KEY_NAMES[key])
 
-import { FC } from 'react'
-
 export const Shortcuts: FC = () => {
   const { isLoggedIn } = useAuth()
   const { data: profile, isLoading, isFetched } = useProfile({ enabled: isLoggedIn })
@@ -23,7 +22,17 @@ export const Shortcuts: FC = () => {
 
   const { mutate: updateShortcuts } = useUpdateShortcuts({})
   const handleSubmit = (key, value): void => {
-    updateShortcuts({ ...shortcuts, [key]: transformKeysToValue(value)?.join('+') })
+    const updatedShortcuts = {
+      ...shortcuts,
+      [key]: transformKeysToValue(value)
+    }
+    const updatedShortcutsTransformed = Object.keys(updatedShortcuts).reduce((acc, key) => {
+      return {
+        ...acc,
+        [key]: updatedShortcuts[key]?.join('+')
+      }
+    }, {})
+    updateShortcuts(updatedShortcutsTransformed)
   }
 
   if (!isLoggedIn || !isFetched) return null
