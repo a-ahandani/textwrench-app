@@ -22,14 +22,14 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^4.0.0",
-    "@nut-tree-fork/nut-js": "^4.2.4",
     "@typescript-eslint/eslint-plugin": "^8.26.0",
     "axios": "^1.8.2",
     "electron-app-universal-protocol-client": "2.1.1",
     "electron-log": "^5.3.1",
     "electron-updater": "^6.3.9",
     "react-hotkeys-hook": "^4.6.1",
-    "react-markdown": "^10.1.0"
+    "react-markdown": "^10.1.0",
+    "robotjs_addon": "^0.6.5"
   },
   "devDependencies": {
     "@chakra-ui/react": "^3.12.0",
