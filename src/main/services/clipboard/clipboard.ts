@@ -1,15 +1,14 @@
 import { clipboard } from 'electron'
 import log from 'electron-log'
 import { checkPermissions } from '../permissions/permissions'
-import { Key, keyboard } from '@nut-tree-fork/nut-js'
+import robot from 'robotjs_addon'
 import { getCommandKey } from '../../utils/platform'
 
-keyboard.config.autoDelayMs = 50
 export const getSelectedText = async (): Promise<string> => {
+  robot.setKeyboardDelay(50)
   clipboard.clear()
 
-  await keyboard.pressKey(getCommandKey(), Key.C)
-  await keyboard.releaseKey(getCommandKey(), Key.C)
+  await robot.keyTap('c', getCommandKey())
 
   const selectedText = clipboard.readText()
   log.info('Selected text:', selectedText, !selectedText)
@@ -21,6 +20,5 @@ export const getSelectedText = async (): Promise<string> => {
 }
 
 export const pasteContent = async (): Promise<void> => {
-  await keyboard.pressKey(getCommandKey(), Key.V)
-  await keyboard.releaseKey(getCommandKey(), Key.V)
+  await robot.keyTap('v', getCommandKey())
 }
