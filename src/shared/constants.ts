@@ -53,14 +53,28 @@ export const KEY_NAMES = {
 }
 
 export const ACTIONS = {
-  REVISE_TEXT: 'fixSelectedText',
-  EXPLAIN_TEXT: 'explainSelectedText'
+  CORRECT_TEXT: 'fixSelectedText',
+  EXPLAIN_TEXT: 'explainSelectedText',
+  SELECT_PROMPT: 'selectPrompt'
 }
+
 export const ACTION_LABELS = {
-  [ACTIONS.REVISE_TEXT]: 'Revise it',
-  [ACTIONS.EXPLAIN_TEXT]: 'Explain it'
+  [ACTIONS.CORRECT_TEXT]: 'Correct it',
+  [ACTIONS.EXPLAIN_TEXT]: 'Explain it',
+  [ACTIONS.SELECT_PROMPT]: 'Select Prompt'
 }
+
 export const ACTION_DEFAULT_SHORTCUTS = {
-  [ACTIONS.REVISE_TEXT]: ['Ctrl', 'Shift', 'C'],
-  [ACTIONS.EXPLAIN_TEXT]: ['Ctrl', 'Shift', 'E']
+  [ACTIONS.CORRECT_TEXT]: ['Ctrl', 'Shift', 'C'],
+  [ACTIONS.EXPLAIN_TEXT]: ['Ctrl', 'Shift', 'E'],
+  [ACTIONS.SELECT_PROMPT]: ['Ctrl', 'Shift', 'J']
+}
+
+export enum ModalTypes {
+  EXPLAIN = 'explain',
+  PROMPT = 'prompt'
+}
+export const MODAL_TITLES = {
+  [ModalTypes.EXPLAIN]: 'Explain',
+  [ModalTypes.PROMPT]: 'Select Prompt'
 }

@@ -1,4 +1,4 @@
-import { Card, IconButton } from '@chakra-ui/react'
+import { Box, Card, IconButton } from '@chakra-ui/react'
 import { BsClipboard } from 'react-icons/bs'
 import { DrawerFull } from '../../ui/Drawer'
 import { useState } from 'react'
@@ -32,11 +32,13 @@ export const Clipboard = () => {
         <BsClipboard />
       </IconButton>
       <DrawerFull open={open} onCancel={handleClick} icon={BsClipboard} title={'Clipboard'}>
-        <Card.Root>
-          <Card.Header />
-          <Card.Body>{selectedText}</Card.Body>
-          <Card.Footer />
-        </Card.Root>
+        <Box p={5}>
+          <Card.Root>
+            <Card.Header />
+            <Card.Body>{selectedText}</Card.Body>
+            <Card.Footer />
+          </Card.Root>
+        </Box>
       </DrawerFull>
     </div>
   )

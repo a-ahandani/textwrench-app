@@ -20,16 +20,18 @@ export const usePrompts = (props?: usePromptsProps): usePromptsReturn => {
     queryFn: getPrompts,
     enabled: isLoggedIn,
     select: (data) => {
-      return data.filter((item) => {
-        const matchesTerm = term
-          ? item.label?.toLowerCase().includes(term.toLowerCase()) ||
-            item.value?.toLowerCase().includes(term.toLowerCase())
-          : true
+      return data
+        .map((item) => ({ ...item, ID: String(item.ID) }))
+        .filter((item) => {
+          const matchesTerm = term
+            ? item.label?.toLowerCase().includes(term.toLowerCase()) ||
+              item.value?.toLowerCase().includes(term.toLowerCase())
+            : true
 
-        const matchesId = id ? item.ID === id : true
+          const matchesId = id ? item.ID === id : true
 
-        return matchesTerm && matchesId
-      })
+          return matchesTerm && matchesId
+        })
     }
   })
 

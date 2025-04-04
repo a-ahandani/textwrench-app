@@ -1,6 +1,6 @@
 import { DrawerFull } from '../../../ui/Drawer'
 import { Prompt } from '@shared/types/store'
-import { Card } from '@chakra-ui/react'
+import { Box, Card } from '@chakra-ui/react'
 import { GoX } from 'react-icons/go'
 
 type DeleteConfirmationProps = {
@@ -35,14 +35,16 @@ export const DeleteConfirmation = ({
       confirmButtonProps={{ colorPalette: 'red' }}
       confirmIcon={GoX}
     >
-      <Card.Root>
-        <Card.Body>
-          <Card.Description>
-            Are you sure you want to delete this prompt? This action cannot be undone.
-          </Card.Description>
-          <Card.Title mt="2">&quot;{label}&quot;</Card.Title>
-        </Card.Body>
-      </Card.Root>
+      <Box p={5}>
+        <Card.Root>
+          <Card.Body>
+            <Card.Description>
+              Are you sure you want to delete this prompt? This action cannot be undone.
+            </Card.Description>
+            <Card.Title mt="2">&quot;{label}&quot;</Card.Title>
+          </Card.Body>
+        </Card.Root>
+      </Box>
     </DrawerFull>
   )
 }

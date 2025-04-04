@@ -4,7 +4,6 @@ import { PromptsProvider } from './components/PromptsContext'
 export const Prompts = () => {
   return (
     <PromptsProvider>
-      {/* <PromptHead /> */}
       <PromptList />
     </PromptsProvider>
   )

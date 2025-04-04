@@ -5,7 +5,7 @@ import robot from 'robotjs_addon'
 import { getCommandKey } from '../../utils/platform'
 
 export const getSelectedText = async (): Promise<string> => {
-  robot.setKeyboardDelay(50)
+  robot.setKeyboardDelay(70)
   clipboard.clear()
 
   await robot.keyTap('c', getCommandKey())
@@ -21,4 +21,12 @@ export const getSelectedText = async (): Promise<string> => {
 
 export const pasteContent = async (): Promise<void> => {
   await robot.keyTap('v', getCommandKey())
+}
+
+export const hidePaste = async (text): Promise<void> => {
+  robot.setKeyboardDelay(70)
+  clipboard.writeText(text)
+  robot.keyTap('tab', getCommandKey())
+  robot.keyTap('enter')
+  pasteContent()
 }
