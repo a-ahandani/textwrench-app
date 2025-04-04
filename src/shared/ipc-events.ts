@@ -19,5 +19,7 @@ export const IPC_EVENTS = {
   UPDATE_PROGRESS: 'update-progress',
   UPDATE_DOWNLOADED: 'update-downloaded',
   QUIT_AND_INSTALL: 'quit-and-install',
-  OPEN_MODAL: 'open-modal'
+  OPEN_MODAL: 'open-modal',
+  PROCESS_TEXT: 'process-text',
+  HIDE_PASTE: 'hide-paste'
 }

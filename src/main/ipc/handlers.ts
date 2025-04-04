@@ -9,6 +9,8 @@ import { resetShortcuts } from '../services/shortcuts/shortcuts'
 import { autoUpdater } from 'electron-updater'
 import { setIsQuitting } from '../services/window/window'
 import { BASE_URL } from '@shared/constants'
+import { processTextWithAI } from '../services/ai/openai'
+import { hidePaste } from '../services/clipboard/clipboard'
 
 export function setupIpcHandlers(): void {
   ipcMain.handle(IPC_EVENTS.GET_STORE_VALUE, (_event, key: keyof StoreType) => {
@@ -91,6 +93,26 @@ export function setupIpcHandlers(): void {
         label
       })
       return result.data
+    } catch (error) {
+      handleError(error)
+    }
+    return
+  })
+
+  ipcMain.handle(IPC_EVENTS.PROCESS_TEXT, async (_event, data) => {
+    try {
+      const result = await processTextWithAI(data)
+      return result
+    } catch (error) {
+      handleError(error)
+    }
+    return
+  })
+
+  ipcMain.handle(IPC_EVENTS.HIDE_PASTE, async (_event, data) => {
+    try {
+      const result = await hidePaste(data)
+      return result
     } catch (error) {
       handleError(error)
     }

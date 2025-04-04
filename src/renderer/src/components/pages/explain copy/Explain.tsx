@@ -8,7 +8,7 @@ export const Explain: FC = () => {
   const { content } = useModal()
 
   return (
-    <Card.Root mx={4} fontSize="md" dir="auto" lineHeight="tall" whiteSpace="pre-line">
+    <Card.Root>
       <Card.Body>
         <Markdown
           components={{

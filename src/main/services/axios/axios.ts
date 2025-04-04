@@ -31,13 +31,13 @@ twService.interceptors.response.use(
     return response
   },
   (error) => {
-    if (error.response.status === 401) {
+    if (error?.response?.status === 401) {
       log.warn('UNAUTHORIZED REQUEST', error.response.status)
       const mainWindow = getMainWindow()
       updateStore('token', null)
       mainWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
     }
-    return Promise.reject(error.response.status)
+    return Promise.reject(error)
   }
 )
 

@@ -38,7 +38,9 @@ const api = {
   login: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.LOGIN),
   logout: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.LOGOUT),
   closeWindow: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.CLOSE_WINDOW),
-  verifyToken: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.VERIFY_TOKEN)
+  verifyToken: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.VERIFY_TOKEN),
+  processText: (text): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.PROCESS_TEXT, text),
+  hidePaste: (text): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.HIDE_PASTE, text)
 }
 
 if (process.contextIsolated) {

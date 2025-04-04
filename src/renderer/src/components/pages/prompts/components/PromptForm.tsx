@@ -1,4 +1,4 @@
-import { Input, Textarea } from '@chakra-ui/react'
+import { Box, Input, Textarea } from '@chakra-ui/react'
 import { DrawerFull } from '../../../ui/Drawer'
 import { useEffect, useMemo, useState } from 'react'
 import { GoPencil } from 'react-icons/go'
@@ -71,25 +71,27 @@ export const PromptForm = (): JSX.Element => {
       confirmLabel={isCreate ? 'Create' : 'Update'}
       isLoading={isLoading}
     >
-      <Input
-        value={localPrompt.label}
-        onChange={(e) => {
-          setLocalPrompt({ ...initialValue, ...localPrompt, label: e.target.value })
-        }}
-        my="1"
-        placeholder="Prompt title"
-        variant="subtle"
-      />
-      <Textarea
-        value={localPrompt.prompt}
-        onChange={(e) => {
-          setLocalPrompt({ ...initialValue, ...localPrompt, prompt: e.target.value })
-        }}
-        my="1"
-        variant="subtle"
-        placeholder="Prompt details"
-        height={110}
-      />
+      <Box p={5}>
+        <Input
+          value={localPrompt.label}
+          onChange={(e) => {
+            setLocalPrompt({ ...initialValue, ...localPrompt, label: e.target.value })
+          }}
+          my="1"
+          placeholder="Prompt title"
+          variant="subtle"
+        />
+        <Textarea
+          value={localPrompt.prompt}
+          onChange={(e) => {
+            setLocalPrompt({ ...initialValue, ...localPrompt, prompt: e.target.value })
+          }}
+          my="1"
+          variant="subtle"
+          placeholder="Prompt details"
+          height={110}
+        />
+      </Box>
     </DrawerFull>
   )
 }

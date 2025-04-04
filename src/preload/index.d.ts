@@ -23,6 +23,8 @@ declare global {
       onUpdateAvailable(callback: (data) => void): () => void
       onUpdateProgress(callback: (data) => void): () => void
       onOpenModal(callback: (data) => void): () => void
+      processText(prompt: Partial<ProcessTextPayload>): Promise<ProcessTextPayload>
+      hidePaste(text?: string): Promise<void>
     }
   }
 }

@@ -1,7 +1,8 @@
 import { ACTIONS } from '../../shared/constants'
-import { handleReviseText, handleExplainText } from './clipboard-handlers'
+import { handleReviseText, handleExplainText, handleSelectPrompt } from './clipboard-handlers'
 
 export const handlers = {
-  [ACTIONS.REVISE_TEXT]: handleReviseText,
-  [ACTIONS.EXPLAIN_TEXT]: handleExplainText
+  [ACTIONS.CORRECT_TEXT]: handleReviseText,
+  [ACTIONS.EXPLAIN_TEXT]: handleExplainText,
+  [ACTIONS.SELECT_PROMPT]: handleSelectPrompt
 }
