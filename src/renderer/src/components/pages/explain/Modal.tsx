@@ -1,6 +1,6 @@
-import { Bs0Circle } from 'react-icons/bs'
 import { DrawerFull } from '../../ui/Drawer'
 import { useModal } from '@renderer/components/providers/ModalProvider'
+import { PiArrowsDownUpBold } from 'react-icons/pi'
 
 import { FC, useRef } from 'react'
 import { Explain } from './Explain'
@@ -33,7 +33,7 @@ export const Modal: FC = () => {
     <DrawerFull
       open={open}
       onCancel={handleClick}
-      icon={Bs0Circle}
+      icon={PiArrowsDownUpBold}
       title={MODAL_TITLES[modalType]}
       actionRef={ACTIONS_REF[modalType]}
     >

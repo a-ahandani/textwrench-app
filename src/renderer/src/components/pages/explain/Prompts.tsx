@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Portal, SkeletonText, Tabs, Text } from '@chakra-ui/react'
+import { Box, Button, IconButton, Kbd, Portal, SkeletonText, Tabs, Text } from '@chakra-ui/react'
 import { useModal } from '@renderer/components/providers/ModalProvider'
 import { TabContents } from '@renderer/components/ui/TabContents'
 import { useEventSubscription } from '@renderer/hooks/useEventSubscription'
@@ -146,10 +146,17 @@ export const Prompts: FC<PromptsProps> = ({ actionRef }) => {
             </Tabs.Trigger>
           ))}
           <Tabs.Indicator />
+
+          <Box bottom={0} position="fixed" left={0} right={0} p={4}>
+            <Text fontSize={'x-small'} color="gray.500" lineClamp="1">
+              <Kbd>↑</Kbd>
+              <Kbd mx={1}>↓</Kbd>
+              Use arrow keys to navigate
+            </Text>
+          </Box>
         </Tabs.List>
 
         <Box width={'full'} pr={4} ml={3} py={1}>
-          {isFetching && <SkeletonText noOfLines={3} gap="4" />}
           {prompts?.map((item) => (
             <TabContents
               key={item.ID}
@@ -160,7 +167,7 @@ export const Prompts: FC<PromptsProps> = ({ actionRef }) => {
               lineHeight="tall"
               whiteSpace="pre-line"
             >
-              {processedText}
+              {isFetching ? <SkeletonText noOfLines={3} gap="4" /> : processedText}
             </TabContents>
           ))}
         </Box>

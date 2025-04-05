@@ -1,4 +1,12 @@
-import { Box, Drawer as ChakraDrawer, IconButton, Portal, ProgressRoot } from '@chakra-ui/react'
+import {
+  Box,
+  Drawer as ChakraDrawer,
+  Text,
+  IconButton,
+  Portal,
+  ProgressRoot,
+  IconProps
+} from '@chakra-ui/react'
 import * as React from 'react'
 import { GoCheck, GoX } from 'react-icons/go'
 import { ProgressBar } from './Progress'
@@ -34,7 +42,7 @@ type DrawerFullProps = {
   confirmLabel?: string
   cancelLabel?: string
   title?: string
-  icon?: React.ComponentType
+  icon?: React.ComponentType<{ size?: number }>
   isLoading?: boolean
   confirmButtonProps?: React.ComponentProps<typeof Button>
   confirmIcon?: React.ComponentType
@@ -67,10 +75,20 @@ export const DrawerFull = ({
               </ProgressRoot>
             )}
             <DrawerTitle>
-              <Box display="flex" alignItems="center">
-                {Icon && <Icon />}
-                <Box ml={2} flex={'1'}>
-                  {title}
+              <Box pb={2} display="flex" alignItems="center" justifyContent={'center'}>
+                {Icon && <Icon size={30} />}
+                <Box
+                  ml={2}
+                  flex={'1'}
+                  flexDirection={'column'}
+                  justifyContent={'center'}
+                  alignItems={'left'}
+                  alignContent={'center'}
+                  display={'flex'}
+                >
+                  <Text m={0} p={0} pt={1} fontSize={'xl'}>
+                    {title}
+                  </Text>
                 </Box>
                 {actionRef && <div ref={actionRef} />}
                 {onConfirm && (
