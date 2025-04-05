@@ -78,7 +78,11 @@ export const pasteContent = async (): Promise<void> => {
 export const hidePaste = async (text): Promise<void> => {
   robot.setKeyboardDelay(70)
   clipboard.writeText(text)
-  robot.keyTap('tab', getCommandKey())
+  if (process.platform === 'darwin') {
+    robot.keyTap('tab', getCommandKey())
+  } else {
+    robot.keyTap('tab', 'alt')
+  }
   robot.keyTap('enter')
   pasteContent()
 }
