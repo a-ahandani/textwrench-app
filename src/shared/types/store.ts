@@ -17,6 +17,8 @@ export type StoreType = {
   selectedText?: string | null
   selectedPrompt?: Prompt
   token?: string | null
+  delay?: number
+  lastDelayTest?: number
 }
 
 enum OsType {

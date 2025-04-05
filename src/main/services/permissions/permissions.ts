@@ -1,8 +1,8 @@
 import { systemPreferences } from 'electron'
 import log from 'electron-log'
 
-export const checkPermissions = async () => {
-  if (process.platform !== 'darwin') return
+export const checkPermissions = async (): Promise<boolean> => {
+  if (process.platform !== 'darwin') return true
 
   const permissions = {
     access: systemPreferences.isTrustedAccessibilityClient(false)
@@ -13,8 +13,7 @@ export const checkPermissions = async () => {
     log.info(`----> ${key}: ${value}`)
   })
 
-  if (!permissions.access) {
-    log.info('Requesting macOS permissions...')
-    systemPreferences.isTrustedAccessibilityClient(true)
-  }
+  if (permissions.access) return true
+  log.info('Requesting macOS permissions...')
+  return systemPreferences.isTrustedAccessibilityClient(true)
 }
