@@ -70,10 +70,16 @@ export const Prompts: FC<PromptsProps> = ({ actionRef }) => {
     changePrompt('prev')
   })
 
-  useHotkeys('enter', (e) => {
-    e.preventDefault()
-    handlePaste()
-  })
+  useHotkeys(
+    'enter',
+    (e) => {
+      e.preventDefault()
+      handlePaste()
+    },
+    {
+      keyup: true
+    }
+  )
 
   const handlePaste = async (): Promise<void> => {
     window.api.hidePaste(processedText)
