@@ -5,11 +5,12 @@ import { useEventSubscription } from '@renderer/hooks/useEventSubscription'
 import { useProcessText } from '@renderer/hooks/useProcessText'
 import { usePrompts } from '@renderer/hooks/usePrompts'
 import { ModalTypes } from '@shared/constants'
-import { GoThumbsup } from 'react-icons/go'
+import { BsArrowReturnLeft } from 'react-icons/bs'
 
 import { FC, RefObject, useState, useCallback } from 'react'
 import { BsClipboard } from 'react-icons/bs'
 import { useHotkeys } from 'react-hotkeys-hook'
+import { Tooltip } from '@renderer/components/ui/Tooltip'
 
 interface PromptsProps {
   actionRef: RefObject<HTMLElement | null>
@@ -95,26 +96,30 @@ export const Prompts: FC<PromptsProps> = ({ actionRef }) => {
       {actionRef && (
         <Portal container={actionRef}>
           <div>
-            <Button
-              aria-label={'Insert'}
-              size="xs"
-              mx={1}
-              variant="solid"
-              colorPalette="green"
-              onClick={handlePaste}
-            >
-              <GoThumbsup />
-              Insert
-            </Button>
-            <IconButton
-              colorPalette="orange"
-              variant="solid"
-              size={'xs'}
-              aria-label="Settings"
-              onClick={handleCopy}
-            >
-              <BsClipboard />
-            </IconButton>
+            <Tooltip content="Press Enter to insert">
+              <Button
+                aria-label={'Insert'}
+                size="xs"
+                mx={1}
+                variant="solid"
+                colorPalette="green"
+                onClick={handlePaste}
+              >
+                Enter
+                <BsArrowReturnLeft />
+              </Button>
+            </Tooltip>
+            <Tooltip content="Copy processed text to clipboard">
+              <IconButton
+                colorPalette="orange"
+                variant="solid"
+                size={'xs'}
+                aria-label="Settings"
+                onClick={handleCopy}
+              >
+                <BsClipboard />
+              </IconButton>
+            </Tooltip>
           </div>
         </Portal>
       )}
