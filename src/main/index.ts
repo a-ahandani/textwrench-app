@@ -14,10 +14,10 @@ import { APP_KEY, labels } from '@shared/constants'
 import { checkPermissions } from './services/permissions/permissions'
 
 let mw: BrowserWindow | null = null
-const isDev = process.env.NODE_ENV === 'development' || app.isPackaged
+const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 log.initialize()
 log.transports.console.format = '{h}:{i}:{s} [{level}] {text}'
-log.transports.console.level = 'info'
+log.transports.console.level = 'silly'
 
 app.whenReady().then(async () => {
   checkPermissions()
@@ -45,6 +45,8 @@ async function initializeAppSettings(): Promise<void> {
   const appVersion = await app.getVersion()
   log.info('App Version:', appVersion)
   updateStore('appVersion', appVersion)
+  updateStore('delay', 50)
+
   electronApp.setAppUserModelId(labels.app)
 
   if (process.defaultApp && process.argv.length >= 2) {
