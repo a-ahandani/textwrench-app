@@ -3,7 +3,7 @@ import { StoreType } from '../../shared/types/store'
 
 const store = new Store<StoreType>({
   defaults: {
-    delay: 15,
+    delay: 50,
     token: null,
     selectedText: '',
     selectedPrompt: undefined

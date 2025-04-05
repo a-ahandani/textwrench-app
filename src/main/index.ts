@@ -14,7 +14,7 @@ import { APP_KEY, labels } from '@shared/constants'
 import { checkPermissions } from './services/permissions/permissions'
 
 let mw: BrowserWindow | null = null
-const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
+const isDev = process.env.NODE_ENV === 'development' || app.isPackaged
 log.initialize()
 log.transports.console.format = '{h}:{i}:{s} [{level}] {text}'
 log.transports.console.level = 'info'
