@@ -20,14 +20,14 @@ asarUnpack:
   - resources/**
 
 win:
-  executableName: ${productName}
+  executableName: ${name}
   icon: 'resources/icons/icon.png'
-  artifactName: 'Textwrench-${version}.${ext}'
+  artifactName: '${name}-${version}.${ext}'
 
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
-  shortcutName: ${productName}
-  uninstallDisplayName: ${productName}
+  shortcutName: ${name}
+  uninstallDisplayName: ${name}
   createDesktopShortcut: always
   oneClick: false
   allowToChangeInstallationDirectory: true
@@ -36,7 +36,7 @@ nsis:
 
 mac:
   icon: 'resources/icons/icon.icns'
-  artifactName: 'Textwrench-${version}.${ext}'
+  artifactName: '${name}-${version}.${ext}'
   entitlementsInherit: build/entitlements.mac.plist
   notarize: true
   hardenedRuntime: true
@@ -57,7 +57,7 @@ linux:
     - deb
   maintainer: electronjs.org
   category: Utility
-  artifactName: 'Textwrench-${version}.${ext}'
+  artifactName: '${name}-${version}.${ext}'
 
 appImage:
   artifactName: ${name}-${version}.${ext}
