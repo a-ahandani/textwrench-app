@@ -17,7 +17,7 @@ let mw: BrowserWindow | null = null
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 log.initialize()
 log.transports.console.format = '{h}:{i}:{s} [{level}] {text}'
-log.transports.console.level = 'silly'
+log.transports.console.level = `info`
 
 app.whenReady().then(async () => {
   checkPermissions()
