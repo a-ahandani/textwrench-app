@@ -20,14 +20,14 @@ asarUnpack:
   - resources/**
 
 win:
-  executableName: ${name}
+  executableName: Textwrench
   icon: 'resources/icons/icon.png'
-  artifactName: '${name}-${version}.${ext}'
+  artifactName: 'Textwrench-${version}.${ext}'
 
 nsis:
-  artifactName: ${name}-${version}-setup.${ext}
-  shortcutName: ${name}
-  uninstallDisplayName: ${name}
+  artifactName: Textwrench-${version}-setup.${ext}
+  shortcutName: Textwrench
+  uninstallDisplayName: Textwrench
   createDesktopShortcut: always
   oneClick: false
   allowToChangeInstallationDirectory: true
@@ -36,7 +36,7 @@ nsis:
 
 mac:
   icon: 'resources/icons/icon.icns'
-  artifactName: '${name}-${version}.${ext}'
+  artifactName: 'Textwrench-${version}.${ext}'
   entitlementsInherit: build/entitlements.mac.plist
   notarize: true
   hardenedRuntime: true
@@ -47,7 +47,7 @@ mac:
     NSAccessibilityUsageDescription: 'Application requires access to macOS accessibility features.'
 
 dmg:
-  artifactName: ${name}-${version}.${ext}
+  artifactName: Textwrench-${version}.${ext}
 
 linux:
   icon: 'resources/icons/icon.png'
@@ -57,10 +57,10 @@ linux:
     - deb
   maintainer: electronjs.org
   category: Utility
-  artifactName: '${name}-${version}.${ext}'
+  artifactName: 'Textwrench-${version}.${ext}'
 
 appImage:
-  artifactName: ${name}-${version}.${ext}
+  artifactName: Textwrench-${version}.${ext}
 
 publish:
   provider: github
