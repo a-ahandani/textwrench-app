@@ -4,8 +4,7 @@ import {
   Text,
   IconButton,
   Portal,
-  ProgressRoot,
-  IconProps
+  ProgressRoot
 } from '@chakra-ui/react'
 import * as React from 'react'
 import { GoCheck, GoX } from 'react-icons/go'
