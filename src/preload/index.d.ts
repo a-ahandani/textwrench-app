@@ -1,5 +1,5 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import { Prompt, StoreType } from '../shared/types/store'
+import { Category, Prompt, StoreType } from '../shared/types/store'
 declare global {
   interface Window {
     electron: ElectronAPI
@@ -14,6 +14,8 @@ declare global {
       updatePrompt(prompt: Partial<Prompt>): Promise<Prompt>
       createPrompt(prompt: Partial<Prompt>): Promise<Prompt>
       deletePrompt(prompt: Partial<Prompt>): Promise<Prompt>
+      getTemplates(): Promise<Template[]>
+      getCategories(): Promise<Category[]>
       onLoggedIn(callback: (data) => void): () => void
       closeWindow(): void
       verifyToken(): Promise<void>

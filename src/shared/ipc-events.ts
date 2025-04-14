@@ -7,6 +7,8 @@ export const IPC_EVENTS = {
   LOGOUT: 'logout',
   GET_PROFILE: 'get-profile',
   GET_PROMPTS: 'get-prompts',
+  GET_TEMPLATES: 'get-templates',
+  GET_CATEGORIES: 'get-categories',
   UPDATE_PROMPT: 'update-prompt',
   DELETE_PROMPT: 'delete-prompt',
   CREATE_PROMPT: 'create-prompt',

@@ -1,4 +1,15 @@
-import { Box, DataListRoot, Flex, Group, IconButton, Input, RadioCardLabel } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  DataListRoot,
+  EmptyState,
+  Flex,
+  Group,
+  IconButton,
+  Input,
+  RadioCardLabel,
+  VStack
+} from '@chakra-ui/react'
 import { RadioCardRoot } from '../../../ui/RadioCard'
 import { PromptListItem } from './PromptListItem'
 import { useStore } from '../../../../hooks/useStore'
@@ -9,7 +20,7 @@ import { usePrompts } from '@renderer/hooks/usePrompts'
 import { Prompt } from '@shared/types/store'
 import { useState } from 'react'
 import { Tooltip } from '@renderer/components/ui/Tooltip'
-import { GoPlus } from 'react-icons/go'
+import { GoBookmarkFill, GoPlus } from 'react-icons/go'
 import { PromptForm } from './PromptForm'
 import { usePromptsContext } from './PromptsContext'
 
@@ -89,6 +100,44 @@ export const PromptList = ({ label }: PromptListProps) => {
             </InputGroup>
           </Flex>
 
+          {term && prompts?.length === 0 && (
+            <EmptyState.Root>
+              <EmptyState.Content>
+                <EmptyState.Indicator>
+                  <GoBookmarkFill />
+                </EmptyState.Indicator>
+                <VStack textAlign="center">
+                  <EmptyState.Title>No result</EmptyState.Title>
+                  <EmptyState.Description>
+                    No prompts found. Try to search for something else.
+                  </EmptyState.Description>
+                </VStack>
+              </EmptyState.Content>
+            </EmptyState.Root>
+          )}
+
+          {!term && prompts?.length === 0 && (
+            <EmptyState.Root>
+              <EmptyState.Content>
+                <EmptyState.Indicator>
+                  <GoBookmarkFill />
+                </EmptyState.Indicator>
+                <VStack textAlign="center">
+                  <EmptyState.Title>No prompts!</EmptyState.Title>
+                  <EmptyState.Description>
+                    <Button variant="subtle" colorPalette="green" size="xs">
+                      Add
+                    </Button>{' '}
+                    a custom prompt to get started or use{' '}
+                    <Button variant="subtle" colorPalette="green" size="xs">
+                      templates
+                    </Button>{' '}
+                    to create a new one.
+                  </EmptyState.Description>
+                </VStack>
+              </EmptyState.Content>
+            </EmptyState.Root>
+          )}
           <RadioCardRoot
             size="sm"
             variant="surface"

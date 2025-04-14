@@ -6,6 +6,7 @@ import App from './App'
 import { AuthProvider } from '@renderer/components/providers/AuthProvider'
 import { UpdateProvider } from './components/providers/UpdateProvider'
 import { ModalProvider } from './components/providers/ModalProvider'
+import { PromptsProvider } from './components/pages/prompts/components/PromptsContext'
 
 const rootElement = document.getElementById('root')
 if (rootElement) {
@@ -16,7 +17,9 @@ if (rootElement) {
           <ChakraProvider>
             <ReactQueryProvider>
               <ModalProvider>
-                <App />
+                <PromptsProvider>
+                  <App />
+                </PromptsProvider>
               </ModalProvider>
             </ReactQueryProvider>
           </ChakraProvider>

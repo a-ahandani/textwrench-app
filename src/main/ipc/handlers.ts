@@ -2,7 +2,14 @@ import { BrowserWindow, ipcMain, shell } from 'electron'
 import { IPC_EVENTS } from '../../shared/ipc-events'
 import { store } from '../store'
 import { updateStore } from '../store/helpers'
-import { Prompt, Shortcuts, StoreType, UserProfile } from '../../shared/types/store'
+import {
+  Category,
+  Prompt,
+  Shortcuts,
+  StoreType,
+  Template,
+  UserProfile
+} from '../../shared/types/store'
 import { handleError, twService } from '../services/axios/axios'
 import { verifyToken } from '../services/auth/verifyToken'
 import { resetShortcuts } from '../services/shortcuts/shortcuts'
@@ -53,6 +60,26 @@ export function setupIpcHandlers(): void {
   ipcMain.handle(IPC_EVENTS.GET_PROMPTS, async () => {
     try {
       const result = await twService.get<Prompt[]>('/protected/prompts')
+      return result.data
+    } catch (error) {
+      handleError(error)
+    }
+    return
+  })
+
+  ipcMain.handle(IPC_EVENTS.GET_TEMPLATES, async () => {
+    try {
+      const result = await twService.get<Template[]>('/protected/templates')
+      return result.data
+    } catch (error) {
+      handleError(error)
+    }
+    return
+  })
+
+  ipcMain.handle(IPC_EVENTS.GET_CATEGORIES, async () => {
+    try {
+      const result = await twService.get<Category[]>('/protected/categories')
       return result.data
     } catch (error) {
       handleError(error)

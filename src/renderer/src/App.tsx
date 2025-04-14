@@ -1,10 +1,11 @@
 import { Prompts } from './components/pages/prompts/Prompts'
+import { Templates } from './components/pages/templates/Templates'
 import { Settings } from './components/pages/settings/Settings'
 import { Container, Tabs } from '@chakra-ui/react'
 import { Clipboard } from './components/pages/clipboard/Clipboard'
 import { Header } from './components/ui/Header'
 import { TabContents } from './components/ui/TabContents'
-import { GoGear, GoPencil, GoTools } from 'react-icons/go'
+import { GoGear, GoBookmark, GoBook, GoTools } from 'react-icons/go'
 import { useAuth } from './components/providers/AuthProvider'
 import { useEffect, useState } from 'react'
 import { About } from './components/pages/about/About'
@@ -15,7 +16,8 @@ function App(): JSX.Element {
   const { isLoggedIn } = useAuth()
 
   const tabs = [
-    { value: 'prompts', icon: <GoPencil />, content: <Prompts />, isProtected: true },
+    { value: 'prompts', icon: <GoBookmark />, content: <Prompts />, isProtected: true },
+    { value: 'templates', icon: <GoBook />, content: <Templates />, isProtected: true },
     { value: 'settings', icon: <GoGear />, content: <Settings />, isProtected: false },
     { value: 'about', icon: <GoTools />, content: <About />, isProtected: false }
   ]

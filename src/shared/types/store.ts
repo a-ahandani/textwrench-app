@@ -4,6 +4,21 @@ export type Prompt = {
   ID: string
 }
 
+export type Template = {
+  value: string
+  label: string | undefined
+  description: string
+  category_id: string
+  rate: number
+  ID: string
+}
+
+export type Category = {
+  label: string | undefined
+  description: string
+  ID: string
+}
+
 export type UserProfile = {
   user_type: string
   name: string
