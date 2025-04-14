@@ -1,35 +1,17 @@
-import {
-  Box,
-  Button,
-  DataListRoot,
-  EmptyState,
-  Flex,
-  Group,
-  IconButton,
-  Input,
-  RadioCardLabel,
-  VStack
-} from '@chakra-ui/react'
-import { RadioCardRoot } from '../../../ui/RadioCard'
-import { PromptListItem } from './PromptListItem'
-import { useStore } from '../../../../hooks/useStore'
+import { Box, Button, EmptyState, Flex, IconButton, Input, Stack, VStack } from '@chakra-ui/react'
 import { SkeletonText } from '../../../ui/Skeleton'
 import { LuSearch } from 'react-icons/lu'
 import { InputGroup } from '../../../ui/InputGroup'
 import { usePrompts } from '@renderer/hooks/usePrompts'
-import { Prompt } from '@shared/types/store'
 import { useState } from 'react'
 import { Tooltip } from '@renderer/components/ui/Tooltip'
 import { GoBookmarkFill, GoPlus } from 'react-icons/go'
 import { PromptForm } from './PromptForm'
 import { usePromptsContext } from './PromptsContext'
 import { useRoute } from '@renderer/components/providers/RouteProvider'
+import { PromptCard } from './PromptCard'
 
-type PromptListProps = {
-  label?: string
-}
-
-export const PromptList = ({ label }: PromptListProps) => {
+export const PromptList = (): JSX.Element => {
   const { setEditingId } = usePromptsContext()
   const [term, setTerm] = useState<string>('')
   const { setCurrentRoute } = useRoute()
@@ -38,22 +20,12 @@ export const PromptList = ({ label }: PromptListProps) => {
     term
   })
 
-  const { setValue: setSelectedPrompt, value: selectedPrompt } = useStore<Prompt>({
-    key: 'selectedPrompt'
-  })
-
-  const handleSelectPrompt = (e) => {
-    const promptId = e?.target?.value
-    const prompt = prompts?.find((item) => item.ID == promptId)
-    setSelectedPrompt(prompt)
-  }
-
   return (
     <Box>
       {isLoading ? (
         <SkeletonText noOfLines={4} />
       ) : (
-        <DataListRoot unstyled>
+        <>
           <Flex alignItems={'center'} justifyContent={'center'} mb={2}>
             <InputGroup
               width="full"
@@ -160,20 +132,11 @@ export const PromptList = ({ label }: PromptListProps) => {
               </EmptyState.Content>
             </EmptyState.Root>
           )}
-          <RadioCardRoot
-            size="sm"
-            variant="surface"
-            onChange={handleSelectPrompt}
-            value={String(selectedPrompt?.ID || prompts?.[0]?.ID)}
-          >
-            <RadioCardLabel>{label}</RadioCardLabel>
-            <Group attached orientation="vertical">
-              {prompts?.map((item) => (
-                <PromptListItem key={item.ID} id={String(item.ID)} label={item.label} />
-              ))}
-            </Group>
-          </RadioCardRoot>
-        </DataListRoot>
+
+          <Stack gap="2" direction="row" wrap="wrap">
+            {prompts?.map((item) => <PromptCard key={item.ID} prompt={item} />)}
+          </Stack>
+        </>
       )}
       <PromptForm />
     </Box>

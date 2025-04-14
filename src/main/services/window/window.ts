@@ -46,7 +46,7 @@ export const initializeApp = (): BrowserWindow => {
   })
   createTray()
 
-  mainWindow.setBounds({ x: 10, y: 10, width: 640, height: 480 })
+  mainWindow.setBounds({ x: 10, y: 10, width: 780, height: 480 })
   mainWindow.setVisibleOnAllWorkspaces(true)
   mainWindow.on('focus', () => {
     checkForUpdates()

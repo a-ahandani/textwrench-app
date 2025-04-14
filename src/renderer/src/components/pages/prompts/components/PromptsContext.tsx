@@ -1,8 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
+import { useStore } from '@renderer/hooks/useStore'
+import { Prompt } from '@shared/types/store'
 import { createContext, useContext, useState } from 'react'
 
 interface PromptContextType {
   editingId: string | null | 'new'
+  defaultPrompt: Prompt | null
+  setDefaultPrompt: (prompt: Prompt) => void
   setEditingId: (id: string | null) => void
 }
 
@@ -17,9 +21,15 @@ interface PromptsProviderProps {
 export const PromptsProvider = ({ children }: PromptsProviderProps) => {
   const [editingId, setEditingId] = useState<string | null>(null)
 
+  const { setValue: setDefaultPrompt, value: defaultPrompt } = useStore<Prompt>({
+    key: 'selectedPrompt'
+  })
+
   return (
     <PromptContext.Provider
       value={{
+        defaultPrompt,
+        setDefaultPrompt,
         editingId,
         setEditingId
       }}
