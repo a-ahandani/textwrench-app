@@ -17,6 +17,7 @@ import { useMemo, useState } from 'react'
 import { useCategories } from '@renderer/hooks/useCategories'
 import { GoBook } from 'react-icons/go'
 import { TemplateCard } from './TemplateCard'
+import { TemplateHead } from './TemplateHead'
 
 export const TemplateList = (): JSX.Element => {
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>()
@@ -53,6 +54,7 @@ export const TemplateList = (): JSX.Element => {
         <SkeletonText noOfLines={4} />
       ) : (
         <DataListRoot unstyled>
+          <TemplateHead />
           <Flex alignItems={'center'} justifyContent={'center'} mb={2}>
             <InputGroup width="full" startElement={<LuSearch />}>
               <Input

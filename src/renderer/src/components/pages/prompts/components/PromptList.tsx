@@ -26,6 +26,7 @@ export const PromptList = (): JSX.Element => {
         <SkeletonText noOfLines={4} />
       ) : (
         <>
+          <PromptHead />
           <Flex alignItems={'center'} justifyContent={'center'} mb={2}>
             <InputGroup width="full" startElement={<LuSearch />}>
               <Input
@@ -49,7 +50,6 @@ export const PromptList = (): JSX.Element => {
               />
             </InputGroup>
           </Flex>
-          <PromptHead />
           {term && prompts?.length === 0 && (
             <EmptyState.Root>
               <EmptyState.Content>

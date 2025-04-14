@@ -9,10 +9,10 @@ export const PromptHead = (): JSX.Element => {
   const { setCurrentRoute } = useRoute()
 
   return (
-    <Card.Root my={2} variant="subtle" flex={1}>
+    <Card.Root mb={2} variant="subtle" flex={1}>
       <Card.Body flexDirection="row" justifyContent="space-between">
         <Box>
-          <Card.Title fontSize="sm">My Prompts</Card.Title>{' '}
+          <Card.Title>My Prompts</Card.Title>{' '}
           <Card.Description as="div">
             Create your own custom prompts to use with the AI.
           </Card.Description>
