@@ -20,19 +20,11 @@ export const useCreatePrompt = ({
   return useMutation({
     mutationKey,
     mutationFn: (prompt: Partial<Prompt>) => createPrompt({ ...prompt }),
-    onMutate: (prompt) => {
-      queryClient.cancelQueries({ queryKey })
-      const previousValue = queryClient.getQueryData<Prompt[]>(queryKey)
-      queryClient.setQueryData(queryKey, (old: Prompt[]) => [{ ...prompt, ID: 'temp_id' }, ...old])
-
-      return { previousValue }
-    },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey })
       onSuccess?.(data)
     },
-    onError: (err, _, context) => {
-      queryClient.setQueryData(queryKey, context?.previousValue)
+    onError: (err) => {
       queryClient.invalidateQueries({ queryKey })
       onError?.(err)
     }

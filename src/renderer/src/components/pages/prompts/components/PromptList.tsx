@@ -23,6 +23,7 @@ import { Tooltip } from '@renderer/components/ui/Tooltip'
 import { GoBookmarkFill, GoPlus } from 'react-icons/go'
 import { PromptForm } from './PromptForm'
 import { usePromptsContext } from './PromptsContext'
+import { useRoute } from '@renderer/components/providers/RouteProvider'
 
 type PromptListProps = {
   label?: string
@@ -31,6 +32,7 @@ type PromptListProps = {
 export const PromptList = ({ label }: PromptListProps) => {
   const { setEditingId } = usePromptsContext()
   const [term, setTerm] = useState<string>('')
+  const { setCurrentRoute } = useRoute()
 
   const { data: prompts, isLoading } = usePrompts({
     term
@@ -109,7 +111,15 @@ export const PromptList = ({ label }: PromptListProps) => {
                 <VStack textAlign="center">
                   <EmptyState.Title>No result</EmptyState.Title>
                   <EmptyState.Description>
-                    No prompts found. Try to search for something else.
+                    No prompts found. Try to search for something else or look for a{' '}
+                    <Button
+                      onClick={() => setCurrentRoute('templates')}
+                      variant="subtle"
+                      colorPalette="green"
+                      size="xs"
+                    >
+                      template
+                    </Button>
                   </EmptyState.Description>
                 </VStack>
               </EmptyState.Content>
@@ -125,11 +135,23 @@ export const PromptList = ({ label }: PromptListProps) => {
                 <VStack textAlign="center">
                   <EmptyState.Title>No prompts!</EmptyState.Title>
                   <EmptyState.Description>
-                    <Button variant="subtle" colorPalette="green" size="xs">
+                    <Button
+                      onClick={() => {
+                        setEditingId('new')
+                      }}
+                      variant="subtle"
+                      colorPalette="green"
+                      size="xs"
+                    >
                       Add
                     </Button>{' '}
                     a custom prompt to get started or use{' '}
-                    <Button variant="subtle" colorPalette="green" size="xs">
+                    <Button
+                      onClick={() => setCurrentRoute('templates')}
+                      variant="subtle"
+                      colorPalette="green"
+                      size="xs"
+                    >
                       templates
                     </Button>{' '}
                     to create a new one.
