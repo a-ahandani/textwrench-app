@@ -53,7 +53,7 @@ export const TemplateCard = ({
           loading={isCreating}
           disabled={isSaved}
         >
-          {isSaved ? 'Added!' : 'Save as Prompt'}
+          {isSaved ? 'Added!' : 'Add to Prompts'}
         </Button>
       </Card.Footer>
     </Card.Root>

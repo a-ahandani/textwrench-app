@@ -1,10 +1,19 @@
-import { Box, Button, EmptyState, Flex, IconButton, Input, Stack, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Card,
+  EmptyState,
+  Flex,
+  Input,
+  Stack,
+  VStack
+} from '@chakra-ui/react'
 import { SkeletonText } from '../../../ui/Skeleton'
 import { LuSearch } from 'react-icons/lu'
 import { InputGroup } from '../../../ui/InputGroup'
 import { usePrompts } from '@renderer/hooks/usePrompts'
 import { useState } from 'react'
-import { Tooltip } from '@renderer/components/ui/Tooltip'
 import { GoBookmarkFill, GoPlus } from 'react-icons/go'
 import { PromptForm } from './PromptForm'
 import { usePromptsContext } from './PromptsContext'
@@ -27,31 +36,7 @@ export const PromptList = (): JSX.Element => {
       ) : (
         <>
           <Flex alignItems={'center'} justifyContent={'center'} mb={2}>
-            <InputGroup
-              width="full"
-              startElement={<LuSearch />}
-              endElement={
-                <Tooltip
-                  content="Add Prompt"
-                  aria-label="Add Prompt"
-                  positioning={{ placement: 'left' }}
-                >
-                  <IconButton
-                    onClick={() => {
-                      setEditingId('new')
-                    }}
-                    colorPalette="green"
-                    size="lg"
-                    borderRadius={0}
-                    aria-label="Add Prompt"
-                    mr={-2}
-                    variant="solid"
-                  >
-                    <GoPlus />
-                  </IconButton>
-                </Tooltip>
-              }
-            >
+            <InputGroup width="full" startElement={<LuSearch />}>
               <Input
                 variant="subtle"
                 _active={{
@@ -73,7 +58,34 @@ export const PromptList = (): JSX.Element => {
               />
             </InputGroup>
           </Flex>
-
+          <Card.Root my={2} variant="subtle" flex={1}>
+            <Card.Body flexDirection="row" justifyContent="space-between">
+              <Box>
+                <Card.Title fontSize="sm">My Prompts</Card.Title>{' '}
+                <Card.Description as="div">
+                  Create your own custom prompts to use with the AI.
+                </Card.Description>
+              </Box>
+              <ButtonGroup size="xs" variant="subtle" attached>
+                <Button
+                  onClick={() => setCurrentRoute('templates')}
+                  variant="subtle"
+                  colorPalette="green"
+                >
+                  Templates
+                </Button>
+                <Button
+                  onClick={() => {
+                    setEditingId('new')
+                  }}
+                  colorPalette="green"
+                  variant="solid"
+                >
+                  <GoPlus /> Create new prompt
+                </Button>
+              </ButtonGroup>
+            </Card.Body>
+          </Card.Root>
           {term && prompts?.length === 0 && (
             <EmptyState.Root>
               <EmptyState.Content>
