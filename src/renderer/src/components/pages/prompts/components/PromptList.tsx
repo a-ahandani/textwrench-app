@@ -1,24 +1,15 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Card,
-  EmptyState,
-  Flex,
-  Input,
-  Stack,
-  VStack
-} from '@chakra-ui/react'
+import { Box, Button, EmptyState, Flex, Input, Stack, VStack } from '@chakra-ui/react'
 import { SkeletonText } from '../../../ui/Skeleton'
 import { LuSearch } from 'react-icons/lu'
 import { InputGroup } from '../../../ui/InputGroup'
 import { usePrompts } from '@renderer/hooks/usePrompts'
 import { useState } from 'react'
-import { GoBookmarkFill, GoPlus } from 'react-icons/go'
+import { GoBookmarkFill } from 'react-icons/go'
 import { PromptForm } from './PromptForm'
 import { usePromptsContext } from './PromptsContext'
 import { useRoute } from '@renderer/components/providers/RouteProvider'
 import { PromptCard } from './PromptCard'
+import { PromptHead } from './PromptHead'
 
 export const PromptList = (): JSX.Element => {
   const { setEditingId } = usePromptsContext()
@@ -58,34 +49,7 @@ export const PromptList = (): JSX.Element => {
               />
             </InputGroup>
           </Flex>
-          <Card.Root my={2} variant="subtle" flex={1}>
-            <Card.Body flexDirection="row" justifyContent="space-between">
-              <Box>
-                <Card.Title fontSize="sm">My Prompts</Card.Title>{' '}
-                <Card.Description as="div">
-                  Create your own custom prompts to use with the AI.
-                </Card.Description>
-              </Box>
-              <ButtonGroup size="xs" variant="subtle" attached>
-                <Button
-                  onClick={() => setCurrentRoute('templates')}
-                  variant="subtle"
-                  colorPalette="green"
-                >
-                  Templates
-                </Button>
-                <Button
-                  onClick={() => {
-                    setEditingId('new')
-                  }}
-                  colorPalette="green"
-                  variant="solid"
-                >
-                  <GoPlus /> Create new prompt
-                </Button>
-              </ButtonGroup>
-            </Card.Body>
-          </Card.Root>
+          <PromptHead />
           {term && prompts?.length === 0 && (
             <EmptyState.Root>
               <EmptyState.Content>
