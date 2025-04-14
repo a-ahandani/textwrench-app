@@ -30,7 +30,6 @@ export const handleSelectPrompt = async (): Promise<void> => {
     bringToFront()
   }
   mainWindow?.webContents.send(IPC_EVENTS.OPEN_MODAL, { data: selectedText, type: 'prompt' })
-  mainWindow?.setSize(720, 420)
 }
 
 export const handleExplainText = async (): Promise<void> => {
@@ -49,5 +48,4 @@ export const handleExplainText = async (): Promise<void> => {
   })
   bringToFront()
   mainWindow?.webContents.send(IPC_EVENTS.OPEN_MODAL, { data: processedText, type: 'explain' })
-  mainWindow?.setSize(720, 420)
 }
