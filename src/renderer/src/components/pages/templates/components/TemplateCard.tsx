@@ -3,6 +3,7 @@ import { Tag } from '@renderer/components/ui/Tag'
 import { useCreatePrompt } from '@renderer/hooks/useCreatePrompt'
 import { Template } from '@shared/types/store'
 import { useState } from 'react'
+import { GoCheck, GoPlus } from 'react-icons/go'
 
 export const TemplateCard = ({
   template
@@ -44,7 +45,7 @@ export const TemplateCard = ({
       <Card.Body py={1} fontSize="sm" fontWeight={'light'}>
         {template.value}
       </Card.Body>
-      <Card.Footer pt={1}>
+      <Card.Footer pt={1} pb={4}>
         <Button
           size="xs"
           variant="solid"
@@ -53,6 +54,8 @@ export const TemplateCard = ({
           loading={isCreating}
           disabled={isSaved}
         >
+          {isSaved ? <GoCheck /> : <GoPlus />}
+
           {isSaved ? 'Added!' : 'Add to Prompts'}
         </Button>
       </Card.Footer>

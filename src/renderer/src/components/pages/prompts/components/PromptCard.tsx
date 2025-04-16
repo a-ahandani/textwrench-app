@@ -1,9 +1,11 @@
-import { Button, ButtonGroup, Card } from '@chakra-ui/react'
+import { Box, Button, Card, IconButton } from '@chakra-ui/react'
 import { Prompt } from '@shared/types/store'
 import { useState } from 'react'
 import { usePromptsContext } from './PromptsContext'
 import { useDeletePrompt } from '@renderer/hooks/useDeletePrompt'
 import { DeleteConfirmation } from './DeleteConfirmation'
+import { GoTrash, GoPin, GoPencil } from 'react-icons/go'
+import { Tooltip } from '@renderer/components/ui/Tooltip'
 
 export const PromptCard = ({ prompt }: { prompt: Prompt }): JSX.Element => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -51,23 +53,40 @@ export const PromptCard = ({ prompt }: { prompt: Prompt }): JSX.Element => {
         <Card.Body py={1} fontSize="sm" fontWeight={'light'}>
           {prompt.value}
         </Card.Body>
-        <Card.Footer pt={1}>
-          <ButtonGroup size="xs" variant="subtle" attached>
-            <Button colorPalette="blue" variant="solid" onClick={handleEditModalModalOpen}>
+        <Card.Footer pt={1} pb={4}>
+          <Box flex="1">
+            <Button
+              colorPalette="blue"
+              size={'xs'}
+              variant="solid"
+              onClick={handleEditModalModalOpen}
+            >
+              <GoPencil />
               Edit
             </Button>
-            <Button
+          </Box>
+          <Tooltip content={isDefaultPrompt ? 'Default prompt' : 'Set as default prompt'}>
+            <IconButton
+              variant={isDefaultPrompt ? 'solid' : 'ghost'}
+              colorPalette={isDefaultPrompt ? 'green' : 'gray'}
+              size="xs"
               disabled={isDefaultPrompt}
-              variant={isDefaultPrompt ? 'solid' : 'subtle'}
-              colorPalette={isDefaultPrompt ? 'green' : 'black'}
               onClick={handleSelectPrompt}
+              aria-label={isDefaultPrompt ? 'Default prompt' : 'Set as Default'}
             >
-              {isDefaultPrompt ? 'Default prompt' : 'Set as Default'}
-            </Button>{' '}
-            <Button colorPalette="red" variant="subtle" onClick={handleDeleteConfirmationOpen}>
-              Delete
-            </Button>
-          </ButtonGroup>
+              <GoPin />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content="Delete prompt">
+            <IconButton
+              variant="ghost"
+              size="xs"
+              onClick={handleDeleteConfirmationOpen}
+              aria-label="Delete prompt"
+            >
+              <GoTrash />
+            </IconButton>
+          </Tooltip>
         </Card.Footer>
       </Card.Root>
       <DeleteConfirmation

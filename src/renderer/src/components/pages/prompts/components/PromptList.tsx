@@ -39,9 +39,6 @@ export const PromptList = (): JSX.Element => {
                   borderColor: 'transparent',
                   boxShadow: 'none'
                 }}
-                colorPalette="green"
-                borderRadius={0}
-                size={'lg'}
                 placeholder="Search prompts"
                 value={term}
                 onChange={(e) => {

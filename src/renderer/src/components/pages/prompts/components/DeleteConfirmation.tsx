@@ -1,7 +1,7 @@
 import { DrawerFull } from '../../../ui/Drawer'
 import { Prompt } from '@shared/types/store'
 import { Box, Card } from '@chakra-ui/react'
-import { GoX } from 'react-icons/go'
+import { GoTrash } from 'react-icons/go'
 
 type DeleteConfirmationProps = {
   onSubmit?: (prompt: Partial<Prompt>) => void
@@ -33,7 +33,7 @@ export const DeleteConfirmation = ({
       confirmLabel={'Delete'}
       isLoading={isLoading}
       confirmButtonProps={{ colorPalette: 'red' }}
-      confirmIcon={GoX}
+      confirmIcon={GoTrash}
     >
       <Box p={5}>
         <Card.Root>

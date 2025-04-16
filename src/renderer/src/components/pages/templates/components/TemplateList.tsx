@@ -67,9 +67,6 @@ export const TemplateList = (): JSX.Element => {
                   borderColor: 'transparent',
                   boxShadow: 'none'
                 }}
-                colorPalette="green"
-                borderRadius={0}
-                size={'lg'}
                 placeholder="Search templates"
                 value={term}
                 onChange={(e) => {
