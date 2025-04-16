@@ -7,6 +7,7 @@ import { useEffect } from 'react'
 import { UpdateAlert } from './components/ui/UpdateAlert'
 import { Modal } from './components/pages/explain/Modal'
 import { useRoute } from './components/providers/RouteProvider'
+import { PromptForm } from './components/pages/prompts/components/PromptForm'
 
 function App(): JSX.Element {
   const { isLoggedIn } = useAuth()
@@ -52,6 +53,7 @@ function App(): JSX.Element {
           ))}
         </Tabs.Root>
       </Container>
+      <PromptForm />
     </>
   )
 }

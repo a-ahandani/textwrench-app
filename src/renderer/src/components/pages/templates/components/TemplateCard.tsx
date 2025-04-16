@@ -1,9 +1,11 @@
-import { Box, Button, Card } from '@chakra-ui/react'
+import { Box, Button, Card, IconButton } from '@chakra-ui/react'
 import { Tag } from '@renderer/components/ui/Tag'
 import { useCreatePrompt } from '@renderer/hooks/useCreatePrompt'
 import { Template } from '@shared/types/store'
 import { useState } from 'react'
-import { GoCheck, GoPlus } from 'react-icons/go'
+import { GoCheck, GoPencil, GoPlus } from 'react-icons/go'
+import { usePromptsContext } from '../../prompts/components/PromptsContext'
+import { Tooltip } from '@renderer/components/ui/Tooltip'
 
 export const TemplateCard = ({
   template
@@ -13,16 +15,20 @@ export const TemplateCard = ({
   }
 }): JSX.Element => {
   const [isSaved, SetIsSaved] = useState(false)
+  const { setTemplateId } = usePromptsContext()
   const { mutate: createPrompt, isPending: isCreating } = useCreatePrompt({
     onSuccess: () => {
       SetIsSaved(true)
     }
   })
-  const handleCreatePrompt = (): void => {
+  const handleAddPrompt = (): void => {
     createPrompt({
       label: template.label,
       value: template.value
     })
+  }
+  const handleAddCustomPrompt = (): void => {
+    setTemplateId(template.ID)
   }
   return (
     <Card.Root
@@ -46,18 +52,31 @@ export const TemplateCard = ({
         {template.value}
       </Card.Body>
       <Card.Footer pt={1} pb={4}>
-        <Button
-          size="xs"
-          variant="solid"
-          colorPalette="green"
-          onClick={handleCreatePrompt}
-          loading={isCreating}
-          disabled={isSaved}
-        >
-          {isSaved ? <GoCheck /> : <GoPlus />}
+        <Box flex="1">
+          <Button
+            size="xs"
+            variant="solid"
+            colorPalette="green"
+            onClick={handleAddPrompt}
+            loading={isCreating}
+            disabled={isSaved}
+          >
+            {isSaved ? <GoCheck /> : <GoPlus />}
 
-          {isSaved ? 'Added!' : 'Add to Prompts'}
-        </Button>
+            {isSaved ? 'Added!' : 'Add to Prompts'}
+          </Button>
+        </Box>
+        <Tooltip content="Customize this template & create a new prompt" aria-label="Customize">
+          <IconButton
+            variant="ghost"
+            size="xs"
+            onClick={handleAddCustomPrompt}
+            loading={isCreating}
+            aria-label="Customize"
+          >
+            <GoPencil />
+          </IconButton>
+        </Tooltip>
       </Card.Footer>
     </Card.Root>
   )

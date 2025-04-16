@@ -97,6 +97,8 @@ export const DrawerFull = ({
                     variant="solid"
                     colorPalette="green"
                     onClick={onConfirm}
+                    disabled={isLoading}
+                    loading={isLoading}
                     {...confirmButtonProps}
                   >
                     <ConfirmIcon />

@@ -8,6 +8,8 @@ interface PromptContextType {
   defaultPrompt: Prompt | null
   setDefaultPrompt: (prompt: Prompt) => void
   setEditingId: (id: string | null) => void
+  templateId: string | null
+  setTemplateId: (id: string | null) => void
 }
 
 export const PromptContext = createContext<PromptContextType | undefined>(undefined)
@@ -20,6 +22,7 @@ interface PromptsProviderProps {
 
 export const PromptsProvider = ({ children }: PromptsProviderProps) => {
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [templateId, setTemplateId] = useState<string | null>(null)
 
   const { setValue: setDefaultPrompt, value: defaultPrompt } = useStore<Prompt>({
     key: 'selectedPrompt'
@@ -31,7 +34,9 @@ export const PromptsProvider = ({ children }: PromptsProviderProps) => {
         defaultPrompt,
         setDefaultPrompt,
         editingId,
-        setEditingId
+        setEditingId,
+        templateId,
+        setTemplateId
       }}
     >
       {children}

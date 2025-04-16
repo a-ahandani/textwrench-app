@@ -5,7 +5,6 @@ import { InputGroup } from '../../../ui/InputGroup'
 import { usePrompts } from '@renderer/hooks/usePrompts'
 import { useState } from 'react'
 import { GoBookmarkFill } from 'react-icons/go'
-import { PromptForm } from './PromptForm'
 import { usePromptsContext } from './PromptsContext'
 import { useRoute } from '@renderer/components/providers/RouteProvider'
 import { PromptCard } from './PromptCard'
@@ -111,7 +110,6 @@ export const PromptList = (): JSX.Element => {
           </Stack>
         </>
       )}
-      <PromptForm />
     </Box>
   )
 }
