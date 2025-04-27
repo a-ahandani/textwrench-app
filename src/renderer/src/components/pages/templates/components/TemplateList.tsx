@@ -83,7 +83,7 @@ export const TemplateList = (): JSX.Element => {
               mb={2}
               value={selectedCategory}
               onValueChange={({ value }) => {
-                setSelectedCategory(value)
+                setSelectedCategory(value ?? undefined)
               }}
             >
               <SegmentGroup.Indicator />
