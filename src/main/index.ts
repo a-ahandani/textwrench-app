@@ -30,11 +30,11 @@ app.whenReady().then(async () => {
   }
 
   await initializeAppSettings()
-  resetShortcuts({})
   setupProtocolHandling()
   setupSingleInstanceLock()
   checkForUpdates()
   setupIpcHandlers()
+  resetShortcuts({})
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
