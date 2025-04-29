@@ -47,7 +47,9 @@ jobs:
       - name: Decode Windows certificate
         if: matrix.os == 'windows-latest'
         run: |
-          echo "${{ secrets.WINDOWS_CERTIFICATE }}" | base64 --decode > windows-certificate.pfx
+          $certBytes = [Convert]::FromBase64String("${{ secrets.WINDOWS_CERTIFICATE }}")
+          [IO.File]::WriteAllBytes("windows-certificate.pfx", $certBytes)
+
 
       - name: Build/release Electron app
         uses: paneron/action-electron-builder@v1.8.1
