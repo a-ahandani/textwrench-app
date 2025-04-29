@@ -13,9 +13,10 @@ export const getSelectedText = async (): Promise<string> => {
     robot.setKeyboardDelay(delay)
     clipboard.clear()
     await robot.keyTap('c', getCommandKey())
+    await new Promise((res) => setTimeout(res, 100))
 
     const text = clipboard.readText()
-    log.debug(`Attempt ${i + 1} with delay ${delay}ms: "${text.slice(0, 20)}..."`)
+    log.info(`Attempt ${i + 1} with delay ${delay}ms: "${text.slice(0, 20)}..."`)
 
     if (text) {
       log.info(`Successfully retrieved selected text on attempt ${i + 1}`)
