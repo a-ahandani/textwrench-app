@@ -1,12 +1,3 @@
-name: Build/release
-
-on:
-  workflow_dispatch:
-  workflow_run:
-    workflows: ['Update package.json version on tag']
-    types:
-      - completed
-
 jobs:
   release:
     runs-on: ${{ matrix.os }}
@@ -14,7 +5,6 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-latest]
-        # os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
       - name: Check out Git repository
@@ -44,7 +34,12 @@ jobs:
       - name: Install dependencies
         run: yarn
 
-      # 🔹 Build/Release Electron App (Includes Notarization for macOS)
+      # 🔹 Decode Windows PFX certificate (only on Windows)
+      - name: Decode Windows certificate
+        if: matrix.os == 'windows-latest'
+        run: |
+          echo "${{ secrets.WINDOWS_CERTIFICATE }}" | base64 --decode > windows-certificate.pfx
+
       - name: Build/release Electron app
         uses: paneron/action-electron-builder@v1.8.1
         with:
@@ -52,27 +47,14 @@ jobs:
           release: true
         env:
           VITE_API_SERVER: ${{ secrets.VITE_API_SERVER }}
+
+          # macOS code signing
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-          # Removed AWS credentials as per recent edits
-          # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      # # 🔹 SFTP Upload (For All Platforms)
-      # - name: SFTP upload with version folder
-      #   uses: Dylan700/sftp-upload-action@latest
-      #   with:
-      #     server: ${{ secrets.FTP_SERVER }}
-      #     username: ${{ secrets.FTP_USERNAME }}
-      #     password: ${{ secrets.FTP_PASSWORD }}
-      #     port: 22
-      #     uploads: |
-      #       ./dist/ => /var/www/textwrench.ai/downloads/${{ matrix.os }}-files
-      #     ignore: |
-      #       *pack*
-      #       *-arm*
-      #       *zip*
-      #     delete: 'true'
+          # ✅ Windows-specific code signing
+          WIN_CSC_LINK: file://windows-certificate.pfx
+          WIN_CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
