@@ -23,6 +23,7 @@ win:
   executableName: Textwrench
   icon: 'resources/icons/icon.png'
   artifactName: 'Textwrench-${version}.${ext}'
+  verifyUpdateCodeSignature: false
 
 nsis:
   artifactName: Textwrench-${version}-setup.${ext}

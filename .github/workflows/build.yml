@@ -69,4 +69,3 @@ jobs:
           # ✅ Windows-specific code signing
           WIN_CSC_LINK: file://windows-certificate.pfx
           WIN_CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
-          CSC_IDENTITY_AUTO_DISCOVERY: false
