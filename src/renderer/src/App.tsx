@@ -32,7 +32,7 @@ function App(): JSX.Element {
           value={activeRoute}
           variant="line"
           borderRadius={0}
-          unmountOnExit
+          // unmountOnExit
         >
           <Tabs.List borderRadius={0} pl={'2px'} pr={0} bg="bg.muted">
             {visibleRoutes.map((tab) => (
