@@ -93,7 +93,7 @@ export const Prompts: FC<PromptsProps> = ({ actionRef }) => {
   }
 
   return (
-    <Box>
+    <Box height={'calc(100vh - 90px)'} overflowY="hidden" overflowX="hidden">
       {actionRef && (
         <Portal container={actionRef}>
           <div>
@@ -125,7 +125,6 @@ export const Prompts: FC<PromptsProps> = ({ actionRef }) => {
           </div>
         </Portal>
       )}
-
       <Tabs.Root
         orientation="vertical"
         size="lg"
@@ -158,7 +157,7 @@ export const Prompts: FC<PromptsProps> = ({ actionRef }) => {
           </Box>
         </Tabs.List>
 
-        <Box width={'full'} pr={4} ml={3} py={1}>
+        <Box width={'full'} pr={2} ml={3} py={1}>
           {prompts?.map((item) => (
             <TabContents
               key={item.ID}
