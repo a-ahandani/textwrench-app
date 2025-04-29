@@ -72,11 +72,12 @@ export const getSelectedText = async (maxWaitTime = 1500): Promise<string> => {
 }
 
 export const pasteContent = async (): Promise<void> => {
+  robot.setKeyboardDelay(120)
   await robot.keyTap('v', getCommandKey())
 }
 
 export const hidePaste = async (text): Promise<void> => {
-  robot.setKeyboardDelay(70)
+  robot.setKeyboardDelay(120)
   clipboard.writeText(text)
   if (process.platform === 'darwin') {
     robot.keyTap('tab', getCommandKey())

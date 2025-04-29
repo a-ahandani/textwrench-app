@@ -18,7 +18,7 @@ twService.interceptors.request.use(
   (config) => {
     const token = store?.get('token')
     config.headers['Authorization'] = `Bearer ${token}`
-    console.log('AXIOS====>', token)
+    // console.log('AXIOS====>', token)
     return config
   },
   (error) => {
@@ -42,6 +42,7 @@ twService.interceptors.response.use(
 )
 
 export const handleError = (error: unknown): never => {
+  log.error('ERROR', error)
   throw new Error(
     (
       error as AxiosError<{

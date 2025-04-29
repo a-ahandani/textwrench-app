@@ -83,6 +83,7 @@ export const Prompts: FC<PromptsProps> = ({ actionRef }) => {
   )
 
   const handlePaste = async (): Promise<void> => {
+    if (!processedText) return
     window.api.hidePaste(processedText)
   }
 
@@ -100,9 +101,10 @@ export const Prompts: FC<PromptsProps> = ({ actionRef }) => {
               <Button
                 aria-label={'Insert'}
                 size="xs"
-                mx={1}
+                mx={2}
                 variant="solid"
                 colorPalette="green"
+                disabled={!processedText}
                 onClick={handlePaste}
               >
                 Enter

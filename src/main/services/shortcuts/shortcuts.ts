@@ -13,6 +13,7 @@ export const resetShortcuts = (shortcuts: Record<string, Record<string, string>>
       ? updatedShortcuts[action]
       : defaultShortcut
     const handler = handlers[action]
+
     if (!handler) {
       log.warn(`No handler found for action: ${actionKey}`)
       return
@@ -21,7 +22,24 @@ export const resetShortcuts = (shortcuts: Record<string, Record<string, string>>
       log.warn(`No shortcut found for action: ${actionKey}`)
       return
     }
-    const success = globalShortcut.register(customShortcut, handler)
+
+    const wrappedHandler = () => {
+      const start = performance.now()
+
+      try {
+        handler()
+      } catch (error) {
+        log.error(`Error in shortcut handler for action: ${actionKey}`, error)
+      }
+
+      const end = performance.now()
+      const duration = end - start
+      log.info(
+        `⏱️ Shortcut '${customShortcut}' for action '${actionKey}' handled in ${duration.toFixed(2)}ms`
+      )
+    }
+
+    const success = globalShortcut.register(customShortcut, wrappedHandler)
     if (!success) {
       log.error(`Failed to register shortcut: ${customShortcut} for action: ${actionKey}`)
     }

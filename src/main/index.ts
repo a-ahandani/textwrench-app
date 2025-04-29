@@ -19,6 +19,8 @@ log.initialize()
 log.transports.console.format = '{h}:{i}:{s} [{level}] {text}'
 log.transports.console.level = `info`
 
+app.commandLine.appendSwitch('enable-features', 'GlobalShortcutsPortal')
+
 app.whenReady().then(async () => {
   checkPermissions()
   mw = initializeApp()
@@ -28,11 +30,11 @@ app.whenReady().then(async () => {
   }
 
   await initializeAppSettings()
+  resetShortcuts({})
   setupProtocolHandling()
   setupSingleInstanceLock()
   checkForUpdates()
   setupIpcHandlers()
-  resetShortcuts({})
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
