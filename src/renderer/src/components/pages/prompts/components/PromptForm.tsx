@@ -7,16 +7,19 @@ import { useCreatePrompt } from '@renderer/hooks/useCreatePrompt'
 import { useUpdatePrompt } from '@renderer/hooks/useUpdatePrompt'
 import { usePrompts } from '@renderer/hooks/usePrompts'
 import { useTemplates } from '@renderer/hooks/useTemplates'
+import { useRoute } from '@renderer/components/providers/RouteProvider'
 
 export const PromptForm = (): JSX.Element => {
   const { editingId, setEditingId, templateId, setTemplateId } = usePromptsContext()
   const { data: prompts, isLoading: isFetchingPrompts } = usePrompts()
   const { data: templates, isLoading: isFetchingTemplates } = useTemplates()
+  const { setCurrentRoute } = useRoute()
 
   const { mutate: createPrompt, isPending: isCreating } = useCreatePrompt({
     onSuccess: () => {
       setEditingId(null)
       setTemplateId(null)
+      setCurrentRoute('prompts')
     }
   })
   const { mutate: updatePrompt, isPending: isUpdating } = useUpdatePrompt({
@@ -24,6 +27,7 @@ export const PromptForm = (): JSX.Element => {
     onSuccess: () => {
       setEditingId(null)
       setTemplateId(null)
+      setCurrentRoute('prompts')
     }
   })
 
