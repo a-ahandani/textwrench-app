@@ -4,6 +4,7 @@ import { checkPermissions } from '../permissions/permissions'
 import robot from 'robotjs_addon'
 import { getCommandKey } from '../../utils/platform'
 
+const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms))
 let RETRY_DELAYS = [300, 480, 890, 1000] // in ms
 
 if (process.platform === 'darwin') {
@@ -51,8 +52,6 @@ export const getSelectedText = async (): Promise<string> => {
   return currentTask
 }
 
-const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms))
-
 const waitForClipboardText = async (timeout: number): Promise<string> => {
   const interval = 50
   let waited = 0
@@ -87,5 +86,11 @@ export const hidePaste = async (text): Promise<void> => {
     robot.keyTap('tab', 'alt')
   }
   robot.keyTap('enter')
+  if (process.platform === 'darwin') {
+    await sleep(300)
+  } else {
+    await sleep(500)
+  }
+
   pasteContent()
 }
