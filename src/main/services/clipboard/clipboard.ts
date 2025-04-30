@@ -4,7 +4,11 @@ import { checkPermissions } from '../permissions/permissions'
 import robot from 'robotjs_addon'
 import { getCommandKey } from '../../utils/platform'
 
-const RETRY_DELAYS = [50, 100, 200] // in ms
+let RETRY_DELAYS = [300, 480, 890, 1000] // in ms
+
+if (process.platform === 'darwin') {
+  RETRY_DELAYS = [50, 70, 100, 180, 220, 500]
+}
 const ATTEMPT_TIMEOUT = 1000 // max time to wait per attempt in ms
 
 let currentTask: Promise<string> | null = null
