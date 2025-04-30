@@ -69,7 +69,12 @@ const waitForClipboardText = async (timeout: number): Promise<string> => {
 }
 
 export const pasteContent = async (): Promise<void> => {
-  robot.setKeyboardDelay(120)
+  if (process.platform === 'darwin') {
+    robot.setKeyboardDelay(80)
+  } else {
+    robot.setKeyboardDelay(220)
+  }
+
   await robot.keyTap('v', getCommandKey())
 }
 
