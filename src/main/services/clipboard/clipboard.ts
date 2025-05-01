@@ -89,7 +89,7 @@ export const hidePaste = async (text): Promise<void> => {
   if (process.platform === 'darwin') {
     await sleep(300)
   } else {
-    await sleep(500)
+    await sleep(1200)
   }
 
   pasteContent()
