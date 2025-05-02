@@ -4,6 +4,9 @@ import { processTextWithAI } from '../ai/openai'
 import { store } from '../../store'
 
 export async function connectToGoPipe() {
+  if (process.platform !== 'win32') {
+    return
+  }
   const selectedPrompt = await store.get('selectedPrompt')
   console.log('Selected Prompt:', selectedPrompt)
   const pipeName = '\\\\.\\pipe\\textwrench-pipe'
