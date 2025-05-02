@@ -30,7 +30,8 @@
     "electron-updater": "^6.3.9",
     "react-hotkeys-hook": "^4.6.1",
     "react-markdown": "^10.1.0",
-    "robotjs_addon": "^0.6.5"
+    "robotjs_addon": "^0.6.5",
+    "textwrench-hotkeys": "^1.0.0"
   },
   "devDependencies": {
     "@chakra-ui/react": "^3.12.0",

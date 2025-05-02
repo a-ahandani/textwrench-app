@@ -12,6 +12,10 @@ import { checkForUpdates } from './services/updater/updater'
 import { handleOpenUrl } from './services/url/url'
 import { APP_KEY, labels } from '@shared/constants'
 import { checkPermissions } from './services/permissions/permissions'
+import { getBinaryPath } from 'textwrench-hotkeys'
+
+import { connectToGoPipe } from './services/windows-pipe/websocket'
+import { spawn } from 'child_process'
 
 let mw: BrowserWindow | null = null
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
@@ -21,8 +25,49 @@ log.transports.console.level = `info`
 
 app.commandLine.appendSwitch('enable-features', 'GlobalShortcutsPortal')
 
+let hotkeyProc: ReturnType<typeof spawn> | null = null
+
+app.whenReady().then(() => {
+  if (process.platform === 'win32') {
+    startHotkeyHandler()
+  }
+})
+
+function startHotkeyHandler() {
+  const binaryPath = getBinaryPath()
+
+  hotkeyProc = spawn(binaryPath, [], {
+    stdio: 'pipe',
+    windowsHide: true
+  })
+
+  hotkeyProc.stdout?.on('data', (data) => {
+    log.info(`[hotkey stdout]: ${data.toString().trim()}`)
+  })
+
+  hotkeyProc.stderr?.on('data', (data) => {
+    log.error(`[hotkey stderr]: ${data.toString().trim()}`)
+  })
+
+  hotkeyProc.on('close', (code) => {
+    log.warn(`hotkey process exited with code ${code}`)
+  })
+
+  hotkeyProc.on('error', (err) => {
+    log.error(`Failed to start hotkey process:`, err)
+  })
+}
+
+app.on('before-quit', () => {
+  if (hotkeyProc) {
+    hotkeyProc.kill()
+    hotkeyProc = null
+  }
+})
+
 app.whenReady().then(async () => {
   checkPermissions()
+  connectToGoPipe()
   mw = initializeApp()
   if (isDev) {
     // autoUpdater.autoDownload = false
