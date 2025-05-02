@@ -3,7 +3,7 @@ import log from 'electron-log'
 import { processTextWithAI } from '../ai/openai'
 import { store } from '../../store'
 
-export async function connectToGoPipe() {
+export async function connectToGoPipe(): Promise<void> {
   if (process.platform !== 'win32') {
     return
   }
