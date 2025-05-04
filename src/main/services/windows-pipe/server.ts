@@ -1,10 +1,10 @@
 import log from 'electron-log'
-
 import { spawn } from 'child_process'
 import { getBinaryPath } from 'textwrench-hotkeys'
 import { app } from 'electron'
 
 let hotkeyProc: ReturnType<typeof spawn> | null = null
+let shouldRestart = true // ← Controls restart behavior
 
 export function startHotkeyHandler(): void {
   const binaryPath = getBinaryPath()
@@ -24,6 +24,12 @@ export function startHotkeyHandler(): void {
 
   hotkeyProc.on('close', (code) => {
     log.warn(`hotkey process exited with code ${code}`)
+    hotkeyProc = null
+
+    if (shouldRestart) {
+      log.info('Restarting hotkey process...')
+      setTimeout(() => startHotkeyHandler(), 1000) // 1s delay before restart
+    }
   })
 
   hotkeyProc.on('error', (err) => {
@@ -32,6 +38,7 @@ export function startHotkeyHandler(): void {
 }
 
 app.on('before-quit', () => {
+  shouldRestart = false // prevent restart loop on app quit
   if (hotkeyProc) {
     hotkeyProc.kill()
     hotkeyProc = null
