@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain, shell } from 'electron'
 import { IPC_EVENTS } from '../../shared/ipc-events'
-import { store } from '../store'
-import { updateStore } from '../store/helpers'
+import { store } from '../providers/store'
+import { updateStore } from '../services/update-store'
 import {
   Category,
   Prompt,
@@ -10,14 +10,14 @@ import {
   Template,
   UserProfile
 } from '../../shared/types/store'
-import { handleError, twService } from '../services/axios/axios'
-import { verifyToken } from '../services/auth/verifyToken'
-import { resetShortcuts } from '../services/shortcuts/shortcuts'
+import { handleError, twService } from '../providers/axios'
+import { verifyToken } from '../services/verify-token'
+import { setShortcuts } from '../services/set-shortcuts'
 import { autoUpdater } from 'electron-updater'
-import { setIsQuitting } from '../services/window/window'
+import { setIsQuitting } from '../providers/window'
 import { BASE_URL } from '@shared/constants'
-import { processTextWithAI } from '../services/ai/openai'
-import { hidePaste } from '../services/clipboard/clipboard'
+import { processText } from '../services/process-text'
+import { focusPaste } from '../services/paste-text'
 
 export function setupIpcHandlers(): void {
   ipcMain.handle(IPC_EVENTS.GET_STORE_VALUE, (_event, key: keyof StoreType) => {
@@ -49,7 +49,9 @@ export function setupIpcHandlers(): void {
   ipcMain.handle(IPC_EVENTS.GET_PROFILE, async () => {
     try {
       const result = await twService.get<UserProfile>('/protected/profile')
-      resetShortcuts(result.data?.shortcuts || {})
+      if (result.data?.shortcuts) {
+        setShortcuts(result.data.shortcuts)
+      }
       return result.data
     } catch (error) {
       handleError(error)
@@ -90,7 +92,7 @@ export function setupIpcHandlers(): void {
   ipcMain.handle(IPC_EVENTS.UPDATE_SHORTCUTS, async (_event, shortcuts: Shortcuts) => {
     try {
       const result = await twService.patch<Shortcuts>(`/protected/profile/shortcuts`, shortcuts)
-      resetShortcuts(result.data)
+      setShortcuts(result.data)
       return result.data
     } catch (error) {
       handleError(error)
@@ -128,7 +130,7 @@ export function setupIpcHandlers(): void {
 
   ipcMain.handle(IPC_EVENTS.PROCESS_TEXT, async (_event, data) => {
     try {
-      const result = await processTextWithAI(data)
+      const result = await processText(data)
       return result
     } catch (error) {
       handleError(error)
@@ -138,7 +140,7 @@ export function setupIpcHandlers(): void {
 
   ipcMain.handle(IPC_EVENTS.HIDE_PASTE, async (_event, data) => {
     try {
-      const result = await hidePaste(data)
+      const result = await focusPaste(data)
       return result
     } catch (error) {
       handleError(error)

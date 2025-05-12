@@ -6160,10 +6160,10 @@ temp-file@^3.4.0:
     async-exit-hook "^2.0.1"
     fs-extra "^10.0.0"
 
-textwrench-hotkeys@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/textwrench-hotkeys/-/textwrench-hotkeys-1.0.1.tgz#a4ed87104049c6ca4b377062721505296d15b289"
-  integrity sha512-lNHxxFEdQ2Igtz+lz5gOrrRCSrbqc2gfirMv7SYYMzOsAuxhEpMo4Ggn6iPv8MnvisbS88SXzYsGdPptnJL5FQ==
+textwrench-hotkeys@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/textwrench-hotkeys/-/textwrench-hotkeys-1.1.1.tgz#7b13357d61710609b4ae8a5845f6cbac19bc43a8"
+  integrity sha512-mg/iyJHxwJAmxBKoSG5Ovd5mkkBjw60d4D7EFuzXA+lTerfPDnqYUWWig0kbo6aqFYm+6BX7uL9ZEq2gSZxH9w==
 
 tiny-typed-emitter@^2.1.0:
   version "2.1.0"

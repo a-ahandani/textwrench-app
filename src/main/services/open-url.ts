@@ -1,8 +1,8 @@
 import log from 'electron-log'
-import { updateStore } from '../../store/helpers'
-import { getMainWindow } from '../window/window'
+import { updateStore } from './update-store'
+import { getMainWindow } from '../providers/window'
 import { IPC_EVENTS } from '@shared/ipc-events'
-import { bringToFront } from '../../utils/bringToFront'
+import { bringToFront } from './set-focus'
 
 export function handleOpenUrl(url): void {
   const mainWindow = getMainWindow()
