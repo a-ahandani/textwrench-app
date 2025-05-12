@@ -1,4 +1,4 @@
-import { getMainWindow } from '../services/window/window'
+import { getMainWindow } from '../providers/window'
 
 export const bringToFront = (): void => {
   const mainWindow = getMainWindow()

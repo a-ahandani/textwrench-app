@@ -1,11 +1,11 @@
-import { twService } from '../axios/axios'
+import { twService } from '../providers/axios'
 
 export enum AiMode {
   Improve = 'improve',
   Explain = 'explain'
 }
 
-export const processTextWithAI = async ({
+export const processText = async ({
   selectedPrompt,
   selectedText,
   mode = AiMode.Improve

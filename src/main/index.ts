@@ -1,19 +1,17 @@
 import { app, BrowserWindow } from 'electron'
 import { electronAppUniversalProtocolClient } from 'electron-app-universal-protocol-client'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import { initializeApp, setIsQuitting } from './services/window/window'
+import { initializeApp, setIsQuitting } from './providers/window'
 import { setupIpcHandlers } from './ipc/handlers'
 import path from 'path'
-import { updateStore } from './store/helpers'
-import { resetShortcuts } from './services/shortcuts/shortcuts'
+import { updateStore } from './services/update-store'
 import { autoUpdater } from 'electron-updater'
 import log from 'electron-log'
-import { checkForUpdates } from './services/updater/updater'
-import { handleOpenUrl } from './services/url/url'
+import { checkForUpdates } from './services/check-updates'
+import { handleOpenUrl } from './services/open-url'
 import { APP_KEY, labels } from '@shared/constants'
-import { checkPermissions } from './services/permissions/permissions'
-import { connectToGoPipe } from './services/windows-pipe/pipe'
-import { startHotkeyHandler } from './services/windows-pipe/server'
+import { checkPermissions } from './services/check-permissions'
+import { hotkeyHandler } from './ipc/hotkey-handler'
 
 let mw: BrowserWindow | null = null
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
@@ -24,10 +22,7 @@ log.transports.console.level = `info`
 app.commandLine.appendSwitch('enable-features', 'GlobalShortcutsPortal')
 
 app.whenReady().then(() => {
-  if (process.platform === 'win32') {
-    startHotkeyHandler()
-    connectToGoPipe()
-  }
+  hotkeyHandler()
 })
 
 app.whenReady().then(async () => {
@@ -43,7 +38,6 @@ app.whenReady().then(async () => {
   setupSingleInstanceLock()
   checkForUpdates()
   setupIpcHandlers()
-  resetShortcuts({})
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
