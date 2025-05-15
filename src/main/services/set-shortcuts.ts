@@ -8,7 +8,7 @@ export const setShortcuts = (shortcuts: Record<string, Record<string, string>>):
 
   Object.entries(ACTIONS).forEach(([actionKey, action]) => {
     const defaultShortcut = ACTION_DEFAULT_SHORTCUTS[action]?.join('+') || 'Ctrl+Shift+C'
-    const shortcut = updatedShortcuts[actionKey] || defaultShortcut
+    const shortcut = updatedShortcuts[action] || defaultShortcut
 
     shortcutConfig.push({
       id: ACTIONS[actionKey],
@@ -16,8 +16,6 @@ export const setShortcuts = (shortcuts: Record<string, Record<string, string>>):
       modifiers: shortcut.split('+').slice(0, -1)
     })
   })
-
   const key = `SHORTCUT_CONFIG|${JSON.stringify(shortcutConfig)}`
-  console.log('Sending shortcut config to Go:', key)
   hotkeyClient.send(key)
 }
