@@ -7,8 +7,10 @@ import { getMainWindow } from '../providers/window'
 import { bringToFront } from '../services/set-focus'
 import { IPC_EVENTS } from '@shared/ipc-events'
 import { paste } from '../services/paste-text'
+import { log } from 'electron-log'
 
 const handleReviseText = async ({ selectedText }) => {
+  log('Selected text:--------->', selectedText)
   const selectedPrompt = await store.get('selectedPrompt')
   const processedText = await processText({ selectedText, selectedPrompt })
   paste(processedText)
@@ -47,6 +49,7 @@ const handlers = {
 
 export const hotkeyHandler = () => {
   hotkeyClient.on('hotkey', async ({ hotkey, text }) => {
+    log('==> Received hotkey:', hotkey, 'with text:', text)
     if (!text) return
     updateStore('selectedText', text)
 
