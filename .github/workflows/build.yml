@@ -43,13 +43,17 @@ jobs:
       - name: Install dependencies
         run: yarn
 
+      # ✅ Ensure macOS hotkey binary is executable
+      - name: Make macOS hotkey binary executable
+        if: matrix.os == 'macos-latest'
+        run: chmod +x node_modules/textwrench-hotkeys/textwrench-hotkeys-macos
+
       # 🔹 Decode Windows PFX certificate (only on Windows)
       - name: Decode Windows certificate
         if: matrix.os == 'windows-latest'
         run: |
           $certBytes = [Convert]::FromBase64String("${{ secrets.WINDOWS_CERTIFICATE }}")
           [IO.File]::WriteAllBytes("windows-certificate.pfx", $certBytes)
-
 
       - name: Build/release Electron app
         uses: paneron/action-electron-builder@v1.8.1
@@ -66,6 +70,6 @@ jobs:
           CSC_LINK: ${{ secrets.CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
 
-          # ✅ Windows-specific code signing
+          # Windows-specific code signing
           WIN_CSC_LINK: file://windows-certificate.pfx
           WIN_CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
