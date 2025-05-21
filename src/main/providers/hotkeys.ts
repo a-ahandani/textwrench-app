@@ -20,7 +20,7 @@ class HotkeyClient extends EventEmitter {
 
   constructor() {
     super()
-    // this.ensureHotkeyServiceRunning()
+    this.ensureHotkeyServiceRunning()
     this.connect()
   }
 
@@ -84,8 +84,6 @@ class HotkeyClient extends EventEmitter {
         log.log('Hotkey connection closed')
         this.client = null
         setTimeout(tryConnect, 1000)
-        // Ensure hotkey process is running if pipe closes unexpectedly
-        // this.ensureHotkeyServiceRunning()
       })
 
       app.on('before-quit', () => {
