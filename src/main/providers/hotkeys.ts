@@ -20,7 +20,7 @@ class HotkeyClient extends EventEmitter {
 
   constructor() {
     super()
-    this.ensureHotkeyServiceRunning()
+    // this.ensureHotkeyServiceRunning()
     this.connect()
   }
 
@@ -60,12 +60,6 @@ class HotkeyClient extends EventEmitter {
 
   private connect(): void {
     const tryConnect = (): void => {
-      if (!fs.existsSync(PIPE_PATH)) {
-        log.log('Hotkey pipe not found, retrying...')
-        setTimeout(tryConnect, 500)
-        return
-      }
-
       this.client = net.createConnection(PIPE_PATH, () => {
         log.log('Connected to Go hotkey service')
       })
@@ -91,7 +85,7 @@ class HotkeyClient extends EventEmitter {
         this.client = null
         setTimeout(tryConnect, 1000)
         // Ensure hotkey process is running if pipe closes unexpectedly
-        this.ensureHotkeyServiceRunning()
+        // this.ensureHotkeyServiceRunning()
       })
 
       app.on('before-quit', () => {

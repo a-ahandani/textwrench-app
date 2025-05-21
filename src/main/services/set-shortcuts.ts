@@ -1,3 +1,4 @@
+import { log } from 'electron-log'
 import { ACTION_DEFAULT_SHORTCUTS, ACTIONS, PLATFORMS } from '../../shared/constants'
 import { hotkeyClient } from '../providers/hotkeys'
 
@@ -17,5 +18,6 @@ export const setShortcuts = (shortcuts: Record<string, Record<string, string>>):
     })
   })
   const key = `SHORTCUT_CONFIG|${JSON.stringify(shortcutConfig)}`
+  log('Sending shortcut config:', key)
   hotkeyClient.send(key)
 }
