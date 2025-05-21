@@ -1,5 +1,5 @@
-import { store } from './index'
-import { getMainWindow } from '../services/window/window'
+import { store } from '../providers/store'
+import { getMainWindow } from '../providers/window'
 import { StoreType } from '@shared/types/store'
 import { IPC_EVENTS } from '@shared/ipc-events'
 

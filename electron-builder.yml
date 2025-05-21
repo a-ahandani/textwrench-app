@@ -19,11 +19,17 @@ files:
 asarUnpack:
   - resources/**
 
+extraResources:
+  - from: node_modules/textwrench-hotkeys/textwrench-hotkeys-macos
+    to: textwrench-hotkeys-macos
+  - from: node_modules/textwrench-hotkeys/textwrench-hotkeys.exe
+    to: textwrench-hotkeys.exe
+
 win:
   executableName: Textwrench
   icon: 'resources/icons/icon.png'
   artifactName: 'Textwrench-${version}.${ext}'
-  verifyUpdateCodeSignature: false
+  requestedExecutionLevel: requireAdministrator
 
 nsis:
   artifactName: Textwrench-${version}-setup.${ext}

@@ -1,6 +1,6 @@
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
-import { getMainWindow } from '../window/window'
+import { getMainWindow } from '../providers/window'
 import { IPC_EVENTS } from '@shared/ipc-events'
 
 let lastUpdateCheck = 0

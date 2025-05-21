@@ -1,6 +1,6 @@
-import { twService } from '../axios/axios'
-import { getMainWindow } from '../window/window'
-import { store } from '../../store'
+import { twService } from '../providers/axios'
+import { getMainWindow } from '../providers/window'
+import { store } from '../providers/store'
 import { IPC_EVENTS } from '@shared/ipc-events'
 
 export async function verifyToken(): Promise<void> {
