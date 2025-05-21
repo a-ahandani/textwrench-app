@@ -26,6 +26,7 @@ extraResources:
     to: textwrench-hotkeys.exe
 
 win:
+  publisherName: Ahandani
   executableName: Textwrench
   icon: 'resources/icons/icon.png'
   artifactName: 'Textwrench-${version}.${ext}'
