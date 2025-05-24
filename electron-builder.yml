@@ -26,11 +26,11 @@ extraResources:
     to: textwrench-hotkeys.exe
 
 win:
-  publisherName: Ahandani
   executableName: Textwrench
   icon: 'resources/icons/icon.png'
   artifactName: 'Textwrench-${version}.${ext}'
   requestedExecutionLevel: requireAdministrator
+  verifyUpdateCodeSignature: false
 
 nsis:
   artifactName: Textwrench-${version}-setup.${ext}
