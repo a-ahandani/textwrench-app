@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import { electronAppUniversalProtocolClient } from 'electron-app-universal-protocol-client'
-import { electronApp, optimizer } from '@electron-toolkit/utils'
+import { electronApp } from '@electron-toolkit/utils'
 import { initializeApp, setIsQuitting } from './providers/window'
 import { setupIpcHandlers } from './ipc/handlers'
 import path from 'path'
@@ -18,8 +18,6 @@ const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 log.initialize()
 log.transports.console.format = '{h}:{i}:{s} [{level}] {text}'
 log.transports.console.level = `info`
-
-app.commandLine.appendSwitch('enable-features', 'GlobalShortcutsPortal')
 
 app.whenReady().then(() => {
   hotkeyHandler()
@@ -59,10 +57,6 @@ async function initializeAppSettings(): Promise<void> {
   } else {
     app.setAsDefaultProtocolClient(APP_KEY)
   }
-
-  app.on('browser-window-created', (_, window) => {
-    optimizer.watchWindowShortcuts(window)
-  })
 }
 
 function setupProtocolHandling(): void {
