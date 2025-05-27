@@ -24,6 +24,26 @@ class HotkeyClient extends EventEmitter {
     this.connect()
   }
 
+  private retryCount = 0
+  private maxRetries = 10
+
+  private scheduleRestart(): void {
+    if (this.retryCount >= this.maxRetries) {
+      log.error('Max retries reached. Giving up.')
+      app.quit()
+      return
+    }
+    const delay = Math.min(1000 * 2 ** this.retryCount, 30000)
+
+    log.warn(
+      `Retrying hotkey service in ${delay}ms (attempt ${this.retryCount}/${this.maxRetries})`
+    )
+    this.restartTimeout = setTimeout(() => {
+      this.ensureHotkeyServiceRunning()
+    }, delay)
+    this.retryCount++
+  }
+
   private ensureHotkeyServiceRunning(): void {
     const startProcess = (): void => {
       const binaryPath = getBinaryPath()
@@ -40,16 +60,14 @@ class HotkeyClient extends EventEmitter {
 
       this.hotkeyProcess.on('error', (err) => {
         log.error('Failed to start hotkey service:', err)
+        this.scheduleRestart()
       })
 
       this.hotkeyProcess.on('exit', (code, signal) => {
         log.warn(`Hotkey process exited with code ${code}, signal ${signal}`)
         this.hotkeyProcess = null
 
-        // Schedule a restart
-        this.restartTimeout = setTimeout(() => {
-          this.ensureHotkeyServiceRunning()
-        }, 1000)
+        this.scheduleRestart()
       })
     }
 
@@ -65,6 +83,7 @@ class HotkeyClient extends EventEmitter {
       })
 
       this.client.on('data', (data) => {
+        this.retryCount = 0
         const raw = data.toString().trim()
         const [hotkey, ...textParts] = raw.split('|')
         const text = textParts.join('|')
