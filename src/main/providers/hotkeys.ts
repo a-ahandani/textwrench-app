@@ -1,4 +1,4 @@
-import { app } from 'electron'
+import { app, dialog } from 'electron'
 import { EventEmitter } from 'events'
 import net from 'net'
 import os from 'os'
@@ -25,18 +25,17 @@ class HotkeyClient extends EventEmitter {
   }
 
   private retryCount = 0
-  private maxRetries = 10
+  private maxRetries = 20
 
   private scheduleRestart(): void {
     if (this.retryCount >= this.maxRetries) {
-      log.error('Max retries reached. Giving up.')
-      app.quit()
-      return
+      log.error('Max retries reached. Giving up on hotkey service connection.')
+      return // Removed app.quit() to let the application continue without hotkeys
     }
     const delay = Math.min(1000 * 2 ** this.retryCount, 30000)
 
     log.warn(
-      `Retrying hotkey service in ${delay}ms (attempt ${this.retryCount}/${this.maxRetries})`
+      `Retrying hotkey service in ${delay}ms (attempt ${this.retryCount + 1}/${this.maxRetries})`
     )
     this.restartTimeout = setTimeout(() => {
       this.ensureHotkeyServiceRunning()
@@ -66,7 +65,6 @@ class HotkeyClient extends EventEmitter {
       this.hotkeyProcess.on('exit', (code, signal) => {
         log.warn(`Hotkey process exited with code ${code}, signal ${signal}`)
         this.hotkeyProcess = null
-
         this.scheduleRestart()
       })
     }
@@ -79,11 +77,11 @@ class HotkeyClient extends EventEmitter {
   private connect(): void {
     const tryConnect = (): void => {
       this.client = net.createConnection(PIPE_PATH, () => {
-        log.log('Connected to Go hotkey service')
+        log.log('Connected to hotkey service')
+        this.retryCount = 0
       })
 
       this.client.on('data', (data) => {
-        this.retryCount = 0
         const raw = data.toString().trim()
         const [hotkey, ...textParts] = raw.split('|')
         const text = textParts.join('|')
@@ -100,9 +98,22 @@ class HotkeyClient extends EventEmitter {
       })
 
       this.client.on('close', () => {
-        log.log('Hotkey connection closed')
+        log.log('Hotkey connection closed', this.retryCount)
+        this.retryCount++
         this.client = null
-        setTimeout(tryConnect, 1000)
+        if (this.retryCount < this.maxRetries) {
+          setTimeout(tryConnect, 5000)
+        } else {
+          log.error('Max connection retries reached. Hotkey service unavailable.')
+          // alert the user or handle gracefully
+          this.retryCount = 0
+          // on confirm kill the application
+          dialog.showErrorBox(
+            'Hotkey Service Unavailable',
+            'The hotkey service is currently unavailable. Please ensure it is running or restart the application.'
+          )
+          app.quit()
+        }
       })
 
       app.on('before-quit', () => {
