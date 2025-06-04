@@ -16,6 +16,8 @@ function App(): JSX.Element {
   useEffect(() => {
     if (!isLoggedIn) {
       setCurrentRoute('settings')
+    } else {
+      setCurrentRoute('prompts')
     }
   }, [isLoggedIn, setCurrentRoute])
 
@@ -27,21 +29,27 @@ function App(): JSX.Element {
         <Clipboard />
         <Modal />
         <Tabs.Root
-          orientation="vertical"
-          size="lg"
+          orientation="horizontal"
+          size="sm"
           value={activeRoute}
-          variant="line"
+          variant="subtle"
           borderRadius={0}
-          // unmountOnExit
         >
-          <Tabs.List borderRadius={0} pl={'2px'} pr={0} bg="bg.muted">
+          <Tabs.List borderRadius={0} bg="#da9619" width={'100%'} display={'flex'}>
             {visibleRoutes.map((tab) => (
               <Tabs.Trigger
                 key={tab.value}
                 value={tab.value}
                 onClick={() => setCurrentRoute(tab.value)}
+                fontSize={'xs'}
+                fontWeight="medium"
+                display={'flex'}
+                alignItems="center"
+                justifyContent="center"
+                borderRadius={0}
+                color={activeRoute === tab.value ? 'auto' : 'black'}
               >
-                {tab.icon}
+                {tab.icon} {tab.label}
               </Tabs.Trigger>
             ))}
             <Tabs.Indicator />

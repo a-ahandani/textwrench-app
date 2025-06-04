@@ -41,13 +41,13 @@ export const PromptCard = ({ prompt }: { prompt: Prompt }): JSX.Element => {
         boxShadow={isDefaultPrompt ? 'inset 0 0 0 1px var(--chakra-colors-green-500)' : 'none'}
         width={{
           base: '100%',
-          md: 'calc(50% - 5px)',
-          xl: 'calc(33.33% - 6px)',
-          '2xl': 'calc(20% - 7px)'
+          xl: 'calc(50% - 5px)',
+          '2xl': 'calc(33.33% - 6px)'
+          // '2xl': 'calc(20% - 7px)'
         }}
         key={prompt.ID}
       >
-        <Card.Header fontWeight="bold" pb={0}>
+        <Card.Header fontWeight="bold" pb={0} pt={4}>
           {prompt.label}
         </Card.Header>
         <Card.Body py={1} fontSize="sm" fontWeight={'light'}>

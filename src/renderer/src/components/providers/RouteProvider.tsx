@@ -11,6 +11,7 @@ type RouteType = {
   icon: ReactNode
   content: ReactNode
   isProtected: boolean
+  label: string
 }
 
 type RouteContextType = {
@@ -28,10 +29,34 @@ type RouteProviderProps = {
 }
 
 const routes = [
-  { value: 'prompts', icon: <GoBookmark />, content: <Prompts />, isProtected: true },
-  { value: 'templates', icon: <GoBook />, content: <Templates />, isProtected: true },
-  { value: 'settings', icon: <GoGear />, content: <Settings />, isProtected: false },
-  { value: 'about', icon: <GoTools />, content: <About />, isProtected: false }
+  {
+    value: 'prompts',
+    icon: <GoBookmark />,
+    content: <Prompts />,
+    isProtected: true,
+    label: 'My Prompts'
+  },
+  {
+    value: 'templates',
+    icon: <GoBook />,
+    content: <Templates />,
+    isProtected: true,
+    label: 'Templates'
+  },
+  {
+    value: 'settings',
+    icon: <GoGear />,
+    content: <Settings />,
+    isProtected: false,
+    label: 'Settings'
+  },
+  {
+    value: 'about',
+    icon: <GoTools />,
+    content: <About />,
+    isProtected: false,
+    label: 'About'
+  }
 ]
 
 export const RouteProvider: React.FC<RouteProviderProps> = ({ children, defaultRoute }) => {
