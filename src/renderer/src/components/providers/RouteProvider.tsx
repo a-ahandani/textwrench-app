@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode, useState } from 'react'
+import React, { createContext, useContext, ReactNode, useState, useMemo } from 'react'
 import { GoGear, GoBookmark, GoBook, GoTools } from 'react-icons/go'
 import { Prompts } from '../pages/prompts/Prompts'
 import { Templates } from '../pages/templates/Templates'
@@ -12,6 +12,8 @@ type RouteType = {
   content: ReactNode
   isProtected: boolean
   label: string
+  description?: string
+  actions?: ReactNode
 }
 
 type RouteContextType = {
@@ -34,35 +36,41 @@ const routes = [
     icon: <GoBookmark />,
     content: <Prompts />,
     isProtected: true,
-    label: 'My Prompts'
+    label: 'My Prompts',
+    description: 'Create your own custom prompts to use with the AI.'
   },
   {
     value: 'templates',
     icon: <GoBook />,
     content: <Templates />,
     isProtected: true,
-    label: 'Templates'
+    label: 'Templates',
+    description: 'Use pre-defined templates for your prompts.'
   },
   {
     value: 'settings',
     icon: <GoGear />,
     content: <Settings />,
     isProtected: false,
-    label: 'Settings'
+    label: 'Settings',
+    description: 'Manage your application settings.'
   },
   {
     value: 'about',
     icon: <GoTools />,
     content: <About />,
     isProtected: false,
-    label: 'About'
+    label: 'About',
+    description: 'Learn more about the application.'
   }
 ]
 
 export const RouteProvider: React.FC<RouteProviderProps> = ({ children, defaultRoute }) => {
   const [activeRoute, setCurrentRoute] = useState(defaultRoute)
   const { isLoggedIn } = useAuth()
-  const visibleRoutes = routes.filter((tab) => !tab.isProtected || isLoggedIn)
+  const visibleRoutes = useMemo(() => {
+    return routes.filter((route) => !route.isProtected || (route.isProtected && isLoggedIn))
+  }, [isLoggedIn])
 
   return (
     <RouteContext.Provider

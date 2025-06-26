@@ -1,12 +1,9 @@
 import { Box, Heading } from '@chakra-ui/react'
-import { GoTools } from 'react-icons/go'
 import { IconButton } from '@chakra-ui/react'
-import { labels } from '@shared/constants'
 import { GoX } from 'react-icons/go'
+import { SearchInput } from './SearchInput'
 
-import { FC } from 'react'
-
-export const Header: FC = () => {
+export const Header = () => {
   const platform = window?.electron?.process?.platform
   const isMac = platform === 'darwin'
   return (
@@ -14,29 +11,30 @@ export const Header: FC = () => {
       display={'flex'}
       flexDirection={isMac ? 'row-reverse' : 'row'}
       alignItems={'center'}
-      height={9}
-      background="#EDA220"
-      color="black"
+      height={12}
     >
-      <Box
-        mx={2}
-        css={{
-          WebkitAppRegion: 'drag'
-        }}
-      >
-        <GoTools fontSize="xl" />
-      </Box>
       <Heading
-        css={{
-          WebkitAppRegion: 'drag'
-        }}
+        width={'100%'}
+        display={'flex'}
+        alignItems={'center'}
+        justifyContent="flex-start"
+        p={3}
+        height={'100%'}
         flex={1}
-        lineHeight="tall"
-        size={'xs'}
-        fontWeight={'bold'}
+        size={'sm'}
+        fontWeight="bold"
         textAlign={isMac ? 'right' : 'left'}
       >
-        {labels.app}
+        <Box display={'flex'} flex={1} justifyContent={'flex-start'} alignItems={'center'}>
+          <SearchInput />
+        </Box>
+        <Box
+          flex={1}
+          height={'100%'}
+          css={{
+            WebkitAppRegion: 'drag'
+          }}
+        ></Box>
       </Heading>
 
       {!isMac && (

@@ -8,6 +8,7 @@ import { UpdateProvider } from './components/providers/UpdateProvider'
 import { ModalProvider } from './components/providers/ModalProvider'
 import { PromptsProvider } from './components/pages/prompts/components/PromptsContext'
 import { RouteProvider } from './components/providers/RouteProvider'
+import { SearchProvider } from './components/providers/SearchProvider'
 
 const rootElement = document.getElementById('root')
 if (rootElement) {
@@ -20,7 +21,9 @@ if (rootElement) {
               <RouteProvider defaultRoute="prompts">
                 <ModalProvider>
                   <PromptsProvider>
-                    <App />
+                    <SearchProvider>
+                      <App />
+                    </SearchProvider>
                   </PromptsProvider>
                 </ModalProvider>
               </RouteProvider>

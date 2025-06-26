@@ -18,7 +18,6 @@ twService.interceptors.request.use(
   (config) => {
     const token = store?.get('token')
     config.headers['Authorization'] = `Bearer ${token}`
-    // console.log('AXIOS====>', token)
     return config
   },
   (error) => {

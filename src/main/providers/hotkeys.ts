@@ -30,7 +30,7 @@ class HotkeyClient extends EventEmitter {
   private scheduleRestart(): void {
     if (this.retryCount >= this.maxRetries) {
       log.error('Max retries reached. Giving up on hotkey service connection.')
-      return // Removed app.quit() to let the application continue without hotkeys
+      return
     }
     const delay = Math.min(1000 * 2 ** this.retryCount, 30000)
 

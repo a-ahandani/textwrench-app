@@ -1,28 +1,17 @@
-import {
-  Box,
-  DataListRoot,
-  EmptyState,
-  Flex,
-  Input,
-  SegmentGroup,
-  Stack,
-  VStack
-} from '@chakra-ui/react'
+import { Box, DataListRoot, EmptyState, Flex, SegmentGroup, Stack, VStack } from '@chakra-ui/react'
 
 import { SkeletonText } from '../../../ui/Skeleton'
-import { LuSearch } from 'react-icons/lu'
-import { InputGroup } from '../../../ui/InputGroup'
 import { useTemplates } from '@renderer/hooks/useTemplates'
 import { useMemo, useState } from 'react'
 import { useCategories } from '@renderer/hooks/useCategories'
 import { GoBook } from 'react-icons/go'
 import { TemplateCard } from './TemplateCard'
-import { TemplateHead } from './TemplateHead'
+import { useSearch } from '@renderer/components/providers/SearchProvider'
 
 export const TemplateList = (): JSX.Element => {
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>()
+  const { searchTerm: term } = useSearch()
 
-  const [term, setTerm] = useState<string>('')
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>()
 
   const { data: templates, isLoading: isLoadingTemplates } = useTemplates({
     term
@@ -54,27 +43,7 @@ export const TemplateList = (): JSX.Element => {
         <SkeletonText noOfLines={4} />
       ) : (
         <DataListRoot unstyled>
-          <TemplateHead />
-          <Flex alignItems={'center'} justifyContent={'center'} mb={2}>
-            <InputGroup width="full" startElement={<LuSearch />}>
-              <Input
-                variant="subtle"
-                _active={{
-                  borderColor: 'transparent',
-                  boxShadow: 'none'
-                }}
-                _focus={{
-                  borderColor: 'transparent',
-                  boxShadow: 'none'
-                }}
-                placeholder="Search templates"
-                value={term}
-                onChange={(e) => {
-                  setTerm(e.target.value)
-                }}
-              />
-            </InputGroup>
-          </Flex>
+          <Flex alignItems={'center'} justifyContent={'center'} mb={2}></Flex>
           {categories && (
             <SegmentGroup.Root
               defaultValue="all"

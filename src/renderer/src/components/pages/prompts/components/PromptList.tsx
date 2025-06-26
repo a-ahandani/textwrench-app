@@ -1,23 +1,29 @@
-import { Box, Button, EmptyState, Flex, Input, Stack, VStack } from '@chakra-ui/react'
+import { Box, Button, EmptyState, RadioCard, VStack } from '@chakra-ui/react'
 import { SkeletonText } from '../../../ui/Skeleton'
-import { LuSearch } from 'react-icons/lu'
-import { InputGroup } from '../../../ui/InputGroup'
 import { usePrompts } from '@renderer/hooks/usePrompts'
-import { useState } from 'react'
 import { GoBookmarkFill } from 'react-icons/go'
 import { usePromptsContext } from './PromptsContext'
 import { useRoute } from '@renderer/components/providers/RouteProvider'
 import { PromptCard } from './PromptCard'
-import { PromptHead } from './PromptHead'
+import { useSearch } from '@renderer/components/providers/SearchProvider'
 
 export const PromptList = (): JSX.Element => {
-  const { setEditingId } = usePromptsContext()
-  const [term, setTerm] = useState<string>('')
+  const { searchTerm: term } = useSearch()
+
+  const { setEditingId, setDefaultPrompt } = usePromptsContext()
   const { setCurrentRoute } = useRoute()
 
   const { data: prompts, isLoading } = usePrompts({
     term
   })
+
+  const handleSelectPrompt = (prompt): void => {
+    const selectedPrompt = prompts?.find((p) => p.ID == prompt.target.value)
+    if (!selectedPrompt) {
+      return
+    }
+    setDefaultPrompt(selectedPrompt)
+  }
 
   return (
     <Box>
@@ -25,28 +31,7 @@ export const PromptList = (): JSX.Element => {
         <SkeletonText noOfLines={4} />
       ) : (
         <>
-          <PromptHead />
-          <Flex alignItems={'center'} justifyContent={'center'} mb={2}>
-            <InputGroup width="full" startElement={<LuSearch />}>
-              <Input
-                variant="subtle"
-                _active={{
-                  borderColor: 'transparent',
-                  boxShadow: 'none'
-                }}
-                _focus={{
-                  borderColor: 'transparent',
-                  boxShadow: 'none'
-                }}
-                placeholder="Search prompts"
-                value={term}
-                onChange={(e) => {
-                  setTerm(e.target.value)
-                }}
-              />
-            </InputGroup>
-          </Flex>
-          {term && prompts?.length === 0 && (
+          {term.length && prompts?.length === 0 ? (
             <EmptyState.Root>
               <EmptyState.Content>
                 <EmptyState.Indicator>
@@ -68,9 +53,9 @@ export const PromptList = (): JSX.Element => {
                 </VStack>
               </EmptyState.Content>
             </EmptyState.Root>
-          )}
+          ) : null}
 
-          {!term && prompts?.length === 0 && (
+          {!term.length && prompts?.length === 0 && (
             <EmptyState.Root>
               <EmptyState.Content>
                 <EmptyState.Indicator>
@@ -105,9 +90,15 @@ export const PromptList = (): JSX.Element => {
             </EmptyState.Root>
           )}
 
-          <Stack gap="2" direction="row" wrap="wrap">
+          <RadioCard.Root
+            onChange={handleSelectPrompt}
+            variant="subtle"
+            defaultValue={prompts?.[0]?.ID}
+            gap="4"
+            width="100%"
+          >
             {prompts?.map((item) => <PromptCard key={item.ID} prompt={item} />)}
-          </Stack>
+          </RadioCard.Root>
         </>
       )}
     </Box>

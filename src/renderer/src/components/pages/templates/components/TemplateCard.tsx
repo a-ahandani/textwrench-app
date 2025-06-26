@@ -63,7 +63,7 @@ export const TemplateCard = ({
           >
             {isSaved ? <GoCheck /> : <GoPlus />}
 
-            {isSaved ? 'Added!' : 'Add to Prompts'}
+            {isSaved ? 'Added!' : 'Add to My Prompts'}
           </Button>
         </Box>
         <Tooltip content="Customize this template & create a new prompt" aria-label="Customize">

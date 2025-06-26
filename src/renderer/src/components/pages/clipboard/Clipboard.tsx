@@ -1,8 +1,9 @@
-import { Box, Card, IconButton } from '@chakra-ui/react'
+import { Box, Card } from '@chakra-ui/react'
 import { BsClipboard } from 'react-icons/bs'
 import { DrawerFull } from '../../ui/Drawer'
 import { useState } from 'react'
 import { useStore } from '@renderer/hooks/useStore'
+import { CreateNewPromptButton } from '../prompts/components/CreateNewPromptButton'
 
 export const Clipboard = () => {
   const { value: selectedText } = useStore<string>({
@@ -16,21 +17,45 @@ export const Clipboard = () => {
 
   return (
     <div>
-      <IconButton
-        variant="subtle"
+      <Box
+        css={{
+          position: 'fixed',
+          bottom: '15px',
+          left: '10px',
+          zIndex: 2
+        }}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <CreateNewPromptButton />
+        <Box
+          fontSize={10}
+          ml={2}
+          color={'gray.800'}
+          textShadow={'0 1px 2px rgba(256, 256, 256, 0.5)'}
+          cursor="pointer"
+        >
+          Create New Prompt
+        </Box>
+      </Box>
+      {/* <IconButton
+        variant="solid"
+        colorPalette="bg.muted"
+        color="orange.300"
         rounded="full"
-        size={'sm'}
+        size={'xs'}
         css={{
           position: 'absolute',
-          bottom: '15px',
-          left: '11px',
+          bottom: '65px',
+          left: 4,
           zIndex: 12
         }}
         aria-label="Settings"
         onClick={handleClick}
       >
         <BsClipboard />
-      </IconButton>
+      </IconButton> */}
       <DrawerFull open={open} onCancel={handleClick} icon={BsClipboard} title={'Clipboard'}>
         <Box p={5}>
           <Card.Root>
