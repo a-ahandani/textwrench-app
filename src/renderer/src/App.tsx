@@ -38,14 +38,7 @@ function App(): JSX.Element {
           borderRadius={0}
         >
           <Tabs.List borderRadius={0} bg="#EDA220" display={'flex'}>
-            <Box
-              display={'flex'}
-              css={{
-                WebkitAppRegion: 'drag'
-              }}
-              height={'55px'}
-              w={180}
-            >
+            <Box display={'flex'} flexDirection="row" alignItems="center">
               {!isMac && (
                 <IconButton
                   mx={0}
@@ -65,7 +58,24 @@ function App(): JSX.Element {
                   <GoX />
                 </IconButton>
               )}
+              <Box
+                display={'flex'}
+                css={{
+                  WebkitAppRegion: 'drag'
+                }}
+                height={'36px'}
+                w={180}
+              ></Box>
             </Box>
+
+            <Box
+              display={'flex'}
+              css={{
+                WebkitAppRegion: 'drag'
+              }}
+              height={'25px'}
+              w={180}
+            ></Box>
             {visibleRoutes.map((tab) => (
               <Tabs.Trigger
                 zIndex={1000}
