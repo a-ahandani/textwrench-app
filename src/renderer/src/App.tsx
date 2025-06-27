@@ -50,6 +50,7 @@ function App(): JSX.Element {
                   borderRadius="0"
                   size="xs"
                   variant="plain"
+                  color="black"
                   _hover={{
                     bg: 'red.600',
                     color: 'white'
