@@ -1,7 +1,6 @@
 import { Box, Heading } from '@chakra-ui/react'
-import { IconButton } from '@chakra-ui/react'
-import { GoX } from 'react-icons/go'
 import { SearchInput } from './SearchInput'
+import { GoTools } from 'react-icons/go'
 
 export const Header = () => {
   const platform = window?.electron?.process?.platform
@@ -23,7 +22,7 @@ export const Header = () => {
         flex={1}
         size={'sm'}
         fontWeight="bold"
-        textAlign={isMac ? 'right' : 'left'}
+        textAlign={'right'}
       >
         <Box display={'flex'} flex={1} justifyContent={'flex-start'} alignItems={'center'}>
           <SearchInput />
@@ -34,28 +33,16 @@ export const Header = () => {
           css={{
             WebkitAppRegion: 'drag'
           }}
-        ></Box>
-      </Heading>
-
-      {!isMac && (
-        <IconButton
-          mx={0}
-          height={'36px'}
-          width={'36px'}
-          onClick={() => {
-            window.api.closeWindow()
-          }}
-          borderRadius="0"
-          size="xs"
-          variant="plain"
-          _hover={{
-            bg: 'red.600',
-            color: 'white'
-          }}
+          display={'flex'}
+          alignItems={'center'}
+          justifyContent={'flex-end'}
+          fontWeight="bold"
+          fontSize={'sm'}
         >
-          <GoX />
-        </IconButton>
-      )}
+          Textwrench
+          <GoTools style={{ marginLeft: '8px' }} />
+        </Box>
+      </Heading>
     </Box>
   )
 }
