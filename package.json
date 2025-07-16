@@ -30,10 +30,10 @@
     "electron-updater": "^6.3.9",
     "react-hotkeys-hook": "^4.6.1",
     "react-markdown": "^10.1.0",
-    "textwrench-hotkeys": "^1.2.37"
+    "textwrench-observer": "^4.22.0"
   },
   "devDependencies": {
-    "@chakra-ui/react": "^3.21.0",
+    "@chakra-ui/react": "^3.22.0",
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
     "@electron-toolkit/eslint-config-ts": "^3.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",

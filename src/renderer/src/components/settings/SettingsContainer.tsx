@@ -1,18 +1,18 @@
 import { ChakraProvider } from '@renderer/components/providers/ChakraProvider'
-import { ReactQueryProvider } from './components/providers/ReactQueryProvider'
+import { ReactQueryProvider } from '../providers/ReactQueryProvider'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
+import SettingsApp from './Settings'
 import { AuthProvider } from '@renderer/components/providers/AuthProvider'
-import { UpdateProvider } from './components/providers/UpdateProvider'
-import { ModalProvider } from './components/providers/ModalProvider'
-import { PromptsProvider } from './components/pages/prompts/components/PromptsContext'
-import { RouteProvider } from './components/providers/RouteProvider'
-import { SearchProvider } from './components/providers/SearchProvider'
+import { UpdateProvider } from '../providers/UpdateProvider'
+import { ModalProvider } from '../providers/ModalProvider'
+import { RouteProvider } from '../providers/RouteProvider'
+import { SearchProvider } from '../providers/SearchProvider'
+import { PromptsProvider } from './pages/prompts/components/PromptsContext'
 
-const rootElement = document.getElementById('root')
-if (rootElement) {
-  ReactDOM.createRoot(rootElement).render(
+const settingsRootElement = document.getElementById('settings')
+if (settingsRootElement) {
+  ReactDOM.createRoot(settingsRootElement).render(
     <React.StrictMode>
       <UpdateProvider>
         <AuthProvider>
@@ -22,7 +22,7 @@ if (rootElement) {
                 <ModalProvider>
                   <PromptsProvider>
                     <SearchProvider>
-                      <App />
+                      <SettingsApp />
                     </SearchProvider>
                   </PromptsProvider>
                 </ModalProvider>

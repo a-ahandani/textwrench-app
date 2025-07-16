@@ -1,4 +1,5 @@
 import { twService } from '../providers/axios'
+import { store } from '../providers/store'
 
 export enum AiMode {
   Improve = 'improve',
@@ -14,9 +15,11 @@ export const processText = async ({
   selectedText: string
   mode?: AiMode
 }): Promise<string> => {
+  const storedPrompt = await store.get('selectedPrompt')
+  const prompt = selectedPrompt?.value || storedPrompt?.value || ''
   const userPrompt = {
     role: 'user',
-    content: `${selectedPrompt?.value}: \n\n ${selectedText}`
+    content: `${prompt}: \n\n ${selectedText}`
   }
 
   const response = await twService.post('/protected/process-text', {

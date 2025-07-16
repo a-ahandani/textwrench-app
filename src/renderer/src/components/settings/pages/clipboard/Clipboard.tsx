@@ -1,9 +1,9 @@
 import { Box, Card } from '@chakra-ui/react'
 import { BsClipboard } from 'react-icons/bs'
-import { DrawerFull } from '../../ui/Drawer'
 import { useState } from 'react'
 import { useStore } from '@renderer/hooks/useStore'
 import { CreateNewPromptButton } from '../prompts/components/CreateNewPromptButton'
+import { DrawerFull } from '@renderer/components/ui/Drawer'
 
 export const Clipboard = () => {
   const { value: selectedText } = useStore<string>({

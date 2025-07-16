@@ -1,5 +1,4 @@
 import { Box, Field, Input, Textarea } from '@chakra-ui/react'
-import { DrawerFull } from '../../../ui/Drawer'
 import { useEffect, useMemo, useState } from 'react'
 import { GoPencil } from 'react-icons/go'
 import { usePromptsContext } from './PromptsContext'
@@ -8,6 +7,7 @@ import { useUpdatePrompt } from '@renderer/hooks/useUpdatePrompt'
 import { usePrompts } from '@renderer/hooks/usePrompts'
 import { useTemplates } from '@renderer/hooks/useTemplates'
 import { useRoute } from '@renderer/components/providers/RouteProvider'
+import { DrawerFull } from '@renderer/components/ui/Drawer'
 
 export const PromptForm = (): JSX.Element => {
   const { editingId, setEditingId, templateId, setTemplateId } = usePromptsContext()

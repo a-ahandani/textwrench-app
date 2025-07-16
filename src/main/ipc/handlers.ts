@@ -2,6 +2,8 @@ import { BrowserWindow, ipcMain, shell } from 'electron'
 import { IPC_EVENTS } from '../../shared/ipc-events'
 import { store } from '../providers/store'
 import { updateStore } from '../services/update-store'
+import { paste } from 'textwrench-observer'
+
 import {
   Category,
   Prompt,
@@ -12,12 +14,11 @@ import {
 } from '../../shared/types/store'
 import { handleError, twService } from '../providers/axios'
 import { verifyToken } from '../services/verify-token'
-import { setShortcuts } from '../services/set-shortcuts'
 import { autoUpdater } from 'electron-updater'
-import { setIsQuitting } from '../providers/window'
+import { setIsQuitting } from '../windows/settings'
 import { BASE_URL } from '@shared/constants'
 import { processText } from '../services/process-text'
-import { focusPaste } from '../services/paste-text'
+import { getToolbarWindow } from '../windows/toolbar'
 
 export function setupIpcHandlers(): void {
   ipcMain.handle(IPC_EVENTS.GET_STORE_VALUE, (_event, key: keyof StoreType) => {
@@ -49,9 +50,6 @@ export function setupIpcHandlers(): void {
   ipcMain.handle(IPC_EVENTS.GET_PROFILE, async () => {
     try {
       const result = await twService.get<UserProfile>('/protected/profile')
-      if (result.data?.shortcuts) {
-        setShortcuts(result.data.shortcuts)
-      }
       return result.data
     } catch (error) {
       handleError(error)
@@ -92,7 +90,6 @@ export function setupIpcHandlers(): void {
   ipcMain.handle(IPC_EVENTS.UPDATE_SHORTCUTS, async (_event, shortcuts: Shortcuts) => {
     try {
       const result = await twService.patch<Shortcuts>(`/protected/profile/shortcuts`, shortcuts)
-      setShortcuts(result.data)
       return result.data
     } catch (error) {
       handleError(error)
@@ -138,10 +135,11 @@ export function setupIpcHandlers(): void {
     return
   })
 
-  ipcMain.handle(IPC_EVENTS.HIDE_PASTE, async (_event, data) => {
+  ipcMain.handle(IPC_EVENTS.PASTE_TEXT, async (_event, data) => {
     try {
-      const result = await focusPaste(data)
-      return result
+      const toolbarWindow = getToolbarWindow()
+      toolbarWindow?.close()
+      await paste(data)
     } catch (error) {
       handleError(error)
     }

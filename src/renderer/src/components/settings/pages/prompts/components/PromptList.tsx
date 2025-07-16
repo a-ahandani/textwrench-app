@@ -1,11 +1,11 @@
 import { Box, Button, EmptyState, RadioCard, VStack } from '@chakra-ui/react'
-import { SkeletonText } from '../../../ui/Skeleton'
 import { usePrompts } from '@renderer/hooks/usePrompts'
 import { GoBookmarkFill } from 'react-icons/go'
 import { usePromptsContext } from './PromptsContext'
 import { useRoute } from '@renderer/components/providers/RouteProvider'
 import { PromptCard } from './PromptCard'
 import { useSearch } from '@renderer/components/providers/SearchProvider'
+import { SkeletonText } from '@renderer/components/ui/Skeleton'
 
 export const PromptList = (): JSX.Element => {
   const { searchTerm: term } = useSearch()
@@ -97,7 +97,9 @@ export const PromptList = (): JSX.Element => {
             gap="4"
             width="100%"
           >
-            {prompts?.map((item) => <PromptCard key={item.ID} prompt={item} />)}
+            {prompts?.map((item) => (
+              <PromptCard key={item.ID} prompt={item} />
+            ))}
           </RadioCard.Root>
         </>
       )}

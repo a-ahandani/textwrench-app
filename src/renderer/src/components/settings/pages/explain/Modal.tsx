@@ -1,4 +1,3 @@
-import { DrawerFull } from '../../ui/Drawer'
 import { useModal } from '@renderer/components/providers/ModalProvider'
 import { PiArrowsDownUpBold } from 'react-icons/pi'
 
@@ -6,6 +5,7 @@ import { FC, useRef } from 'react'
 import { Explain } from './Explain'
 import { Prompts } from './Prompts'
 import { MODAL_TITLES, ModalTypes } from '@shared/constants'
+import { DrawerFull } from '@renderer/components/ui/Drawer'
 
 const MODAL_COMPONENTS = {
   [ModalTypes.EXPLAIN]: Explain,

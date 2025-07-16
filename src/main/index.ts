@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron'
 import { electronAppUniversalProtocolClient } from 'electron-app-universal-protocol-client'
 import { electronApp } from '@electron-toolkit/utils'
-import { initializeApp, setIsQuitting } from './providers/window'
+import { initializeSettingsWindow, setIsQuitting } from './windows/settings'
 import { setupIpcHandlers } from './ipc/handlers'
 import path from 'path'
 import { updateStore } from './services/update-store'
@@ -11,21 +11,19 @@ import { checkForUpdates } from './services/check-updates'
 import { handleOpenUrl } from './services/open-url'
 import { APP_KEY, labels } from '@shared/constants'
 import { checkPermissions } from './services/check-permissions'
-import { hotkeyHandler } from './ipc/hotkey-handler'
+import { initializeToolbarWindow } from './windows/toolbar'
 
-let mw: BrowserWindow | null = null
+let settingsWindow: BrowserWindow | null = null
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
 log.initialize()
 log.transports.console.format = '{h}:{i}:{s} [{level}] {text}'
 log.transports.console.level = `info`
 
-app.whenReady().then(() => {
-  hotkeyHandler()
-})
-
 app.whenReady().then(async () => {
   checkPermissions()
-  mw = initializeApp()
+  initializeToolbarWindow()
+  settingsWindow = initializeSettingsWindow()
+
   if (isDev) {
     // autoUpdater.autoDownload = false
     autoUpdater.forceDevUpdateConfig = true
@@ -39,7 +37,7 @@ app.whenReady().then(async () => {
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      initializeApp()
+      initializeSettingsWindow()
     }
   })
 })
@@ -81,16 +79,16 @@ function setupSingleInstanceLock(): void {
   }
 
   app.on('second-instance', (_, commandLine) => {
-    if (mw) {
-      if (mw.isMinimized()) mw.restore()
-      mw.focus()
+    if (settingsWindow) {
+      if (settingsWindow.isMinimized()) settingsWindow.restore()
+      settingsWindow.focus()
     }
     handleOpenUrl(commandLine.pop())
   })
 }
 
 app.on('window-all-closed', () => {
-  mw = null
+  settingsWindow = null
   // Do not quit the app when all windows are closed
   // The app will remain running in the background
 })

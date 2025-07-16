@@ -1,15 +1,15 @@
 import { store } from '../providers/store'
-import { getMainWindow } from '../providers/window'
+import { getSettingsWindow } from '../windows/settings'
 import { StoreType } from '@shared/types/store'
 import { IPC_EVENTS } from '@shared/ipc-events'
 
 export const updateStore = (key: keyof StoreType, value): void => {
-  const mainWindow = getMainWindow()
+  const settingsWindow = getSettingsWindow()
 
   store.set(key, value)
 
-  if (mainWindow) {
-    mainWindow.webContents.send(IPC_EVENTS.STORE_CHANGED, {
+  if (settingsWindow) {
+    settingsWindow.webContents.send(IPC_EVENTS.STORE_CHANGED, {
       key: key,
       value: value,
       oldValue: store.get(key)

@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Electron</title>
+    <title>Toolbar</title>
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta
       http-equiv="Content-Security-Policy"
@@ -10,8 +10,8 @@
     />
   </head>
 
-  <body>
-    <div id="settings"></div>
-    <script type="module" src="/src/components/settings/SettingsContainer.tsx"></script>
+  <body style="margin: 0; padding: 0; overflow: hidden;">
+    <div id="toolbar"></div>
+    <script type="module" src="/src/components/toolbar/ToolbarContainer.tsx"></script>
   </body>
 </html>

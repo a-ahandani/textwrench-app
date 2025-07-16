@@ -27,6 +27,8 @@ declare global {
       onOpenModal(callback: (data) => void): () => void
       processText(prompt: Partial<ProcessTextPayload>): Promise<ProcessTextPayload>
       hidePaste(text?: string): Promise<void>
+      onSetSelectedText(callback: (data) => void): () => void
+      pasteText(text: string | { text: string; appPID: number }): Promise<void>
     }
   }
 }

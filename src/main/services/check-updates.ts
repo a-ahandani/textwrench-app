@@ -1,6 +1,6 @@
 import log from 'electron-log'
 import { autoUpdater } from 'electron-updater'
-import { getMainWindow } from '../providers/window'
+import { getSettingsWindow } from '../windows/settings'
 import { IPC_EVENTS } from '@shared/ipc-events'
 
 let lastUpdateCheck = 0
@@ -16,21 +16,21 @@ export async function checkForUpdates(): Promise<void> {
   lastUpdateCheck = now
   log.info('Checking for updates...')
 
-  const mainWindow = getMainWindow()
+  const settingsWindow = getSettingsWindow()
   autoUpdater.checkForUpdatesAndNotify()
 
   autoUpdater.on('update-available', (version) => {
     log.info('Update available:', version)
-    mainWindow?.webContents.send(IPC_EVENTS.UPDATE_AVAILABLE, version)
+    settingsWindow?.webContents.send(IPC_EVENTS.UPDATE_AVAILABLE, version)
   })
 
   autoUpdater.on('download-progress', (progress) => {
-    mainWindow?.webContents.send(IPC_EVENTS.UPDATE_PROGRESS, progress)
+    settingsWindow?.webContents.send(IPC_EVENTS.UPDATE_PROGRESS, progress)
   })
 
   autoUpdater.on('update-downloaded', () => {
     log.info('Update downloaded')
-    mainWindow?.webContents.send(IPC_EVENTS.UPDATE_DOWNLOADED)
+    settingsWindow?.webContents.send(IPC_EVENTS.UPDATE_DOWNLOADED)
   })
 
   autoUpdater.on('error', (error) => {

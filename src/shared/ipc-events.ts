@@ -23,5 +23,7 @@ export const IPC_EVENTS = {
   QUIT_AND_INSTALL: 'quit-and-install',
   OPEN_MODAL: 'open-modal',
   PROCESS_TEXT: 'process-text',
-  HIDE_PASTE: 'hide-paste'
+  HIDE_PASTE: 'hide-paste',
+  SET_SELECTED_TEXT: 'set-selected-text',
+  PASTE_TEXT: 'paste-text'
 }
