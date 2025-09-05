@@ -1,20 +1,20 @@
-import { getMainWindow } from '../providers/window'
+import { getSettingsWindow } from '../windows/settings'
 import { exec } from 'child_process'
 
 export const bringToFront = (): void => {
-  const mainWindow = getMainWindow()
-  if (!mainWindow) return
+  const settingsWindow = getSettingsWindow()
+  if (!settingsWindow) return
 
-  if (mainWindow.isMinimized()) {
-    mainWindow.restore()
+  if (settingsWindow.isMinimized()) {
+    settingsWindow.restore()
   }
-  mainWindow.show()
-  mainWindow.focus()
-  mainWindow.setAlwaysOnTop(true)
-  mainWindow.setAlwaysOnTop(false)
+  settingsWindow.show()
+  settingsWindow.focus()
+  settingsWindow.setAlwaysOnTop(true)
+  settingsWindow.setAlwaysOnTop(false)
 
   if (process.platform === 'win32') {
-    const title = mainWindow.getTitle().replace(/'/g, "''") // escape single-quotes
+    const title = settingsWindow.getTitle().replace(/'/g, "''") // escape single-quotes
     exec(
       `powershell -Command "(New-Object -ComObject WScript.Shell).AppActivate('${title}')"`,
       (err) => {
@@ -25,6 +25,6 @@ export const bringToFront = (): void => {
 }
 
 export const bringToFrontWindows = (): void => {
-  const win = getMainWindow()
-  if (!win) return
+  const settingsWindow = getSettingsWindow()
+  if (!settingsWindow) return
 }

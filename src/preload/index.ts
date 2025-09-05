@@ -42,7 +42,9 @@ const api = {
   closeWindow: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.CLOSE_WINDOW),
   verifyToken: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.VERIFY_TOKEN),
   processText: (text): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.PROCESS_TEXT, text),
-  hidePaste: (text): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.HIDE_PASTE, text)
+  hidePaste: (text): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.HIDE_PASTE, text),
+  onSetSelectedText: createIpcListener(IPC_EVENTS.SET_SELECTED_TEXT),
+  pasteText: (text: string): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.PASTE_TEXT, text)
 }
 
 if (process.contextIsolated) {

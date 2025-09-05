@@ -1,7 +1,7 @@
-import { DrawerFull } from '../../../ui/Drawer'
 import { Prompt } from '@shared/types/store'
 import { Box, Card } from '@chakra-ui/react'
 import { GoTrash } from 'react-icons/go'
+import { DrawerFull } from '@renderer/components/ui/Drawer'
 
 type DeleteConfirmationProps = {
   onSubmit?: (prompt: Partial<Prompt>) => void

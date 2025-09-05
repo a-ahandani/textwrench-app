@@ -1,12 +1,13 @@
 import { Card, IconButton, ProgressRoot, ButtonGroup } from '@chakra-ui/react'
 import { useProfile } from '@renderer/hooks/useProfile'
-import { useAuth } from '../../../providers/AuthProvider'
-import { ProgressBar } from '../../../ui/Progress'
+
 import { Button } from '@renderer/components/ui/Button'
 import { labels } from '@shared/constants'
 import { GoX } from 'react-icons/go'
 
 import { FC } from 'react'
+import { ProgressBar } from '@renderer/components/ui/Progress'
+import { useAuth } from '@renderer/components/providers/AuthProvider'
 
 export const Auth: FC = () => {
   const { login, logout, isLoading: isLoggingIn, isLoggedIn, setIsLoading } = useAuth()

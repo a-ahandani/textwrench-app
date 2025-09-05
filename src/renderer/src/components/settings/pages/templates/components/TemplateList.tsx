@@ -1,6 +1,14 @@
-import { Box, DataListRoot, EmptyState, Flex, SegmentGroup, Stack, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  DataListRoot,
+  EmptyState,
+  Flex,
+  SegmentGroup,
+  SkeletonText,
+  Stack,
+  VStack
+} from '@chakra-ui/react'
 
-import { SkeletonText } from '../../../ui/Skeleton'
 import { useTemplates } from '@renderer/hooks/useTemplates'
 import { useMemo, useState } from 'react'
 import { useCategories } from '@renderer/hooks/useCategories'

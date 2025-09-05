@@ -1,16 +1,16 @@
 import { Box, Container, IconButton, Tabs } from '@chakra-ui/react'
-import { Clipboard } from './components/pages/clipboard/Clipboard'
-import { TabContents } from './components/ui/TabContents'
-import { useAuth } from './components/providers/AuthProvider'
+import { Clipboard } from './pages/clipboard/Clipboard'
+import { TabContents } from '../ui/TabContents'
+import { useAuth } from '../providers/AuthProvider'
 import { useEffect } from 'react'
-import { UpdateAlert } from './components/ui/UpdateAlert'
-import { Modal } from './components/pages/explain/Modal'
-import { useRoute } from './components/providers/RouteProvider'
-import { PromptForm } from './components/pages/prompts/components/PromptForm'
-import { Header } from './components/ui/Header'
+import { UpdateAlert } from '../ui/UpdateAlert'
+import { Modal } from './pages/explain/Modal'
+import { useRoute } from '../providers/RouteProvider'
+import { PromptForm } from './pages/prompts/components/PromptForm'
+import { Header } from '../ui/Header'
 import { GoX } from 'react-icons/go'
 
-function App(): JSX.Element {
+function SettingsApp(): JSX.Element {
   const { isLoggedIn } = useAuth()
   const { visibleRoutes, activeRoute, setCurrentRoute } = useRoute()
   const platform = window?.electron?.process?.platform
@@ -62,7 +62,7 @@ function App(): JSX.Element {
               <Box
                 display={'flex'}
                 css={{
-                  WebkitAppRegion: 'drag'
+                  WebkitSettingsAppRegion: 'drag'
                 }}
                 height={'36px'}
                 w={180}
@@ -72,7 +72,7 @@ function App(): JSX.Element {
             <Box
               display={'flex'}
               css={{
-                WebkitAppRegion: 'drag'
+                WebkitSettingsAppRegion: 'drag'
               }}
               height={'25px'}
               w={180}
@@ -101,7 +101,7 @@ function App(): JSX.Element {
             <Box
               display={'flex'}
               css={{
-                WebkitAppRegion: 'drag'
+                WebkitSettingsAppRegion: 'drag'
               }}
               height={175}
               width={'100%'}
@@ -122,4 +122,4 @@ function App(): JSX.Element {
   )
 }
 
-export default App
+export default SettingsApp

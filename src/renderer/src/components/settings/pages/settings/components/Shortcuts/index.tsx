@@ -1,12 +1,12 @@
 import { FC } from 'react'
 import { Card, Kbd, ProgressRoot } from '@chakra-ui/react'
 import { useProfile } from '@renderer/hooks/useProfile'
-import { useAuth } from '../../../../providers/AuthProvider'
-import { ProgressBar } from '../../../../ui/Progress'
 
 import { Hotkeys } from './Hotkeys'
 import { ACTION_DEFAULT_SHORTCUTS, ACTION_LABELS, ACTIONS, KEY_NAMES } from '@shared/constants'
 import { useUpdateShortcuts } from '@renderer/hooks/useUpdateShortcuts'
+import { useAuth } from '@renderer/components/providers/AuthProvider'
+import { ProgressBar } from '@renderer/components/ui/Progress'
 
 const transformValueToKeys = (value?: string[]) =>
   (value?.map((v) => Object.keys(KEY_NAMES).find((key) => KEY_NAMES[key] === v)) || []).filter(

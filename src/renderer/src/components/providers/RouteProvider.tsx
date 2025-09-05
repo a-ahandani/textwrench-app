@@ -1,10 +1,11 @@
 import React, { createContext, useContext, ReactNode, useState, useMemo } from 'react'
 import { GoGear, GoBookmark, GoBook, GoTools } from 'react-icons/go'
-import { Prompts } from '../pages/prompts/Prompts'
-import { Templates } from '../pages/templates/Templates'
-import { Settings } from '../pages/settings/Settings'
-import { About } from '../pages/about/About'
+
 import { useAuth } from './AuthProvider'
+import { Prompts } from '../settings/pages/prompts/Prompts'
+import { Templates } from '../settings/pages/templates/Templates'
+import { Settings } from '../settings/pages/settings/Settings'
+import { About } from '../settings/pages/about/About'
 
 type RouteType = {
   value: string
