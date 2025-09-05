@@ -9,7 +9,8 @@ let hideToolbarWindowTimeout: NodeJS.Timeout | null = null
 
 let previousSelection: { text: string; timestamp: number } | null = null
 const SELECTION_COOLDOWN_MS = 1000
-const WIDTH = 205
+// const WIDTH = 205
+const WIDTH = 120
 const HEIGHT = 25
 const MINIMUM_CHARACTER_LENGTH = 3
 
@@ -18,9 +19,13 @@ export function initializeToolbarWindow(): void {
     // only consider letters in the selection in any language
     const selectedText = selection.text.replace(/[^\p{L}\s]/gu, '').trim()
     console.debug('Toolbar selection:', selectedText, selection)
+
     const now = Date.now()
 
     if (selectedText && selectedText.length > MINIMUM_CHARACTER_LENGTH) {
+      if (!selection.modifiers?.includes('option')) {
+        return
+      }
       if (
         previousSelection &&
         previousSelection.text === selectedText &&
@@ -114,37 +119,6 @@ function showToolbar(text: string, x: number, y: number, window): void {
     toolbarWindow.loadFile(join(__dirname, '../renderer/toolbar.html'))
   }
 }
-
-// const animateWindowResize = (
-//   window: BrowserWindow,
-//   targetWidth: number,
-//   targetHeight: number,
-//   duration = 300
-// ) => {
-//   const bounds = window.getBounds()
-//   const steps = 30
-//   const interval = duration / steps
-
-//   const deltaW = (targetWidth - bounds.width) / steps
-//   const deltaH = (targetHeight - bounds.height) / steps
-
-//   let currentStep = 0
-//   const resizeInterval = setInterval(() => {
-//     if (currentStep++ >= steps) {
-//       clearInterval(resizeInterval)
-//       return
-//     }
-//     window.setBounds(
-//       {
-//         x: bounds.x,
-//         y: bounds.y,
-//         width: Math.round(bounds.width + deltaW * currentStep),
-//         height: Math.round(bounds.height + deltaH * currentStep)
-//       },
-//       false
-//     )
-//   }, interval)
-// }
 
 export const getToolbarWindow = (): BrowserWindow | undefined => {
   return toolbarWindow
