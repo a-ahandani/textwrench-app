@@ -1,9 +1,9 @@
 import { Box, IconButton, ProgressRoot } from '@chakra-ui/react'
-import { RadioCardItem } from '../../../ui/RadioCard'
 import { useState } from 'react'
 import { GoPencil, GoX } from 'react-icons/go'
-import { ProgressBar } from '../../../ui/Progress'
 import { Tooltip } from '@renderer/components/ui/Tooltip'
+import { RadioCardItem } from '@renderer/components/ui/RadioCard'
+import { ProgressBar } from '@renderer/components/ui/Progress'
 
 type TemplateListProps = {
   options?: Array<{ label: string; value: string }>
