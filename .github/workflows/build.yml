@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
+        os: [macos-latest]
 
     steps:
       - name: Check out Git repository
@@ -46,7 +46,7 @@ jobs:
       # ✅ Ensure macOS hotkey binary is executable
       - name: Make macOS hotkey binary executable
         if: matrix.os == 'macos-latest'
-        run: chmod +x node_modules/textwrench-hotkeys/textwrench-hotkeys-macos
+        run: chmod +x node_modules/textwrench-observer/helpers/mac/selection-observer
 
       # 🔹 Decode Windows PFX certificate (only on Windows)
       - name: Decode Windows certificate
