@@ -1,7 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import { electronAppUniversalProtocolClient } from 'electron-app-universal-protocol-client'
 import { electronApp } from '@electron-toolkit/utils'
-import { initializeSettingsWindow, setIsQuitting } from './windows/settings'
 import { setupIpcHandlers } from './ipc/handlers'
 import path from 'path'
 import { updateStore } from './services/update-store'
@@ -11,6 +10,7 @@ import { checkForUpdates } from './services/check-updates'
 import { handleOpenUrl } from './services/open-url'
 import { APP_KEY, labels } from '@shared/constants'
 import { checkPermissions } from './services/check-permissions'
+import { initializeSettingsWindow, setIsQuitting } from './windows/settings'
 import { initializeToolbarWindow } from './windows/toolbar'
 
 let settingsWindow: BrowserWindow | null = null

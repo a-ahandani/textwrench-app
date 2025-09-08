@@ -18,12 +18,7 @@ files:
 
 asarUnpack:
   - resources/**
-
-extraResources:
-  - from: node_modules/textwrench-hotkeys/textwrench-hotkeys-macos
-    to: textwrench-hotkeys-macos
-  - from: node_modules/textwrench-hotkeys/textwrench-hotkeys.exe
-    to: textwrench-hotkeys.exe
+  - node_modules/textwrench-observer/helpers/mac/**
 
 win:
   executableName: Textwrench

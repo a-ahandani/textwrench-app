@@ -1,0 +1,37 @@
+diff --git a/node_modules/textwrench-observer/index.js b/node_modules/textwrench-observer/index.js
+index 1111111..2222222 100644
+--- a/node_modules/textwrench-observer/index.js
++++ b/node_modules/textwrench-observer/index.js
+@@
+-function startHelper() {
+-  if (helper) return;
+-  const platform = process.platform;
+-  let helperPath;
+-  if (platform === 'darwin') {
+-    helperPath = path.join(__dirname, 'helpers', 'mac', 'selection-observer');
+-  } else if (platform === 'win32') {
+-    throw new Error('Windows support coming soon.');
+-  } else {
+-    throw new Error('Unsupported OS');
+-  }
+-
+-  helper = spawn(helperPath);
++function startHelper() {
++  if (helper) return;
++  const platform = process.platform;
++  let helperPath;
++  if (platform === 'darwin') {
++    helperPath = path.join(__dirname, 'helpers', 'mac', 'selection-observer');
++  } else if (platform === 'win32') {
++    throw new Error('Windows support coming soon.');
++  } else {
++    throw new Error('Unsupported OS');
++  }
++
++  // If running inside an asar archive, use the unpacked path so the binary is executable
++  if (helperPath.includes('.asar')) {
++    helperPath = helperPath.replace('.asar', '.asar.unpacked');
++  }
++
++  helper = spawn(helperPath, { stdio: ['pipe', 'pipe', 'pipe'] });
+*** End Patch
