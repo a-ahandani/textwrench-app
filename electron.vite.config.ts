@@ -40,8 +40,7 @@ export default ({ mode }): ElectronViteConfig => {
         rollupOptions: {
           input: {
             webview: resolve(__dirname, 'src/renderer/index.html'),
-            toolbar: resolve(__dirname, 'src/renderer/toolbar.html'),
-            popup: resolve(__dirname, 'src/renderer/popup.html')
+            toolbar: resolve(__dirname, 'src/renderer/toolbar.html')
           }
         }
       },
