@@ -1,6 +1,6 @@
 import { is } from '@electron-toolkit/utils'
 import { IPC_EVENTS } from '@shared/ipc-events'
-import { BrowserWindow } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { onSelection } from 'textwrench-observer'
 
@@ -116,7 +116,8 @@ function showToolbar(text: string, x: number, y: number, window): void {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     toolbarWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/toolbar.html`)
   } else {
-    toolbarWindow.loadFile(join(__dirname, '../renderer/toolbar.html'))
+    const appPath = app.getAppPath()
+    toolbarWindow.loadFile(join(appPath, 'out/renderer/toolbar.html'))
   }
 }
 

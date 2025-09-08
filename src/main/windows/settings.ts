@@ -50,8 +50,7 @@ export const getSettingsWindow = (): BrowserWindow | null => {
  * Reuses existing window if one already exists
  */
 export function initializeSettingsWindow(): BrowserWindow {
-  const existingWindow = BrowserWindow.getAllWindows()[0]
-  if (existingWindow) return existingWindow
+  if (settingsWindow && !settingsWindow.isDestroyed()) return settingsWindow
 
   createSettingsWindow()
   setupWindowEventHandlers()
@@ -136,7 +135,8 @@ function loadWindowContent(): void {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     settingsWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    settingsWindow.loadFile(join(__dirname, '../renderer/settings.html'))
+    const appPath = app.getAppPath()
+    settingsWindow.loadFile(join(appPath, 'out/renderer/index.html'))
   }
 }
 
