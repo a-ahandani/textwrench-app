@@ -6156,10 +6156,10 @@ temp-file@^3.4.0:
     async-exit-hook "^2.0.1"
     fs-extra "^10.0.0"
 
-textwrench-observer@4.36.0:
-  version "4.36.0"
-  resolved "https://registry.yarnpkg.com/textwrench-observer/-/textwrench-observer-4.36.0.tgz#f12676c8a5ea96022b79d034344c382ac0c6535a"
-  integrity sha512-DrY8e+1WNeightjoLy0VrJ3FT7e4imry+zWsRknF+UR7Nfp8I8g78+xrTvgsvCmQqxSKvelsDOzZu7Xg68olww==
+textwrench-observer@4.37.0:
+  version "4.37.0"
+  resolved "https://registry.yarnpkg.com/textwrench-observer/-/textwrench-observer-4.37.0.tgz#dcc589840ae0050d9d549c674882386599d84184"
+  integrity sha512-OcL8O+HZ4ySVWzyZ2pMer7fLQ4H1+uPGICep4DxYVu69NF+YM7DPcvFcnpTH6tuvexcw5MYREh807T5U4XSpxQ==
 
 tiny-typed-emitter@^2.1.0:
   version "2.1.0"
