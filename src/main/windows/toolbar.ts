@@ -23,9 +23,6 @@ export function initializeToolbarWindow(): void {
     const now = Date.now()
 
     if (selectedText && selectedText.length > MINIMUM_CHARACTER_LENGTH) {
-      if (!selection.modifiers?.includes('option')) {
-        return
-      }
       if (
         previousSelection &&
         previousSelection.text === selectedText &&

@@ -25,7 +25,7 @@ export const FixIt = (props): JSX.Element => {
         })
       }}
     >
-      Apply Default
+      Rewrite with AI
     </Button>
   )
 }
