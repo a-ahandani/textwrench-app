@@ -1,6 +1,7 @@
 import { Button } from '@chakra-ui/react'
 import { useSelectedText } from '@renderer/components/providers/SelectedTextProvider'
 import { useProcessText } from '@renderer/hooks/useProcessText'
+import { GiElectric } from 'react-icons/gi'
 
 export const FixIt = (props): JSX.Element => {
   const { data } = useSelectedText()
@@ -25,6 +26,7 @@ export const FixIt = (props): JSX.Element => {
         })
       }}
     >
+      <GiElectric />
       Rewrite with AI
     </Button>
   )

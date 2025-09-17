@@ -25,5 +25,8 @@ export const IPC_EVENTS = {
   PROCESS_TEXT: 'process-text',
   HIDE_PASTE: 'hide-paste',
   SET_SELECTED_TEXT: 'set-selected-text',
-  PASTE_TEXT: 'paste-text'
+  PASTE_TEXT: 'paste-text',
+  // Single unified expand event. Renderer sends payload describing panel + desired action.
+  TOOLBAR_EXPAND: 'toolbar-expand',
+  TOOLBAR_RESET_UI: 'toolbar-reset-ui'
 }

@@ -1,17 +1,14 @@
 import { twService } from '../providers/axios'
 import { store } from '../providers/store'
-
-export enum AiMode {
-  Improve = 'improve',
-  Explain = 'explain'
-}
+import { AiMode } from '@shared/ai'
 
 export const processText = async ({
   selectedPrompt,
   selectedText,
   mode = AiMode.Improve
 }: {
-  selectedPrompt: { value: string }
+  // Made optional to allow calls without a prompt (e.g., explain panel)
+  selectedPrompt?: { value: string }
   selectedText: string
   mode?: AiMode
 }): Promise<string> => {

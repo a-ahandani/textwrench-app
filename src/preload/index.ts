@@ -44,6 +44,7 @@ const api = {
   processText: (text): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.PROCESS_TEXT, text),
   hidePaste: (text): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.HIDE_PASTE, text),
   onSetSelectedText: createIpcListener(IPC_EVENTS.SET_SELECTED_TEXT),
+  onToolbarResetUI: createIpcListener(IPC_EVENTS.TOOLBAR_RESET_UI),
   pasteText: (text: string): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.PASTE_TEXT, text)
 }
 

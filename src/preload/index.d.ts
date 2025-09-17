@@ -25,10 +25,13 @@ declare global {
       onUpdateAvailable(callback: (data) => void): () => void
       onUpdateProgress(callback: (data) => void): () => void
       onOpenModal(callback: (data) => void): () => void
-      processText(prompt: Partial<ProcessTextPayload>): Promise<ProcessTextPayload>
+      processText(
+        prompt: Partial<ProcessTextPayload & { mode?: string }>
+      ): Promise<ProcessTextPayload>
       hidePaste(text?: string): Promise<void>
       onSetSelectedText(callback: (data) => void): () => void
       pasteText(text: string | { text: string; appPID: number }): Promise<void>
+      onToolbarResetUI(callback: () => void): () => void
     }
   }
 }
