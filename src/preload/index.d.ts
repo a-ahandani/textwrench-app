@@ -28,6 +28,12 @@ declare global {
       processText(
         prompt: Partial<ProcessTextPayload & { mode?: string }>
       ): Promise<ProcessTextPayload>
+      // Streaming text processing API
+      startTextStream(payload: Partial<ProcessTextPayload & { mode?: string }>): Promise<void>
+      cancelTextStream(): Promise<void>
+      onTextStreamChunk(callback: (data: { content?: string; error?: string }) => void): () => void
+      onTextStreamDone(callback: () => void): () => void
+      onTextStreamError(callback: (data: { error: string }) => void): () => void
       hidePaste(text?: string): Promise<void>
       onSetSelectedText(callback: (data) => void): () => void
       pasteText(text: string | { text: string; appPID: number }): Promise<void>

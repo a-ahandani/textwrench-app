@@ -1,27 +1,21 @@
-import { Box, HStack, Text, VStack, Button, Spinner } from '@chakra-ui/react'
+import { Box, HStack, Text, VStack, Button } from '@chakra-ui/react'
+import { keyframes } from '@emotion/react'
 import ReactMarkdown from 'react-markdown'
-import React from 'react'
-import { useExplainText } from '@renderer/hooks/useExplainText'
 import { useSelectedText } from '@renderer/components/providers/SelectedTextProvider'
 import { PanelLayout } from '../PanelLayout/PanelLayout'
+import { useExplainText } from '@renderer/hooks/useExplainText'
+
+const cursorBlink = keyframes`
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+`
 
 export function ExplainPanel(): JSX.Element {
   const { data: selected } = useSelectedText()
   const textToExplain = selected?.text || ''
-  const { mutate, data, isPending, isError, error, reset } = useExplainText()
 
-  const runExplain = (): void => {
-    if (!textToExplain.trim()) return
-    mutate({ selectedText: textToExplain })
-  }
-
-  // Auto-trigger explanation on mount if text exists
-  React.useEffect(() => {
-    if (textToExplain.trim()) {
-      runExplain()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [textToExplain])
+  const { output, isStreaming, error, start, reset } = useExplainText()
 
   return (
     <PanelLayout title="Explain">
@@ -31,28 +25,23 @@ export function ExplainPanel(): JSX.Element {
             Select some text first to generate an explanation.
           </Text>
         )}
-        {textToExplain && isPending && (
-          <HStack gap={2} fontSize="xs" color="gray.400">
-            <Spinner size="xs" />
-            <Text>Generating explanation...</Text>
-          </HStack>
-        )}
-        {isError && (
+
+        {error && (
           <VStack align="stretch" gap={2} fontSize="xs" color="red.300">
             <Text>Failed to generate explanation.</Text>
-            <Text>{(error as Error)?.message || 'Unknown error'}</Text>
+            <Text>{error}</Text>
             <Button
               size="xs"
               onClick={() => {
                 reset()
-                runExplain()
+                start()
               }}
             >
               Retry
             </Button>
           </VStack>
         )}
-        {!isPending && !isError && data && (
+        {(output || isStreaming) && (
           <Box
             fontSize="sm"
             style={{
@@ -60,6 +49,23 @@ export function ExplainPanel(): JSX.Element {
               maxWidth: '100%',
               wordBreak: 'break-word'
             }}
+            aria-live="polite"
+            // Blinking cursor at end while streaming
+            _after={
+              isStreaming
+                ? {
+                    content: '""',
+                    display: 'inline-block',
+                    width: '6px',
+                    height: '1em',
+                    ml: '2px',
+                    bg: 'gray.300',
+                    animation: `${cursorBlink} 1s steps(2, start) infinite`,
+                    borderRadius: '1px',
+                    verticalAlign: 'text-bottom'
+                  }
+                : undefined
+            }
           >
             <ReactMarkdown
               components={{
@@ -169,13 +175,13 @@ export function ExplainPanel(): JSX.Element {
                 )
               }}
             >
-              {data}
+              {output}
             </ReactMarkdown>
           </Box>
         )}
-        {textToExplain && !isPending && !isError && !data && (
+        {textToExplain && !isStreaming && !error && !output && (
           <HStack mt={2}>
-            <Button size="xs" variant="subtle" onClick={runExplain}>
+            <Button size="xs" variant="subtle" onClick={() => start()}>
               Explain Text
             </Button>
           </HStack>

@@ -42,6 +42,14 @@ const api = {
   closeWindow: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.CLOSE_WINDOW),
   verifyToken: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.VERIFY_TOKEN),
   processText: (text): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.PROCESS_TEXT, text),
+  // Text streaming API
+  startTextStream: (payload): Promise<unknown> =>
+    ipcRenderer.invoke(IPC_EVENTS.PROCESS_TEXT_STREAM_START, payload),
+  cancelTextStream: (): Promise<unknown> =>
+    ipcRenderer.invoke(IPC_EVENTS.PROCESS_TEXT_STREAM_CANCEL),
+  onTextStreamChunk: createIpcListener(IPC_EVENTS.PROCESS_TEXT_STREAM_CHUNK),
+  onTextStreamDone: createIpcListener(IPC_EVENTS.PROCESS_TEXT_STREAM_DONE),
+  onTextStreamError: createIpcListener(IPC_EVENTS.PROCESS_TEXT_STREAM_ERROR),
   hidePaste: (text): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.HIDE_PASTE, text),
   onSetSelectedText: createIpcListener(IPC_EVENTS.SET_SELECTED_TEXT),
   onToolbarResetUI: createIpcListener(IPC_EVENTS.TOOLBAR_RESET_UI),

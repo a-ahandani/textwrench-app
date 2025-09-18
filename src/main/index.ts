@@ -7,6 +7,7 @@ import { updateStore } from './services/update-store'
 import { autoUpdater } from 'electron-updater'
 import log from 'electron-log'
 import { checkForUpdates } from './services/check-updates'
+import { registerTextStreamIpc } from './services/process-text-stream'
 import { handleOpenUrl } from './services/open-url'
 import { APP_KEY, labels } from '@shared/constants'
 import { checkPermissions } from './services/check-permissions'
@@ -34,6 +35,7 @@ app.whenReady().then(async () => {
   setupSingleInstanceLock()
   checkForUpdates()
   setupIpcHandlers()
+  registerTextStreamIpc()
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
