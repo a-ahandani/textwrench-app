@@ -37,6 +37,18 @@ app.whenReady().then(async () => {
   setupIpcHandlers()
   registerTextStreamIpc()
 
+  // Schedule periodic update checks (every 1 hour with small random jitter)
+  const ONE_HOUR = 60 * 60 * 1000
+  setInterval(() => {
+    // Add up to 2 minutes jitter to avoid thundering herd on startup
+    const jitter = Math.floor(Math.random() * 2 * 60 * 1000)
+    setTimeout(() => {
+      checkForUpdates().catch((err) => {
+        log.error('Periodic update check failed:', err)
+      })
+    }, jitter)
+  }, ONE_HOUR)
+
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       initializeSettingsWindow()
