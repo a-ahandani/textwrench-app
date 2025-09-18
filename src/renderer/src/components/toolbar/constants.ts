@@ -15,7 +15,7 @@ export type PanelKey = (typeof PANEL_KEYS)[keyof typeof PANEL_KEYS]
 export const PANEL_REGISTRY: Record<PanelKey, PanelConfig> = {
   [PANEL_KEYS.EXPLAIN]: {
     width: 640,
-    height: 410,
+    height: 440,
     render: ExplainPanel
   }
 }
