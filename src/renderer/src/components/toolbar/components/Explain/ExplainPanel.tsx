@@ -43,12 +43,14 @@ export function ExplainPanel(): JSX.Element {
         )}
         {(output || isStreaming) && (
           <Box
-            fontSize="sm"
+            fontSize="md"
             style={{
-              lineHeight: '1.35',
+              lineHeight: '1.6',
               maxWidth: '100%',
-              wordBreak: 'break-word'
+              wordBreak: 'break-word',
+              letterSpacing: '0.01em'
             }}
+            px={2}
             aria-live="polite"
             // Blinking cursor at end while streaming
             _after={
@@ -70,7 +72,7 @@ export function ExplainPanel(): JSX.Element {
             <ReactMarkdown
               components={{
                 p: ({ children }) => (
-                  <Text as="p" m={0} mb={2} fontSize="inherit" lineHeight="inherit">
+                  <Text as="p" m={0} mb={3} fontSize="inherit" lineHeight="inherit">
                     {children}
                   </Text>
                 ),
@@ -78,8 +80,8 @@ export function ExplainPanel(): JSX.Element {
                   <Box
                     as="ul"
                     style={{
-                      paddingInlineStart: 18,
-                      margin: '6px 0 10px',
+                      paddingInlineStart: 22,
+                      margin: '8px 0 14px',
                       listStyleType: 'disc'
                     }}
                   >
@@ -90,8 +92,8 @@ export function ExplainPanel(): JSX.Element {
                   <Box
                     as="ol"
                     style={{
-                      paddingInlineStart: 20,
-                      margin: '6px 0 10px',
+                      paddingInlineStart: 24,
+                      margin: '8px 0 14px',
                       listStyleType: 'decimal'
                     }}
                   >
@@ -99,7 +101,7 @@ export function ExplainPanel(): JSX.Element {
                   </Box>
                 ),
                 li: ({ children }) => (
-                  <Box as="li" m={0} mb={1}>
+                  <Box as="li" m={0} mb={2}>
                     <Text as="span" fontSize="inherit" lineHeight="inherit">
                       {children}
                     </Text>
@@ -112,12 +114,15 @@ export function ExplainPanel(): JSX.Element {
                     <Box
                       as={isBlock ? 'pre' : 'code'}
                       style={{
-                        background: 'rgba(255,255,255,0.06)',
-                        padding: isBlock ? '10px 12px' : '2px 6px',
-                        borderRadius: 6,
+                        background: 'rgba(255,255,255,0.08)',
+                        border: '1px solid rgba(255,255,255,0.12)',
+                        padding: isBlock ? '12px 14px' : '3px 6px',
+                        borderRadius: 8,
                         overflowX: isBlock ? 'auto' : 'initial',
                         display: isBlock ? 'block' : 'inline',
-                        fontSize: '0.9em'
+                        fontSize: '0.92em',
+                        fontFamily:
+                          'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
                       }}
                     >
                       {children}
@@ -127,10 +132,10 @@ export function ExplainPanel(): JSX.Element {
                 h1: ({ children }) => (
                   <Text
                     as="h1"
-                    fontSize="1.05rem"
+                    fontSize="1.25rem"
                     fontWeight="semibold"
-                    mt={1}
-                    mb={2}
+                    mt={2}
+                    mb={3}
                     lineHeight="1.3"
                   >
                     {children}
@@ -139,10 +144,10 @@ export function ExplainPanel(): JSX.Element {
                 h2: ({ children }) => (
                   <Text
                     as="h2"
-                    fontSize="0.98rem"
+                    fontSize="1.1rem"
                     fontWeight="semibold"
                     mt={2}
-                    mb={1}
+                    mb={2}
                     lineHeight="1.3"
                   >
                     {children}
@@ -151,10 +156,10 @@ export function ExplainPanel(): JSX.Element {
                 h3: ({ children }) => (
                   <Text
                     as="h3"
-                    fontSize="0.9rem"
+                    fontSize="1.0rem"
                     fontWeight="semibold"
                     mt={2}
-                    mb={1}
+                    mb={2}
                     lineHeight="1.3"
                   >
                     {children}
@@ -164,9 +169,10 @@ export function ExplainPanel(): JSX.Element {
                   <Box
                     as="blockquote"
                     style={{
-                      borderLeft: '2px solid rgba(255,255,255,0.15)',
-                      margin: '8px 0',
-                      paddingLeft: 10,
+                      borderLeft: '3px solid rgba(255,255,255,0.2)',
+                      background: 'rgba(255,255,255,0.04)',
+                      margin: '10px 0',
+                      paddingLeft: 12,
                       color: 'var(--chakra-colors-gray-300)'
                     }}
                   >

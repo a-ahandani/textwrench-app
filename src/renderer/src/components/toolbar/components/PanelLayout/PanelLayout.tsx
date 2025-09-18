@@ -28,7 +28,7 @@ export const PanelLayout: React.FC<PanelLayoutProps> = ({
   }
 
   return (
-    <VStack gap={2} align="stretch" height="100%" p={1} width="100%">
+    <VStack gap={2} align="stretch" height="100vh" p={1} width="100%">
       <style>
         {`
         .tw-drag-region { -webkit-app-region: drag; }
