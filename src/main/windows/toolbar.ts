@@ -1,6 +1,7 @@
 import { is } from '@electron-toolkit/utils'
 import { IPC_EVENTS } from '@shared/ipc-events'
 import { app, BrowserWindow, ipcMain, screen } from 'electron'
+import { info } from 'electron-log'
 import { join } from 'path'
 import { onSelection } from 'textwrench-observer'
 
@@ -73,7 +74,7 @@ export function initializeToolbarWindow(): void {
   onSelection((selection) => {
     // only consider letters in the selection in any language
     const selectedText = selection.text.replace(/[^\p{L}\s]/gu, '').trim()
-    console.debug('Toolbar selection:', selectedText, selection)
+    info('------------>:', selection)
 
     const now = Date.now()
 
