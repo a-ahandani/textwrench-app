@@ -73,9 +73,9 @@ function SettingsApp(): JSX.Element {
             <Box
               display={'flex'}
               css={{
-                WebkitSettingsAppRegion: 'drag'
+                WebkitAppRegion: 'drag'
               }}
-              height={'25px'}
+              height={'45px'}
               w={180}
             ></Box>
             {visibleRoutes.map((tab) => (
@@ -102,9 +102,9 @@ function SettingsApp(): JSX.Element {
             <Box
               display={'flex'}
               css={{
-                WebkitSettingsAppRegion: 'drag'
+                WebkitAppRegion: 'drag'
               }}
-              height={175}
+              height={195}
               width={'100%'}
             ></Box>
           </Tabs.List>

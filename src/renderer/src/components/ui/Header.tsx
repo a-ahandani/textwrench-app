@@ -17,19 +17,20 @@ export const Header = () => {
         display={'flex'}
         alignItems={'center'}
         justifyContent="flex-start"
-        p={3}
+        px={0}
         height={'100%'}
         flex={1}
         size={'sm'}
         fontWeight="bold"
         textAlign={'right'}
       >
-        <Box display={'flex'} flex={1} justifyContent={'flex-start'} alignItems={'center'}>
+        <Box w={'160px'} display={'flex'} justifyContent={'flex-start'} alignItems={'center'}>
           <SearchInput />
         </Box>
         <Box
           flex={1}
           height={'100%'}
+          px={3}
           css={{
             WebkitAppRegion: 'drag'
           }}

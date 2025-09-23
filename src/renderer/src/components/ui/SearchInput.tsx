@@ -9,10 +9,8 @@ export const SearchInput: React.FC = () => {
   const [localValue, setLocalValue] = useState<string>(searchTerm ?? '')
 
   useEffect(() => {
-    if (searchTerm !== localValue) {
-      setLocalValue(searchTerm ?? '')
-    }
-  }, [localValue, searchTerm])
+    setLocalValue(searchTerm ?? '')
+  }, [searchTerm])
 
   const debouncedSet = useDebouncedCallback<[string]>((val) => setSearchTerm(val), 300)
 
@@ -29,7 +27,7 @@ export const SearchInput: React.FC = () => {
       boxShadow="none"
     >
       <Input
-        size={'md'}
+        size={'sm'}
         variant="flushed"
         fontWeight="light"
         borderColor={'transparent'}
@@ -41,7 +39,7 @@ export const SearchInput: React.FC = () => {
         _placeholder={{
           color: 'gray.500',
           fontWeight: 'light',
-          visibility: 'hidden'
+          visibility: 'visible'
         }}
         value={localValue}
         onChange={handleInputChange}
