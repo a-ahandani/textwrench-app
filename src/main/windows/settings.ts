@@ -70,7 +70,7 @@ function createSettingsWindow(): void {
     titleBarStyle: 'hidden',
     resizable: true,
     skipTaskbar: true,
-    focusable: false,
+    focusable: true,
     maximizable: false,
     autoHideMenuBar: true,
     ...PLATFORM_SETTINGS[process.platform as keyof typeof PLATFORM_SETTINGS],
