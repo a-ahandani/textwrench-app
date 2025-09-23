@@ -1,5 +1,4 @@
 import React, { createContext, useContext, ReactNode, useState } from 'react'
-import { useRoute } from './RouteProvider'
 
 type SearchContextType = {
   searchTerm: string
@@ -13,16 +12,10 @@ type SearchProviderProps = {
 }
 
 export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
-  const [searchTerm, setSearchTerm] = useState({})
+  const [searchTerm, setSearchTerm] = useState('')
 
-  const { activeRoute } = useRoute()
   return (
-    <SearchContext.Provider
-      value={{
-        searchTerm: searchTerm[activeRoute] || '',
-        setSearchTerm: (term: string) => setSearchTerm((prev) => ({ ...prev, [activeRoute]: term }))
-      }}
-    >
+    <SearchContext.Provider value={{ searchTerm, setSearchTerm }}>
       {children}
     </SearchContext.Provider>
   )

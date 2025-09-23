@@ -9,6 +9,7 @@ import { useRoute } from '../providers/RouteProvider'
 import { PromptForm } from './pages/prompts/components/PromptForm'
 import { Header } from '../ui/Header'
 import { GoX } from 'react-icons/go'
+import { SearchProvider } from '../providers/SearchProvider'
 
 function SettingsApp(): JSX.Element {
   const { isLoggedIn } = useAuth()
@@ -108,11 +109,13 @@ function SettingsApp(): JSX.Element {
             ></Box>
           </Tabs.List>
           <Box display={'flex'} flexDirection="column" height={'100vh'} width={'100%'}>
-            <Header />
             {visibleRoutes.map((tab) => (
-              <TabContents key={tab.value} value={tab.value} label={tab.label} flex={1}>
-                {tab.content}
-              </TabContents>
+              <SearchProvider key={tab.value}>
+                {activeRoute === tab.value && <Header />}
+                <TabContents value={tab.value} label={tab.label} flex={1}>
+                  {tab.content}
+                </TabContents>
+              </SearchProvider>
             ))}
           </Box>
         </Tabs.Root>

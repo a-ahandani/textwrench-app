@@ -1,13 +1,25 @@
 import { Input, InputGroup } from '@chakra-ui/react'
-
+import { useEffect, useState } from 'react'
 import { LuSearch } from 'react-icons/lu'
 import { useSearch } from '../providers/SearchProvider'
+import { useDebouncedCallback } from '../../hooks/useDebouncedCallback'
 
-export const SearchInput = () => {
+export const SearchInput: React.FC = () => {
   const { searchTerm, setSearchTerm } = useSearch()
+  const [localValue, setLocalValue] = useState<string>(searchTerm ?? '')
 
-  const handleInputChange = (e) => {
-    setSearchTerm(e.currentTarget.value)
+  useEffect(() => {
+    if (searchTerm !== localValue) {
+      setLocalValue(searchTerm ?? '')
+    }
+  }, [localValue, searchTerm])
+
+  const debouncedSet = useDebouncedCallback<[string]>((val) => setSearchTerm(val), 300)
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const val = e.currentTarget.value
+    setLocalValue(val)
+    debouncedSet(val)
   }
 
   return (
@@ -31,7 +43,7 @@ export const SearchInput = () => {
           fontWeight: 'light',
           visibility: 'hidden'
         }}
-        value={searchTerm}
+        value={localValue}
         onChange={handleInputChange}
       />
     </InputGroup>

@@ -7,7 +7,6 @@ import { AuthProvider } from '@renderer/components/providers/AuthProvider'
 import { UpdateProvider } from '../providers/UpdateProvider'
 import { ModalProvider } from '../providers/ModalProvider'
 import { RouteProvider } from '../providers/RouteProvider'
-import { SearchProvider } from '../providers/SearchProvider'
 import { PromptsProvider } from './pages/prompts/components/PromptsContext'
 
 const settingsRootElement = document.getElementById('settings')
@@ -21,9 +20,7 @@ if (settingsRootElement) {
               <RouteProvider defaultRoute="prompts">
                 <ModalProvider>
                   <PromptsProvider>
-                    <SearchProvider>
-                      <SettingsApp />
-                    </SearchProvider>
+                    <SettingsApp />
                   </PromptsProvider>
                 </ModalProvider>
               </RouteProvider>
