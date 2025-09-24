@@ -114,6 +114,12 @@ function showToolbar(text: string, x: number, y: number, window): void {
     toolbarWindow.showInactive()
     toolbarWindow.setPosition(position.x, position.y)
     toolbarWindow.webContents.send(IPC_EVENTS.SET_SELECTED_TEXT, { text, position, window })
+    // Always reset active panel on new selection so UI returns to compact state
+    try {
+      toolbarWindow.webContents.send(IPC_EVENTS.TOOLBAR_OPEN_PANEL, { panel: null })
+    } catch {
+      // ignore
+    }
     startDistanceMonitor()
     return
   }
@@ -163,6 +169,12 @@ function showToolbar(text: string, x: number, y: number, window): void {
   toolbarWindow.on('ready-to-show', () => {
     toolbarWindow?.showInactive()
     toolbarWindow?.webContents.send(IPC_EVENTS.SET_SELECTED_TEXT, { text, position, window })
+    // Initial mount also ensures panel is reset
+    try {
+      toolbarWindow?.webContents.send(IPC_EVENTS.TOOLBAR_OPEN_PANEL, { panel: null })
+    } catch {
+      // ignore
+    }
     startDistanceMonitor()
   })
 
@@ -224,6 +236,17 @@ function showToolbar(text: string, x: number, y: number, window): void {
       toolbarWindow.setResizable(false)
       toolbarWindow.setFocusable(false)
       startDistanceMonitor()
+    }
+  })
+
+  // Panel open/close notification from renderer -> rebroadcast to renderer subscription API
+  ipcMain.on(IPC_EVENTS.TOOLBAR_OPEN_PANEL, (_event, data: { panel?: string | null }) => {
+    if (!toolbarWindow || toolbarWindow.isDestroyed()) return
+    activePanel = data?.panel ?? null
+    try {
+      toolbarWindow.webContents.send(IPC_EVENTS.TOOLBAR_OPEN_PANEL, { panel: activePanel })
+    } catch {
+      // ignore if webContents gone
     }
   })
 

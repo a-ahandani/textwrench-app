@@ -15,7 +15,7 @@ export const ExplainButton = memo(function ExplainButton(): JSX.Element {
       width: cfg?.width,
       height: cfg?.height
     })
-    window.dispatchEvent(new CustomEvent('toolbar:open-panel', { detail: { panel: panelKey } }))
+    ipc?.send(IPC_EVENTS.TOOLBAR_OPEN_PANEL, { panel: panelKey })
   }
 
   return (

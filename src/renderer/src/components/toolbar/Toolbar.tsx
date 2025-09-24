@@ -2,7 +2,8 @@ import { ButtonGroup, Box } from '@chakra-ui/react'
 import { FixIt } from './components/FixIt/FixItButton'
 import { ExplainButton } from './components/Explain/ExplainButton'
 import { PromptsButton } from './components/Prompts/PromptsButton'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useEventSubscription } from '@renderer/hooks/useEventSubscription'
 import { PANEL_REGISTRY } from './constants'
 
 function useToolbarPanels(): {
@@ -11,21 +12,17 @@ function useToolbarPanels(): {
 } {
   const [activePanel, setActivePanel] = useState<string | null>(null)
 
-  useEffect((): (() => void) => {
-    const onOpen = (e: Event): void => {
-      const detail = (e as CustomEvent).detail as { panel?: string | null }
-      if (Object.prototype.hasOwnProperty.call(detail || {}, 'panel')) {
-        setActivePanel(detail?.panel ?? null)
-      }
-    }
-    const onReset = (): void => setActivePanel(null)
-    window.addEventListener('toolbar:open-panel', onOpen as EventListener)
-    const unsubscribeReset = window.api?.onToolbarResetUI?.(onReset)
-    return () => {
-      window.removeEventListener('toolbar:open-panel', onOpen as EventListener)
-      if (unsubscribeReset) unsubscribeReset()
-    }
-  }, [])
+  useEventSubscription<{ panel?: string | null }>({
+    eventName: 'onToolbarOpenPanel',
+    callback: (data) => setActivePanel(data?.panel ?? null),
+    dependencies: []
+  })
+
+  useEventSubscription<undefined>({
+    eventName: 'onToolbarResetUI',
+    callback: () => setActivePanel(null),
+    dependencies: []
+  })
 
   return { activePanel, setPanel: setActivePanel }
 }

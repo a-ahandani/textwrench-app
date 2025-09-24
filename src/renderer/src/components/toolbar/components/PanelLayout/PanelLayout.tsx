@@ -24,7 +24,7 @@ export const PanelLayout: React.FC<PanelLayoutProps> = ({
     if (onClose) onClose()
     const ipc = window.electron?.ipcRenderer
     ipc?.send(IPC_EVENTS.TOOLBAR_EXPAND, { action: 'close' })
-    window.dispatchEvent(new CustomEvent('toolbar:open-panel', { detail: { panel: null } }))
+    ipc?.send(IPC_EVENTS.TOOLBAR_OPEN_PANEL, { panel: null })
   }
 
   return (

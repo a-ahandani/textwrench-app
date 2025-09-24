@@ -38,6 +38,7 @@ declare global {
       onSetSelectedText(callback: (data) => void): () => void
       pasteText(text: string | { text: string; appPID: number }): Promise<void>
       onToolbarResetUI(callback: () => void): () => void
+      onToolbarOpenPanel(callback: (data: { panel?: string | null }) => void): () => void
     }
   }
 }
