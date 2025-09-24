@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios'
 import { store } from './store'
 import { getSettingsWindow } from '../windows/settings'
+import { getToolbarWindow } from '../windows/toolbar'
 import { updateStore } from '../services/update-store'
 import log from 'electron-log'
 import { IPC_EVENTS } from '@shared/ipc-events'
@@ -33,8 +34,10 @@ twService.interceptors.response.use(
     if (error?.response?.status === 401) {
       log.warn('UNAUTHORIZED REQUEST', error.response.status)
       const settingsWindow = getSettingsWindow()
+      const toolbarWindow = getToolbarWindow()
       updateStore('token', null)
       settingsWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
+      toolbarWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
     }
     return Promise.reject(error)
   }

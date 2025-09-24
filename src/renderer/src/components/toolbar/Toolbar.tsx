@@ -1,23 +1,20 @@
 import { ButtonGroup, Box } from '@chakra-ui/react'
 import { FixIt } from './components/FixIt/FixItButton'
-import { ToggleExpand } from './components/ToggleExpand/ToggleExpand'
 import { ExplainButton } from './components/Explain/ExplainButton'
-import React from 'react'
+import { PromptsButton } from './components/Prompts/PromptsButton'
+import { useEffect, useState } from 'react'
 import { PANEL_REGISTRY } from './constants'
-
-// Generic panel state management for toolbar expansion panels
 
 function useToolbarPanels(): {
   activePanel: string | null
   setPanel: (id: string | null) => void
 } {
-  const [activePanel, setActivePanel] = React.useState<string | null>(null)
+  const [activePanel, setActivePanel] = useState<string | null>(null)
 
-  React.useEffect((): (() => void) => {
+  useEffect((): (() => void) => {
     const onOpen = (e: Event): void => {
       const detail = (e as CustomEvent).detail as { panel?: string | null }
       if (Object.prototype.hasOwnProperty.call(detail || {}, 'panel')) {
-        // Accept null to clear panel
         setActivePanel(detail?.panel ?? null)
       }
     }
@@ -52,7 +49,7 @@ function ToolbarApp(): JSX.Element {
           <ButtonGroup width={'100%'} size={'xs'} variant="subtle" attached>
             <FixIt />
             <ExplainButton />
-            <ToggleExpand />
+            <PromptsButton />
           </ButtonGroup>
         )}
       </Box>

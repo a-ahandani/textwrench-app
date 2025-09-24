@@ -9,7 +9,7 @@ let toolbarWindow: BrowserWindow | undefined = undefined
 
 let previousSelection: { text: string; timestamp: number } | null = null
 const SELECTION_COOLDOWN_MS = 1000
-const WIDTH = 212
+const WIDTH = 302
 const HEIGHT = 32
 const MINIMUM_CHARACTER_LENGTH = 3
 
