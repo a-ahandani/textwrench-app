@@ -10,19 +10,37 @@ import {
 } from '@chakra-ui/react'
 import { Portal } from '@chakra-ui/react'
 import { FiClipboard, FiCopy, FiCheck } from 'react-icons/fi'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { useSelectedText } from '@renderer/components/providers/SelectedTextProvider'
 import { PanelLayout } from '../PanelLayout/PanelLayout'
 import { usePrompts } from '@renderer/hooks/usePrompts'
 import { usePromptPreview } from '@renderer/hooks/usePromptPreview'
+import { useStore } from '@renderer/hooks/useStore'
+import { Prompt } from '@shared/types/store'
 
 export function PromptsPanel(): JSX.Element {
   const { data: selected } = useSelectedText()
   const selectedText = selected?.text || ''
 
   const { data: prompts } = usePrompts()
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const {
+    value: defaultPrompt,
+    setValue: setDefaultPrompt,
+    isLoading: isStoreLoading
+  } = useStore<Prompt>({
+    key: 'selectedPrompt'
+  })
+
+  // Ensure we have a valid selectedId that exists in the current prompts
+  const selectedId = useMemo(() => {
+    if (!prompts?.length) return null
+    if (defaultPrompt && prompts.some((p) => p.ID === defaultPrompt.ID)) {
+      return defaultPrompt.ID
+    }
+    // If defaultPrompt doesn't exist in current prompts, return first prompt's ID
+    return prompts[0]?.ID || null
+  }, [defaultPrompt, prompts])
 
   const selectedPromptValue = useMemo(
     () => prompts?.find((p) => p.ID === selectedId)?.value,
@@ -34,10 +52,15 @@ export function PromptsPanel(): JSX.Element {
     promptValue: selectedPromptValue
   })
 
+  // Sync selectedId back to store when it changes
   useEffect(() => {
-    if (!prompts?.length) return
-    if (!selectedId) setSelectedId(prompts[0].ID)
-  }, [prompts, selectedId])
+    if (!prompts?.length || isStoreLoading || !selectedId) return
+
+    const selectedPrompt = prompts.find((p) => p.ID === selectedId)
+    if (selectedPrompt && (!defaultPrompt || defaultPrompt.ID !== selectedId)) {
+      setDefaultPrompt(selectedPrompt)
+    }
+  }, [selectedId, prompts, defaultPrompt, setDefaultPrompt, isStoreLoading])
 
   useEffect(() => {
     if (!selectedText.trim()) return
@@ -58,6 +81,7 @@ export function PromptsPanel(): JSX.Element {
             Choose a prompt
           </Text>
           <Select.Root
+            key={`select-${selectedId}`}
             variant="outline"
             size="sm"
             collection={createListCollection({
@@ -68,7 +92,10 @@ export function PromptsPanel(): JSX.Element {
               const v = (details.value && details.value[0]) || null
               if (v !== selectedId) {
                 if (isStreaming) cancel()
-                setSelectedId(v)
+                const selectedPrompt = prompts?.find((p) => p.ID === v)
+                if (selectedPrompt) {
+                  setDefaultPrompt(selectedPrompt)
+                }
               }
             }}
             disabled={!prompts?.length}

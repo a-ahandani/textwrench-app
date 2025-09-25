@@ -15,13 +15,16 @@ type useStoreProps = {
 
 export const useStore = <K>({ key }: useStoreProps): useStoreReturnType<K> => {
   const [localValue, setLocalValue] = useState<StoreType[keyof StoreType]>()
+  const [isLoading, setIsLoading] = useState(true)
 
   const { getStoreValue, setStoreValue } = window.api
 
   useEffect(() => {
     const loadStoreData = async (): Promise<void> => {
+      setIsLoading(true)
       const storeValue = await getStoreValue(key)
       setLocalValue(storeValue)
+      setIsLoading(false)
     }
     loadStoreData()
   }, [getStoreValue, key])
@@ -43,6 +46,6 @@ export const useStore = <K>({ key }: useStoreProps): useStoreReturnType<K> => {
   return {
     value: localValue as K,
     setValue: handleSetStoreValue,
-    isLoading: false
+    isLoading
   }
 }

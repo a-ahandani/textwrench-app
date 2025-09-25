@@ -6,16 +6,24 @@ import { useRoute } from '@renderer/components/providers/RouteProvider'
 import { PromptCard } from './PromptCard'
 import { useSearch } from '@renderer/components/providers/SearchProvider'
 import { SkeletonText } from '@renderer/components/ui/Skeleton'
+import { useEffect } from 'react'
 
 export const PromptList = (): JSX.Element => {
   const { searchTerm: term } = useSearch()
 
-  const { setEditingId, setDefaultPrompt } = usePromptsContext()
+  const { setEditingId, setDefaultPrompt, defaultPrompt } = usePromptsContext()
   const { setCurrentRoute } = useRoute()
 
   const { data: prompts, isLoading } = usePrompts({
     term
   })
+
+  // Set first prompt as default if no default is set
+  useEffect(() => {
+    if (!defaultPrompt && prompts?.length && !term) {
+      setDefaultPrompt(prompts[0])
+    }
+  }, [defaultPrompt, prompts, setDefaultPrompt, term])
 
   const handleSelectPrompt = (prompt): void => {
     const selectedPrompt = prompts?.find((p) => p.ID == prompt.target.value)
@@ -93,7 +101,7 @@ export const PromptList = (): JSX.Element => {
           <RadioCard.Root
             onChange={handleSelectPrompt}
             variant="subtle"
-            defaultValue={prompts?.[0]?.ID}
+            value={defaultPrompt?.ID || prompts?.[0]?.ID}
             gap="4"
             width="100%"
           >
