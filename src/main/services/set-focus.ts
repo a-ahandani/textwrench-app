@@ -1,9 +1,12 @@
-import { getSettingsWindow } from '../windows/settings'
+import { getSettingsWindow, showSettingsWindowExplicitly } from '../windows/settings'
 import { exec } from 'child_process'
 
 export const bringToFront = (): void => {
   const settingsWindow = getSettingsWindow()
-  if (!settingsWindow) return
+  if (!settingsWindow) {
+    showSettingsWindowExplicitly()
+    return
+  }
 
   if (settingsWindow.isMinimized()) {
     settingsWindow.restore()

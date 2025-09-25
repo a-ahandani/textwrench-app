@@ -23,7 +23,7 @@ log.transports.console.level = `info`
 app.whenReady().then(async () => {
   checkPermissions()
   initializeToolbarWindow()
-  settingsWindow = initializeSettingsWindow()
+  settingsWindow = initializeSettingsWindow(false) // Don't show on startup
 
   if (isDev) {
     // autoUpdater.autoDownload = false
@@ -51,7 +51,7 @@ app.whenReady().then(async () => {
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      initializeSettingsWindow()
+      initializeSettingsWindow(true) // Show when user activates app
     }
   })
 })

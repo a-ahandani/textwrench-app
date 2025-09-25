@@ -34,6 +34,7 @@ const PLATFORM_SETTINGS = {
 let tray: Tray | null = null
 let settingsWindow: BrowserWindow | null = null
 let isQuitting = false
+let shouldShowOnReady = false
 
 // Public API
 export const getIsQuitting = (): boolean => isQuitting
@@ -45,13 +46,18 @@ export const getSettingsWindow = (): BrowserWindow | null => {
   return settingsWindow
 }
 
+export const showSettingsWindowExplicitly = (): void => {
+  showSettingsWindow()
+}
+
 /**
  * Initializes and returns the settings window
  * Reuses existing window if one already exists
  */
-export function initializeSettingsWindow(): BrowserWindow {
+export function initializeSettingsWindow(shouldShow = false): BrowserWindow {
   if (settingsWindow && !settingsWindow.isDestroyed()) return settingsWindow
 
+  shouldShowOnReady = shouldShow
   createSettingsWindow()
   setupWindowEventHandlers()
   loadWindowContent()
@@ -93,7 +99,10 @@ function setupWindowEventHandlers(): void {
   settingsWindow.on('focus', checkForUpdates)
 
   settingsWindow.on('ready-to-show', () => {
-    settingsWindow?.show()
+    if (shouldShowOnReady) {
+      settingsWindow?.show()
+      shouldShowOnReady = false
+    }
   })
 
   settingsWindow.webContents.setWindowOpenHandler((details) => {
@@ -197,7 +206,13 @@ function setupTrayClickHandler(): void {
  * Shows the settings window if it exists
  */
 function showSettingsWindow(): void {
-  settingsWindow?.show()
+  if (settingsWindow && !settingsWindow.isDestroyed()) {
+    shouldShowOnReady = true
+    settingsWindow.show()
+  } else {
+    // Initialize and show if window doesn't exist
+    initializeSettingsWindow(true)
+  }
 }
 
 /**
