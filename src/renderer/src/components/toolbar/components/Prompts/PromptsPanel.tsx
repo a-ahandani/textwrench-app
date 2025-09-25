@@ -9,7 +9,7 @@ import {
   Skeleton
 } from '@chakra-ui/react'
 import { Portal } from '@chakra-ui/react'
-import { FiClipboard, FiCopy, FiCheck } from 'react-icons/fi'
+import { FiClipboard, FiCheck } from 'react-icons/fi'
 import { useEffect, useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { useSelectedText } from '@renderer/components/providers/SelectedTextProvider'
@@ -18,6 +18,7 @@ import { usePrompts } from '@renderer/hooks/usePrompts'
 import { usePromptPreview } from '@renderer/hooks/usePromptPreview'
 import { useStore } from '@renderer/hooks/useStore'
 import { Prompt } from '@shared/types/store'
+import { CopyButton } from '@renderer/components/ui'
 
 export function PromptsPanel(): JSX.Element {
   const { data: selected } = useSelectedText()
@@ -145,20 +146,7 @@ export function PromptsPanel(): JSX.Element {
             <FiClipboard size={12} aria-hidden />
             Paste
           </Button>
-          <Button
-            size="xs"
-            variant="ghost"
-            onClick={async () => {
-              if (!output.trim()) return
-              await navigator.clipboard.writeText(output)
-            }}
-            disabled={!output.trim()}
-            display="inline-flex"
-            gap={1}
-          >
-            <FiCopy size={12} aria-hidden />
-            Copy
-          </Button>
+          <CopyButton size="xs" variant="ghost" textToCopy={output} />
         </HStack>
 
         <Box
