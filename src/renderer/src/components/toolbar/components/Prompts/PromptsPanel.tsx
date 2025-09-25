@@ -135,7 +135,9 @@ export function PromptsPanel(): JSX.Element {
           <Button
             size="xs"
             variant="subtle"
-            onClick={() => window.api.pasteText(output)}
+            onClick={() =>
+              window.api.pasteText({ text: output, appPID: selected?.window?.appPID || 0 })
+            }
             disabled={!output.trim()}
             display="inline-flex"
             gap={1}
