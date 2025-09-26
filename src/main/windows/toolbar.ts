@@ -1,12 +1,13 @@
 import { is } from '@electron-toolkit/utils'
 import { IPC_EVENTS } from '@shared/ipc-events'
-import { app, BrowserWindow, ipcMain, screen } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
+import { createDistanceMonitor, DistanceMonitor } from '../utils/distance-monitor'
 import { info } from 'electron-log'
 import { join } from 'path'
 import { onSelection } from 'textwrench-observer'
+import { makeProximityChecker } from '../utils/distance-monitor'
 
 let toolbarWindow: BrowserWindow | undefined = undefined
-
 let previousSelection: { text: string; timestamp: number } | null = null
 const SELECTION_COOLDOWN_MS = 1000
 const WIDTH = 302
@@ -16,10 +17,10 @@ const MINIMUM_CHARACTER_LENGTH = 3
 // Expansion state
 let isExpanded = false
 let activePanel: string | null = null
-let distanceMonitorInterval: NodeJS.Timeout | null = null
-const MOUSE_LEAVE_THRESHOLD = 90
 const DEFAULT_EXPANDED_WIDTH = Math.round(WIDTH * 4)
 const DEFAULT_EXPANDED_HEIGHT = Math.round(HEIGHT * 10)
+
+let distanceMonitor: DistanceMonitor | null = null
 
 // Remember last user-expanded size so subsequent expansions restore it
 let lastExpandedWidth = DEFAULT_EXPANDED_WIDTH
@@ -31,35 +32,11 @@ interface ExpandPayload {
   width?: number
   height?: number
 }
-
-function isCursorNearToolbar(threshold = MOUSE_LEAVE_THRESHOLD): boolean {
-  if (!toolbarWindow || toolbarWindow.isDestroyed()) return false
-  const cursor = screen.getCursorScreenPoint()
-  const [wx, wy] = toolbarWindow.getPosition()
-  const [ww, wh] = toolbarWindow.getSize()
-  return (
-    cursor.x >= wx - threshold &&
-    cursor.x <= wx + ww + threshold &&
-    cursor.y >= wy - threshold &&
-    cursor.y <= wy + wh + threshold
-  )
-}
-
-function stopDistanceMonitor(): void {
-  if (distanceMonitorInterval) {
-    clearInterval(distanceMonitorInterval)
-    distanceMonitorInterval = null
-  }
-}
-
-function startDistanceMonitor(): void {
-  stopDistanceMonitor()
-  distanceMonitorInterval = setInterval(() => {
-    if (!toolbarWindow || toolbarWindow.isDestroyed()) return
-    if (!isCursorNearToolbar()) {
-      toolbarWindow.hide()
-    }
-  }, 250)
+// Proximity checker bound to current toolbar window reference
+const isCursorNearToolbar = makeProximityChecker(() => toolbarWindow)
+// Public helper so other modules (e.g., index.ts Space change listener) can force restart
+export function restartDistanceMonitor(): void {
+  distanceMonitor?.restart()
 }
 
 function collapseToolbar(): void {
@@ -120,7 +97,7 @@ function showToolbar(text: string, x: number, y: number, window): void {
     } catch {
       // ignore
     }
-    startDistanceMonitor()
+    distanceMonitor?.restart()
     return
   }
 
@@ -154,7 +131,7 @@ function showToolbar(text: string, x: number, y: number, window): void {
 
   toolbarWindow.on('hide', () => {
     if (isExpanded) collapseToolbar()
-    stopDistanceMonitor()
+    distanceMonitor?.stop()
     try {
       toolbarWindow?.webContents.send(IPC_EVENTS.TOOLBAR_RESET_UI)
     } catch {
@@ -175,7 +152,7 @@ function showToolbar(text: string, x: number, y: number, window): void {
     } catch {
       // ignore
     }
-    startDistanceMonitor()
+    distanceMonitor?.restart()
   })
 
   ipcMain.on(IPC_EVENTS.TOOLBAR_EXPAND, (_event, raw?: ExpandPayload) => {
@@ -223,7 +200,7 @@ function showToolbar(text: string, x: number, y: number, window): void {
           // ignore focus errors
         }
       }, 10)
-      startDistanceMonitor()
+      distanceMonitor?.restart()
     } else {
       // collapse
       const [, curH] = toolbarWindow.getSize()
@@ -235,7 +212,7 @@ function showToolbar(text: string, x: number, y: number, window): void {
       activePanel = null
       toolbarWindow.setResizable(false)
       toolbarWindow.setFocusable(false)
-      startDistanceMonitor()
+      distanceMonitor?.restart()
     }
   })
 
@@ -268,6 +245,20 @@ function showToolbar(text: string, x: number, y: number, window): void {
     const appPath = app.getAppPath()
     toolbarWindow.loadFile(join(appPath, 'out/renderer/toolbar.html'))
   }
+
+  // Initialize distance monitor (only once per window creation)
+  distanceMonitor = createDistanceMonitor({
+    getWindow: () => toolbarWindow,
+    skipHidePredicate: () => isExpanded,
+    onFar: (win) => {
+      try {
+        win.hide()
+      } catch {
+        // ignore
+      }
+    }
+  })
+  distanceMonitor.start()
 }
 
 export const getToolbarWindow = (): BrowserWindow | undefined => {

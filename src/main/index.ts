@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, systemPreferences } from 'electron'
 import { electronAppUniversalProtocolClient } from 'electron-app-universal-protocol-client'
 import { electronApp } from '@electron-toolkit/utils'
 import { setupIpcHandlers } from './ipc/handlers'
@@ -12,7 +12,11 @@ import { handleOpenUrl } from './services/open-url'
 import { APP_KEY, labels } from '@shared/constants'
 import { checkPermissions } from './services/check-permissions'
 import { initializeSettingsWindow, setIsQuitting } from './windows/settings'
-import { initializeToolbarWindow } from './windows/toolbar'
+import {
+  initializeToolbarWindow,
+  getToolbarWindow,
+  restartDistanceMonitor
+} from './windows/toolbar'
 
 let settingsWindow: BrowserWindow | null = null
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
@@ -36,6 +40,22 @@ app.whenReady().then(async () => {
   checkForUpdates()
   setupIpcHandlers()
   registerTextStreamIpc()
+
+  // macOS Space / fullscreen app change: hide collapsed toolbar & restart distance logic
+  if (process.platform === 'darwin') {
+    try {
+      systemPreferences.subscribeNotification('NSWorkspaceActiveSpaceDidChangeNotification', () => {
+        const win = getToolbarWindow()
+        if (!win || win.isDestroyed()) return
+        if (win.isVisible()) {
+          win.hide()
+        }
+        restartDistanceMonitor()
+      })
+    } catch (err) {
+      log.warn('Failed subscribing to Space change notification:', err)
+    }
+  }
 
   // Schedule periodic update checks (every 1 hour with small random jitter)
   const ONE_HOUR = 60 * 60 * 1000
