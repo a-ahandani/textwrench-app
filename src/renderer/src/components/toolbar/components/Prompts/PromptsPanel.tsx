@@ -11,7 +11,7 @@ import {
 import { Portal } from '@chakra-ui/react'
 import { FiClipboard, FiCheck } from 'react-icons/fi'
 import { useEffect, useMemo } from 'react'
-import ReactMarkdown from 'react-markdown'
+import Markdown from '@renderer/components/ui/Markdown'
 import { useSelectedText } from '@renderer/components/providers/SelectedTextProvider'
 import { PanelLayout } from '../PanelLayout/PanelLayout'
 import { usePrompts } from '@renderer/hooks/usePrompts'
@@ -159,7 +159,7 @@ export function PromptsPanel(): JSX.Element {
               {error}
             </Text>
           ) : output ? (
-            <ReactMarkdown>{output}</ReactMarkdown>
+            <Markdown>{output}</Markdown>
           ) : (
             <VStack align="stretch" gap={2} py={1}>
               <Skeleton height="10px" bg="gray.600" opacity={0.4} />
