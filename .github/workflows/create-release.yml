@@ -13,11 +13,36 @@ jobs:
         id: tag
         run: echo "value=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies (production only)
+        run: |
+          if [ -f yarn.lock ]; then yarn install --ignore-scripts --frozen-lockfile --production=false; else npm ci --ignore-scripts; fi
+
+      - name: Generate AI release notes
+        id: notes
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          AI_MODEL: gpt-4o-mini
+        run: |
+          node scripts/generate-ai-release-notes.mjs "${{ steps.tag.outputs.value }}" > release-notes.md
+          echo 'notes<<EOF' >> $GITHUB_OUTPUT
+          sed 's/\r$//' release-notes.md >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
       - name: Create or update release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag.outputs.value }}
           name: ${{ steps.tag.outputs.value }}
-          generate_release_notes: true
+          body: ${{ steps.notes.outputs.notes }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
