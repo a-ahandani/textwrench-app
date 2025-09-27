@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /*
   AI Release Notes Generator
 
@@ -21,10 +22,20 @@ const MODEL = process.env.AI_MODEL || 'gpt-4o-mini'
 const PROVIDER = process.env.MODEL_PROVIDER || 'openai'
 const OPENAI_BASE_URL = (process.env.OPENAI_BASE_URL || 'https://api.openai.com').replace(/\/$/, '')
 
+/**
+ * Execute a shell command and return trimmed stdout.
+ * @param {string} cmd
+ * @returns {string}
+ */
 function run(cmd) {
   return execSync(cmd, { encoding: 'utf8' }).trim()
 }
 
+/**
+ * Safe command execution returning empty string on failure.
+ * @param {string} cmd
+ * @returns {string}
+ */
 function safeRun(cmd) {
   try {
     return run(cmd)
@@ -33,6 +44,10 @@ function safeRun(cmd) {
   }
 }
 
+/**
+ * Get the previous tag reachable from HEAD.
+ * @returns {string}
+ */
 function getLastTag() {
   return (
     safeRun('git describe --tags --abbrev=0 HEAD^ 2>/dev/null') ||
@@ -45,6 +60,10 @@ const currentTag = process.argv[2] || safeRun('git describe --tags --exact-match
 const previousTag = getLastTag()
 const range = previousTag ? `${previousTag}..${currentTag}` : currentTag
 
+/**
+ * Collect commit metadata between tags.
+ * @returns {{hash:string,subject:string,body:string}[]}
+ */
 function getCommits() {
   const format = '%H%x01%s%x01%b%x02'
   const raw = safeRun(`git log ${range} --no-merges --pretty=format:"${format}"`)
@@ -58,6 +77,11 @@ function getCommits() {
     })
 }
 
+/**
+ * Classify a commit subject into a category.
+ * @param {string} subject
+ * @returns {string}
+ */
 function classify(subject) {
   const lower = subject.toLowerCase()
   if (/^feat[:(]/.test(lower)) return 'features'
@@ -72,10 +96,18 @@ function classify(subject) {
 
 const commits = getCommits()
 
+/**
+ * Detect potential breaking changes.
+ * @returns {boolean}
+ */
 function detectBreaking() {
   return commits.some((c) => /BREAKING CHANGE|!/.test(c.subject) || /BREAKING CHANGE/i.test(c.body))
 }
 
+/**
+ * Build fallback (non-AI) release notes.
+ * @returns {string}
+ */
 function buildFallbackNotes() {
   if (!commits.length) return 'No changes.'
   const groups = {}
@@ -85,7 +117,7 @@ function buildFallbackNotes() {
     groups[key].push(c)
   }
   const order = ['features', 'fixes', 'performance', 'refactors', 'docs', 'tests', 'chore', 'other']
-  let out = `## Changes\n`
+  let out = '## Changes\n'
   for (const key of order) {
     if (!groups[key]) continue
     const title = key.charAt(0).toUpperCase() + key.slice(1)
@@ -95,11 +127,17 @@ function buildFallbackNotes() {
     }
   }
   if (detectBreaking()) {
-    out += `\n### Potential Breaking Changes\n- Review commits marked with '!' or containing 'BREAKING CHANGE'.`
+    out +=
+      '\n### Potential Breaking Changes\n- Review commits marked with ! or containing "BREAKING CHANGE".'
   }
   return out.trim()
 }
 
+/**
+ * Call AI provider to generate notes.
+ * @param {string} prompt
+ * @returns {Promise<string|null>}
+ */
 async function callAI(prompt) {
   if (PROVIDER === 'none') return null
   if (!process.env.OPENAI_API_KEY) return null
@@ -109,7 +147,7 @@ async function callAI(prompt) {
     messages: [{ role: 'user', content: prompt }],
     temperature: 0.2
   })
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const req = https.request(
       {
         hostname: OPENAI_BASE_URL.replace(/^https?:\/\//, ''),
@@ -131,7 +169,7 @@ async function callAI(prompt) {
             const json = JSON.parse(data)
             const content = json.choices?.[0]?.message?.content?.trim()
             resolve(content || null)
-          } catch (e) {
+          } catch {
             resolve(null)
           }
         })
@@ -143,8 +181,11 @@ async function callAI(prompt) {
   })
 }
 
+/**
+ * Build AI prompt from commits.
+ * @returns {string}
+ */
 function buildPrompt() {
-  // Limit commits to avoid over-long prompts
   const MAX_COMMITS = 120
   const truncated = commits.slice(0, MAX_COMMITS)
   const omitted = commits.length - truncated.length
@@ -163,7 +204,9 @@ async function main() {
   let ai = null
   try {
     ai = await callAI(buildPrompt())
-  } catch (_) {}
+  } catch {
+    /* swallow AI errors deliberately; fallback already prepared */
+  }
   const header = `# Release Notes for ${currentTag}\n\n`
   const output = ai ? `${header}${ai.trim()}` : `${header}${fallback}`
   console.log(output)
