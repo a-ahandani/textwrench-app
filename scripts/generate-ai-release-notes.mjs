@@ -201,14 +201,55 @@ async function main() {
     console.log(fallback)
     return
   }
+
+  /**
+   * Sanitize & normalize AI generated content.
+   * - Remove any leading level-1/2 headings referencing release notes or the version.
+   * - Collapse excess blank lines.
+   * - Ensure a trailing newline.
+   * - If missing a summary line (starts directly with a heading / list), prepend a minimal summary derived from fallback.
+   * @param {string} text
+   */
+  function sanitizeAI(text) {
+    if (!text) return ''
+    let lines = text.split(/\r?\n/)
+    // Drop BOM or whitespace
+    lines = lines.map((l) => l.replace(/^\uFEFF/, ''))
+    // Remove leading empty lines
+    while (lines.length && !lines[0].trim()) lines.shift()
+    // Remove first heading if it looks like a generic release notes title
+    if (lines[0] && /^#{1,2}\s+release notes/i.test(lines[0])) {
+      lines.shift()
+      while (lines.length && !lines[0]?.trim()) lines.shift()
+    }
+    // Remove heading that redundantly includes version e.g. "# v0.2.54"
+    if (lines[0] && /^#{1,2}\s*v?\d+\.\d+\.\d+/.test(lines[0])) {
+      lines.shift()
+      while (lines.length && !lines[0]?.trim()) lines.shift()
+    }
+    // Collapse multiple blank lines
+    const collapsed = []
+    for (const l of lines) {
+      if (!l.trim() && !collapsed[collapsed.length - 1]?.trim()) continue
+      collapsed.push(l)
+    }
+    lines = collapsed
+    // Determine if first meaningful line is a heading or list implying missing summary
+    if (lines[0] && /^\s*(###|##|[-*])/.test(lines[0])) {
+      const firstSentence = fallback.split(/\n/)[0] // summary line from fallback
+      lines.unshift(firstSentence, '')
+    }
+    return lines.join('\n').trim() + '\n'
+  }
+
   let ai = null
   try {
     ai = await callAI(buildPrompt())
   } catch {
     /* swallow AI errors deliberately; fallback already prepared */
   }
-  const header = `# Release Notes for ${currentTag}\n\n`
-  const output = ai ? `${header}${ai.trim()}` : `${header}${fallback}`
+
+  const output = ai ? sanitizeAI(ai) : fallback
   console.log(output)
 }
 
