@@ -9,6 +9,8 @@ import { labels } from '../../shared/constants'
 import { checkForUpdates } from '../services/check-updates'
 import log from 'electron-log'
 import { getToolbarWindow } from './toolbar'
+import { store } from '../providers/store'
+import { bringToFront } from '../services/set-focus'
 
 // Constants
 const SETTINGS_WINDOW_BOUNDS = {
@@ -35,6 +37,7 @@ let tray: Tray | null = null
 let settingsWindow: BrowserWindow | null = null
 let isQuitting = false
 let shouldShowOnReady = false
+let firstReadyHandled = false
 
 // Public API
 export const getIsQuitting = (): boolean => isQuitting
@@ -99,9 +102,23 @@ function setupWindowEventHandlers(): void {
   settingsWindow.on('focus', checkForUpdates)
 
   settingsWindow.on('ready-to-show', () => {
+    // Show if explicitly requested
     if (shouldShowOnReady) {
       settingsWindow?.show()
       shouldShowOnReady = false
+    }
+
+    if (!firstReadyHandled) {
+      firstReadyHandled = true
+      // If there's no auth token yet, surface the window to user for login
+      try {
+        const token = store.get('token')
+        if (!token) {
+          bringToFront()
+        }
+      } catch {
+        // ignore store access errors
+      }
     }
   })
 

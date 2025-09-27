@@ -6,6 +6,7 @@ import { updateStore } from '../services/update-store'
 import log from 'electron-log'
 import { IPC_EVENTS } from '@shared/ipc-events'
 import { BASE_URL } from '@shared/constants'
+import { bringToFront } from '../services/set-focus'
 
 export const twService = axios.create({
   baseURL: BASE_URL,
@@ -38,6 +39,8 @@ twService.interceptors.response.use(
       updateStore('token', null)
       settingsWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
       toolbarWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
+      // Surface the settings window to allow user to re-authenticate
+      bringToFront()
     }
     return Promise.reject(error)
   }
