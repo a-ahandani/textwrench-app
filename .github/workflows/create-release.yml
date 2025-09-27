@@ -22,10 +22,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-
-      - name: Install dependencies (production only)
-        run: |
-          if [ -f yarn.lock ]; then yarn install --ignore-scripts --frozen-lockfile --production=false; else npm ci --ignore-scripts; fi
+        # We intentionally skip dependency installation: the AI notes script only uses built-in Node modules.
+        # Installing full dependencies failed previously due to platform-specific native module (textwrench-observer).
 
       - name: Generate AI release notes
         id: notes
