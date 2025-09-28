@@ -67,6 +67,10 @@ export class DistanceMonitor {
       if (near) {
         this.opts.onNear?.(win)
       } else {
+        // NOTE: Previously callers could block hiding while a window was "expanded".
+        // Toolbars now require unconditional hiding when cursor is far, so callers
+        // using the legacy skipHidePredicate should update accordingly. We retain
+        // the check for backward compatibility with other potential windows.
         if (this.opts.skipHidePredicate?.()) return
         this.opts.onFar?.(win)
       }

@@ -22,6 +22,15 @@ const DEFAULT_EXPANDED_HEIGHT = Math.round(HEIGHT * 10)
 
 let distanceMonitor: DistanceMonitor | null = null
 
+function safeHide(): void {
+  if (!toolbarWindow || toolbarWindow.isDestroyed()) return
+  try {
+    toolbarWindow.hide()
+  } catch {
+    /* ignore */
+  }
+}
+
 // Remember last user-expanded size so subsequent expansions restore it
 let lastExpandedWidth = DEFAULT_EXPANDED_WIDTH
 let lastExpandedHeight = DEFAULT_EXPANDED_HEIGHT
@@ -71,11 +80,8 @@ export function initializeToolbarWindow(): void {
 
       showToolbar(selection.text, selection.position.x, selection.position.y, selection.window)
     } else if (toolbarWindow) {
-      // No immediate hide based on selection clearing; continuous distance monitor manages hiding
-      if (!isCursorNearToolbar()) {
-        // If user cleared selection and cursor already far, hide right away
-        toolbarWindow.hide()
-      }
+      // If selection cleared and cursor already far, hide promptly.
+      if (!isCursorNearToolbar()) safeHide()
     }
   })
 }
@@ -132,10 +138,21 @@ function showToolbar(text: string, x: number, y: number, window): void {
   toolbarWindow.on('hide', () => {
     if (isExpanded) collapseToolbar()
     distanceMonitor?.stop()
+    // Double-check hide if compositor delay leaves it visible momentarily
+    setTimeout(() => {
+      try {
+        if (toolbarWindow && !toolbarWindow.isDestroyed() && toolbarWindow.isVisible()) {
+          safeHide()
+          setTimeout(() => safeHide(), 120)
+        }
+      } catch {
+        /* ignore */
+      }
+    }, 120)
     try {
       toolbarWindow?.webContents.send(IPC_EVENTS.TOOLBAR_RESET_UI)
     } catch {
-      // ignore if webContents destroyed
+      /* ignore */
     }
   })
 
@@ -247,12 +264,27 @@ function showToolbar(text: string, x: number, y: number, window): void {
   }
 
   // Initialize distance monitor (only once per window creation)
+  // Distance monitor will now always hide the toolbar when the cursor is far,
+  // even if it is expanded. Previous logic skipped hiding while expanded which
+  // could leave the UI lingering indefinitely if the user moved away without
+  // explicitly closing it. We first collapse (to persist sizing state safely)
+  // then hide the window for a smoother UX.
   distanceMonitor = createDistanceMonitor({
     getWindow: () => toolbarWindow,
-    skipHidePredicate: () => isExpanded,
+    // Slightly larger threshold gives the user a small buffer while interacting.
+    threshold: 110,
     onFar: (win) => {
       try {
+        if (isExpanded) collapseToolbar()
         win.hide()
+        // Proactive visibility re-check shortly after initiating hide
+        setTimeout(() => {
+          try {
+            if (win.isVisible()) win.hide()
+          } catch {
+            /* ignore */
+          }
+        }, 80)
       } catch {
         // ignore
       }
