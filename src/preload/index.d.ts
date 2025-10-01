@@ -39,6 +39,15 @@ declare global {
       pasteText(text: string | { text: string; appPID: number }): Promise<void>
       onToolbarResetUI(callback: () => void): () => void
       onToolbarOpenPanel(callback: (data: { panel?: string | null }) => void): () => void
+      onUsageLimitReached(
+        callback: (data: {
+          allowed: boolean
+          remaining: number
+          limit: number
+          actionCount: number
+          plan: string
+        }) => void
+      ): () => void
     }
   }
 }

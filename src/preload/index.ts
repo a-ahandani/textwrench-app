@@ -54,6 +54,7 @@ const api = {
   onSetSelectedText: createIpcListener(IPC_EVENTS.SET_SELECTED_TEXT),
   onToolbarResetUI: createIpcListener(IPC_EVENTS.TOOLBAR_RESET_UI),
   onToolbarOpenPanel: createIpcListener(IPC_EVENTS.TOOLBAR_OPEN_PANEL),
+  onUsageLimitReached: createIpcListener(IPC_EVENTS.USAGE_LIMIT_REACHED),
   pasteText: (text: string): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.PASTE_TEXT, text)
 }
 

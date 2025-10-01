@@ -6,6 +6,7 @@ import { AuthProvider } from '@renderer/components/providers/AuthProvider'
 import { UpdateProvider } from '../providers/UpdateProvider'
 import { SelectedTextProvider } from '../providers/SelectedTextProvider'
 import ToolbarApp from './Toolbar'
+import { UsageLimitProvider } from '../providers/UsageLimitProvider'
 
 const toolbarRootElement = document.getElementById('toolbar')
 if (toolbarRootElement) {
@@ -16,7 +17,9 @@ if (toolbarRootElement) {
           <ChakraProvider>
             <ReactQueryProvider>
               <SelectedTextProvider>
-                <ToolbarApp />
+                <UsageLimitProvider>
+                  <ToolbarApp />
+                </UsageLimitProvider>
               </SelectedTextProvider>
             </ReactQueryProvider>
           </ChakraProvider>
