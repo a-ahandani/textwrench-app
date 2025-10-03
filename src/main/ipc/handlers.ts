@@ -165,4 +165,14 @@ export function setupIpcHandlers(): void {
   ipcMain.handle(IPC_EVENTS.VERIFY_TOKEN, () => {
     verifyToken()
   })
+
+  ipcMain.handle(IPC_EVENTS.GET_USAGE_STATS, async () => {
+    try {
+      const result = await twService.get('/protected/usage/stats')
+      return result.data
+    } catch (error) {
+      handleError(error)
+    }
+    return
+  })
 }

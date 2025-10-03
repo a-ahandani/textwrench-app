@@ -1,4 +1,5 @@
-import { Card, IconButton, ProgressRoot, ButtonGroup } from '@chakra-ui/react'
+import { IconButton, ProgressRoot, ButtonGroup } from '@chakra-ui/react'
+import { SettingCard } from './SettingCard'
 import { useProfile } from '@renderer/hooks/useProfile'
 
 import { Button } from '@renderer/components/ui/Button'
@@ -15,25 +16,27 @@ export const Auth: FC = () => {
   const isPremium = profile?.user_type !== 'free'
 
   return (
-    <Card.Root variant="subtle">
-      <Card.Body>
+    <SettingCard>
+      <SettingCard.Body>
         {isLoading && (
           <ProgressRoot shape="square" variant="subtle" animated value={null} size="xs" mb={2}>
             <ProgressBar />
           </ProgressRoot>
         )}
-        <Card.Title mt="2">
+        <SettingCard.Title mt="2">
           {isLoggedIn && profile?.name ? `Hello, ${profile?.name}` : 'Login to your account'}
-        </Card.Title>
+        </SettingCard.Title>
         {isLoggedIn ? (
-          <Card.Description>
+          <SettingCard.Description>
             You are using {isPremium ? `active` : `free`} version of the {labels.app}
-          </Card.Description>
+          </SettingCard.Description>
         ) : (
-          <Card.Description>Please login to access the premium features</Card.Description>
+          <SettingCard.Description>
+            Please login to access the premium features
+          </SettingCard.Description>
         )}
-      </Card.Body>
-      <Card.Footer justifyContent="flex-end">
+      </SettingCard.Body>
+      <SettingCard.Footer justifyContent="flex-end">
         {!isLoggedIn ? (
           <ButtonGroup size="sm" attached>
             <Button
@@ -68,7 +71,7 @@ export const Auth: FC = () => {
             Logout
           </Button>
         )}
-      </Card.Footer>
-    </Card.Root>
+      </SettingCard.Footer>
+    </SettingCard>
   )
 }

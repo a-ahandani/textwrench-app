@@ -35,5 +35,6 @@ export const IPC_EVENTS = {
   TOOLBAR_EXPAND: 'toolbar-expand',
   TOOLBAR_OPEN_PANEL: 'toolbar-open-panel',
   TOOLBAR_RESET_UI: 'toolbar-reset-ui',
-  USAGE_LIMIT_REACHED: 'usage-limit-reached'
+  USAGE_LIMIT_REACHED: 'usage-limit-reached',
+  GET_USAGE_STATS: 'get-usage-stats'
 }

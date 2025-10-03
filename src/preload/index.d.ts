@@ -48,6 +48,15 @@ declare global {
           plan: string
         }) => void
       ): () => void
+      getUsageStats(): Promise<{
+        today: number
+        limit: number
+        remaining: number
+        windows: Record<string, number[]>
+        totals: Record<string, number>
+        allTime: number
+        currentDate: string
+      }>
     }
   }
 }
