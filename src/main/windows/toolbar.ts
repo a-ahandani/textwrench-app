@@ -6,6 +6,7 @@ import { info } from 'electron-log'
 import { join } from 'path'
 import { onSelection } from 'textwrench-observer'
 import { makeProximityChecker } from '../utils/distance-monitor'
+import { bringToFront } from '../services/set-focus'
 
 let toolbarWindow: BrowserWindow | undefined = undefined
 let previousSelection: { text: string; timestamp: number } | null = null
@@ -212,7 +213,7 @@ function showToolbar(text: string, x: number, y: number, window): void {
       // focus without stealing active app aggressively
       setTimeout(() => {
         try {
-          toolbarWindow?.focus()
+          bringToFront(toolbarWindow)
         } catch {
           // ignore focus errors
         }

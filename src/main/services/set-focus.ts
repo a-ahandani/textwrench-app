@@ -1,23 +1,25 @@
 import { getSettingsWindow, showSettingsWindowExplicitly } from '../windows/settings'
 import { exec } from 'child_process'
 
-export const bringToFront = (): void => {
-  const settingsWindow = getSettingsWindow()
-  if (!settingsWindow) {
+export const bringToFront = (
+  window: Electron.CrossProcessExports.BrowserWindow | null = null
+): void => {
+  const targetWindow = window || getSettingsWindow()
+  if (!targetWindow) {
     showSettingsWindowExplicitly()
     return
   }
 
-  if (settingsWindow.isMinimized()) {
-    settingsWindow.restore()
+  if (targetWindow.isMinimized()) {
+    targetWindow.restore()
   }
-  settingsWindow.show()
-  settingsWindow.focus()
-  settingsWindow.setAlwaysOnTop(true)
-  settingsWindow.setAlwaysOnTop(false)
+  targetWindow.show()
+  targetWindow.focus()
+  targetWindow.setAlwaysOnTop(true)
+  targetWindow.setAlwaysOnTop(false)
 
   if (process.platform === 'win32') {
-    const title = settingsWindow.getTitle().replace(/'/g, "''") // escape single-quotes
+    const title = targetWindow.getTitle().replace(/'/g, "''") // escape single-quotes
     exec(
       `powershell -Command "(New-Object -ComObject WScript.Shell).AppActivate('${title}')"`,
       (err) => {
@@ -28,6 +30,6 @@ export const bringToFront = (): void => {
 }
 
 export const bringToFrontWindows = (): void => {
-  const settingsWindow = getSettingsWindow()
-  if (!settingsWindow) return
+  const targetWindow = getSettingsWindow()
+  if (!targetWindow) return
 }

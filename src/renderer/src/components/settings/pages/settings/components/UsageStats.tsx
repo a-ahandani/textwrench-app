@@ -12,12 +12,7 @@ export const UsageStatsPanel: React.FC = () => {
         Loading usage…
       </Text>
     )
-  if (error || !data)
-    return (
-      <Text fontSize="sm" color="red.400">
-        Failed to load usage
-      </Text>
-    )
+  if (error || !data) return null
 
   const ratio = data.limit > 0 ? data.today / data.limit : 0
   let rangeBg: string
