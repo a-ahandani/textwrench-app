@@ -1,6 +1,6 @@
 import { is } from '@electron-toolkit/utils'
 import { IPC_EVENTS } from '@shared/ipc-events'
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, screen } from 'electron'
 import { createDistanceMonitor, DistanceMonitor } from '../utils/distance-monitor'
 import { info } from 'electron-log'
 import { join } from 'path'
@@ -87,14 +87,39 @@ export function initializeToolbarWindow(): void {
   })
 }
 
+function clampPosition(pos: { x: number; y: number }): { x: number; y: number } {
+  try {
+    const display = screen.getDisplayNearestPoint({ x: pos.x, y: pos.y })
+    const { x: dx, y: dy, width: dw, height: dh } = display.workArea
+    return {
+      x: Math.min(Math.max(pos.x, dx), dx + dw - WIDTH),
+      y: Math.min(Math.max(pos.y, dy), dy + dh - HEIGHT)
+    }
+  } catch {
+    return pos
+  }
+}
+
+function ensureZOrder(win: BrowserWindow | undefined): void {
+  if (!win || win.isDestroyed()) return
+  try {
+    win.setAlwaysOnTop(true, 'screen-saver', 1)
+    win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
+  } catch {
+    /* ignore */
+  }
+}
+
 function showToolbar(text: string, x: number, y: number, window): void {
-  const position: { x: number; y: number } = {
+  let position: { x: number; y: number } = {
     x: Math.round(x - WIDTH / 2),
     y: Math.round(y - 50)
   }
+  position = clampPosition(position)
 
   if (toolbarWindow) {
     if (isExpanded) collapseToolbar()
+    ensureZOrder(toolbarWindow)
     toolbarWindow.showInactive()
     toolbarWindow.setPosition(position.x, position.y)
     toolbarWindow.webContents.send(IPC_EVENTS.SET_SELECTED_TEXT, { text, position, window })
@@ -131,6 +156,7 @@ function showToolbar(text: string, x: number, y: number, window): void {
 
   toolbarWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
   toolbarWindow.setAlwaysOnTop(true, 'screen-saver', 1)
+  ensureZOrder(toolbarWindow)
   toolbarWindow.on('close', (e) => {
     e.preventDefault()
     toolbarWindow?.hide()
@@ -162,6 +188,7 @@ function showToolbar(text: string, x: number, y: number, window): void {
   })
 
   toolbarWindow.on('ready-to-show', () => {
+    ensureZOrder(toolbarWindow)
     toolbarWindow?.showInactive()
     toolbarWindow?.webContents.send(IPC_EVENTS.SET_SELECTED_TEXT, { text, position, window })
     // Initial mount also ensures panel is reset
