@@ -52,6 +52,8 @@ export function restartDistanceMonitor(): void {
 function collapseToolbar(): void {
   if (toolbarWindow && !toolbarWindow.isDestroyed()) {
     toolbarWindow.setSize(WIDTH, HEIGHT)
+    toolbarWindow.setResizable(false)
+    toolbarWindow.setFocusable(false)
     isExpanded = false
     activePanel = null
   }
@@ -323,4 +325,8 @@ function showToolbar(text: string, x: number, y: number, window): void {
 
 export const getToolbarWindow = (): BrowserWindow | undefined => {
   return toolbarWindow
+}
+
+export const getToolbarState = (): { isExpanded: boolean; activePanel: string | null } => {
+  return { isExpanded, activePanel }
 }

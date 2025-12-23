@@ -2,7 +2,7 @@ import { ButtonGroup, Box } from '@chakra-ui/react'
 import { FixIt } from './components/FixIt/FixItButton'
 import { ExplainButton } from './components/Explain/ExplainButton'
 import { PromptsButton } from './components/Prompts/PromptsButton'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useEventSubscription } from '@renderer/hooks/useEventSubscription'
 import { PANEL_REGISTRY } from './constants'
 
@@ -23,6 +23,23 @@ function useToolbarPanels(): {
     callback: () => setActivePanel(null),
     dependencies: []
   })
+
+  useEffect(() => {
+    let cancelled = false
+    window.api
+      .getToolbarState()
+      .then((state) => {
+        if (cancelled) return
+        const panel = state?.activePanel ?? null
+        setActivePanel(panel && PANEL_REGISTRY[panel] ? panel : null)
+      })
+      .catch(() => {
+        /* ignore */
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   return { activePanel, setPanel: setActivePanel }
 }

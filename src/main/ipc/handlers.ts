@@ -18,7 +18,7 @@ import { autoUpdater } from 'electron-updater'
 import { setIsQuitting } from '../windows/settings'
 import { BASE_URL } from '@shared/constants'
 import { processText } from '../services/process-text'
-import { getToolbarWindow } from '../windows/toolbar'
+import { getToolbarState, getToolbarWindow } from '../windows/toolbar'
 
 export function setupIpcHandlers(): void {
   ipcMain.handle(IPC_EVENTS.GET_STORE_VALUE, (_event, key: keyof StoreType) => {
@@ -174,5 +174,9 @@ export function setupIpcHandlers(): void {
       handleError(error)
     }
     return
+  })
+
+  ipcMain.handle(IPC_EVENTS.GET_TOOLBAR_STATE, () => {
+    return getToolbarState()
   })
 }

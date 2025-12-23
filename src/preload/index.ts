@@ -56,7 +56,9 @@ const api = {
   onToolbarOpenPanel: createIpcListener(IPC_EVENTS.TOOLBAR_OPEN_PANEL),
   onUsageLimitReached: createIpcListener(IPC_EVENTS.USAGE_LIMIT_REACHED),
   pasteText: (text: string): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.PASTE_TEXT, text),
-  getUsageStats: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.GET_USAGE_STATS)
+  getUsageStats: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.GET_USAGE_STATS),
+  getToolbarState: (): Promise<{ isExpanded: boolean; activePanel?: string | null }> =>
+    ipcRenderer.invoke(IPC_EVENTS.GET_TOOLBAR_STATE)
 }
 
 if (process.contextIsolated) {
