@@ -5,6 +5,8 @@ const store = new Store<StoreType>({
   defaults: {
     delay: 50,
     token: null,
+    authStartAt: null,
+    authState: null,
     selectedText: '',
     selectedPrompt: undefined
   } as StoreType

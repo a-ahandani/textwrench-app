@@ -19,7 +19,12 @@ export const twService = axios.create({
 twService.interceptors.request.use(
   (config) => {
     const token = store?.get('token')
-    config.headers['Authorization'] = `Bearer ${token}`
+    if (token) {
+      config.headers = config.headers ?? {}
+      config.headers['Authorization'] = `Bearer ${token}`
+    } else if (config.headers && 'Authorization' in config.headers) {
+      delete config.headers['Authorization']
+    }
     return config
   },
   (error) => {

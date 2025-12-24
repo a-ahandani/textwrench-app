@@ -1,4 +1,5 @@
 import { BrowserWindow, ipcMain, shell } from 'electron'
+import { randomBytes } from 'crypto'
 import { IPC_EVENTS } from '../../shared/ipc-events'
 import { store } from '../providers/store'
 import { updateStore } from '../services/update-store'
@@ -32,9 +33,12 @@ export function setupIpcHandlers(): void {
   })
 
   ipcMain.handle(IPC_EVENTS.LOGIN, () => {
+    const authState = randomBytes(16).toString('hex')
+    updateStore('authStartAt', Date.now())
+    updateStore('authState', authState)
     updateStore('token', null)
-    twService.defaults.headers.common['Authorization'] = ''
-    return shell.openExternal(`${BASE_URL}/auth/google`)
+    delete twService.defaults.headers.common['Authorization']
+    return shell.openExternal(`${BASE_URL}/auth/google?state=${encodeURIComponent(authState)}`)
   })
 
   ipcMain.handle(IPC_EVENTS.QUIT_AND_INSTALL, () => {
@@ -49,8 +53,10 @@ export function setupIpcHandlers(): void {
   })
 
   ipcMain.handle(IPC_EVENTS.LOGOUT, () => {
+    updateStore('authStartAt', null)
+    updateStore('authState', null)
     updateStore('token', null)
-    twService.defaults.headers.common['Authorization'] = ''
+    delete twService.defaults.headers.common['Authorization']
   })
 
   ipcMain.handle(IPC_EVENTS.GET_PROFILE, async () => {

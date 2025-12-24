@@ -32,6 +32,8 @@ export type StoreType = {
   selectedText?: string | null
   selectedPrompt?: Prompt
   token?: string | null
+  authStartAt?: number | null
+  authState?: string | null
   delay?: number
   lastDelayTest?: number
 }
