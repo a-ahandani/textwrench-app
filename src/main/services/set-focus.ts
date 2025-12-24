@@ -56,11 +56,21 @@ export function requestAppFocus(opts: FocusOptions = {}): void {
 function performAggressiveFocus(targetWindow: BrowserWindow): void {
   try {
     if (targetWindow.isMinimized()) targetWindow.restore()
-    targetWindow.show()
+    if (!targetWindow.isVisible()) {
+      if (process.platform === 'darwin') {
+        targetWindow.showInactive()
+      } else {
+        targetWindow.show()
+      }
+    }
     targetWindow.focus()
-    // Temporary always-on-top flip attempts to force z-order raise; may be removed later.
-    targetWindow.setAlwaysOnTop(true)
-    targetWindow.setAlwaysOnTop(false)
+    const wasAlwaysOnTop = targetWindow.isAlwaysOnTop()
+    // Temporary always-on-top flip attempts to force z-order raise; avoid downgrading
+    // windows already pinned (e.g., toolbar with elevated always-on-top level).
+    if (!wasAlwaysOnTop) {
+      targetWindow.setAlwaysOnTop(true)
+      targetWindow.setAlwaysOnTop(false)
+    }
 
     if (process.platform === 'win32') {
       const title = targetWindow.getTitle().replace(/'/g, "''")
