@@ -37,7 +37,7 @@ app.whenReady().then(async () => {
   await initializeAppSettings()
   setupProtocolHandling()
   setupSingleInstanceLock()
-  checkForUpdates()
+  void checkForUpdates({ source: 'startup' })
   setupIpcHandlers()
   registerTextStreamIpc()
 
@@ -63,7 +63,7 @@ app.whenReady().then(async () => {
     // Add up to 2 minutes jitter to avoid thundering herd on startup
     const jitter = Math.floor(Math.random() * 2 * 60 * 1000)
     setTimeout(() => {
-      checkForUpdates().catch((err) => {
+      checkForUpdates({ source: 'periodic' }).catch((err) => {
         log.error('Periodic update check failed:', err)
       })
     }, jitter)

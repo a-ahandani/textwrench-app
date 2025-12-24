@@ -21,9 +21,13 @@ declare global {
       verifyToken(): Promise<void>
       updateShortcuts(shortcuts: Partial<Shortcuts>): Promise<Shortcuts>
       quitAndInstall(): Promise<Version>
+      checkForUpdates(): Promise<boolean>
+      onUpdateChecking(callback: (data) => void): () => void
       onUpdateDownloaded(callback: (data) => void): () => void
       onUpdateAvailable(callback: (data) => void): () => void
+      onUpdateNotAvailable(callback: (data) => void): () => void
       onUpdateProgress(callback: (data) => void): () => void
+      onUpdateError(callback: (data) => void): () => void
       onOpenModal(callback: (data) => void): () => void
       processText(
         prompt: Partial<ProcessTextPayload & { mode?: string }>

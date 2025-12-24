@@ -8,12 +8,13 @@ export const updateStore = (key: keyof StoreType, value): void => {
   const settingsWindow = getSettingsWindow()
   const toolbarWindow = getToolbarWindow()
 
+  const oldValue = store.get(key)
   store.set(key, value)
 
   const storeChangeEvent = {
     key: key,
     value: value,
-    oldValue: store.get(key)
+    oldValue
   }
 
   if (settingsWindow) {

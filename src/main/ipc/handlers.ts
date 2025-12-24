@@ -19,6 +19,7 @@ import { setIsQuitting } from '../windows/settings'
 import { BASE_URL } from '@shared/constants'
 import { processText } from '../services/process-text'
 import { getToolbarState, getToolbarWindow } from '../windows/toolbar'
+import { checkForUpdates } from '../services/check-updates'
 
 export function setupIpcHandlers(): void {
   ipcMain.handle(IPC_EVENTS.GET_STORE_VALUE, (_event, key: keyof StoreType) => {
@@ -40,6 +41,11 @@ export function setupIpcHandlers(): void {
     setIsQuitting(true)
     autoUpdater.quitAndInstall()
     return
+  })
+
+  ipcMain.handle(IPC_EVENTS.CHECK_FOR_UPDATES, async () => {
+    await checkForUpdates({ force: true, source: 'manual' })
+    return true
   })
 
   ipcMain.handle(IPC_EVENTS.LOGOUT, () => {

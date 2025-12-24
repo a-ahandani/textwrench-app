@@ -18,15 +18,19 @@ const createIpcListener =
 
 const api = {
   onStoreChange: createIpcListener(IPC_EVENTS.STORE_CHANGED),
+  onUpdateChecking: createIpcListener(IPC_EVENTS.UPDATE_CHECKING),
   onUpdateProgress: createIpcListener(IPC_EVENTS.UPDATE_PROGRESS),
   onUpdateDownloaded: createIpcListener(IPC_EVENTS.UPDATE_DOWNLOADED),
   onUpdateAvailable: createIpcListener(IPC_EVENTS.UPDATE_AVAILABLE),
+  onUpdateNotAvailable: createIpcListener(IPC_EVENTS.UPDATE_NOT_AVAILABLE),
+  onUpdateError: createIpcListener(IPC_EVENTS.UPDATE_ERROR),
   onOpenModal: createIpcListener(IPC_EVENTS.OPEN_MODAL),
   onLoggedIn: createIpcListener(IPC_EVENTS.LOGIN_FULFILLED),
   getStoreValue: (key: string): Promise<unknown> =>
     ipcRenderer.invoke(IPC_EVENTS.GET_STORE_VALUE, key),
   setStoreValue: (key: string, value: unknown): Promise<void> =>
     ipcRenderer.invoke(IPC_EVENTS.SET_STORE_VALUE, key, value),
+  checkForUpdates: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.CHECK_FOR_UPDATES),
   quitAndInstall: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.QUIT_AND_INSTALL),
   getProfile: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.GET_PROFILE),
   getPrompts: (): Promise<unknown> => ipcRenderer.invoke(IPC_EVENTS.GET_PROMPTS),

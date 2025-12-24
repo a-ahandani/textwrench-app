@@ -5,10 +5,13 @@ import { useStore } from '@renderer/hooks/useStore'
 type UpdateContextType = {
   isUpdateAvailable: boolean
   isUpdateDownloaded: boolean
+  isCheckingForUpdate: boolean
   latestVersion: string
   currentVersion: string
   releaseNotes: string
   progress: number
+  updateError: string
+  checkForUpdates: () => void
   quitAndInstall: () => void
 }
 
@@ -19,7 +22,7 @@ type UpdateProviderProps = {
 }
 
 export const UpdateProvider: React.FC<UpdateProviderProps> = ({ children }) => {
-  const { quitAndInstall } = window.api
+  const { quitAndInstall, checkForUpdates } = window.api
 
   const { value: currentVersion } = useStore<string>({
     key: 'appVersion'
@@ -29,10 +32,41 @@ export const UpdateProvider: React.FC<UpdateProviderProps> = ({ children }) => {
   const [releaseNotes, setReleaseNotes] = useState<string>('')
   const [isUpdateDownloaded, setIsUpdateDownloaded] = useState<boolean>(false)
   const [progress, setProgress] = useState<number>(0)
+  const [isCheckingForUpdate, setIsCheckingForUpdate] = useState<boolean>(false)
+  const [updateError, setUpdateError] = useState<string>('')
+
+  useEventSubscription({
+    eventName: 'onUpdateChecking',
+    callback: () => {
+      setIsCheckingForUpdate(true)
+      setUpdateError('')
+    }
+  })
+
+  useEventSubscription({
+    eventName: 'onUpdateNotAvailable',
+    callback: () => {
+      setIsCheckingForUpdate(false)
+      setIsUpdateAvailable(false)
+      setIsUpdateDownloaded(false)
+      setLatestVersion('')
+      setReleaseNotes('')
+      setProgress(0)
+    }
+  })
+
+  useEventSubscription({
+    eventName: 'onUpdateError',
+    callback: (data: { message?: string }) => {
+      setIsCheckingForUpdate(false)
+      setUpdateError(data?.message || 'Update check failed')
+    }
+  })
 
   useEventSubscription({
     eventName: 'onUpdateDownloaded',
     callback: () => {
+      setIsCheckingForUpdate(false)
       setIsUpdateDownloaded(true)
     }
   })
@@ -47,6 +81,8 @@ export const UpdateProvider: React.FC<UpdateProviderProps> = ({ children }) => {
   useEventSubscription({
     eventName: 'onUpdateAvailable',
     callback: (data: { version: string; releaseNotes: string }) => {
+      setIsCheckingForUpdate(false)
+      setUpdateError('')
       setLatestVersion(data.version)
       setReleaseNotes(data.releaseNotes)
       setIsUpdateAvailable(true)
@@ -58,10 +94,13 @@ export const UpdateProvider: React.FC<UpdateProviderProps> = ({ children }) => {
       value={{
         isUpdateAvailable,
         isUpdateDownloaded,
+        isCheckingForUpdate,
         currentVersion,
         latestVersion,
         releaseNotes,
         progress,
+        updateError,
+        checkForUpdates: () => void checkForUpdates(),
         quitAndInstall: () => quitAndInstall()
       }}
     >

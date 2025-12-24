@@ -99,7 +99,11 @@ function createSettingsWindow(): void {
 function setupWindowEventHandlers(): void {
   if (!settingsWindow) return
 
-  settingsWindow.on('focus', checkForUpdates)
+  settingsWindow.on('focus', () => {
+    void checkForUpdates({ source: 'focus' }).catch((err) => {
+      log.error('Focus update check failed:', err)
+    })
+  })
 
   settingsWindow.on('ready-to-show', () => {
     // Show if explicitly requested
