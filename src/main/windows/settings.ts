@@ -91,7 +91,7 @@ function createSettingsWindow(): void {
 
   settingsWindow.setBounds(SETTINGS_WINDOW_BOUNDS)
   if (process.platform === 'darwin') {
-    settingsWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
+    settingsWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: false })
   } else {
     settingsWindow.setVisibleOnAllWorkspaces(true)
   }

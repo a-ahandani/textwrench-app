@@ -17,6 +17,7 @@ import {
   getToolbarWindow,
   restartDistanceMonitor
 } from './windows/toolbar'
+import { store } from './providers/store'
 
 let settingsWindow: BrowserWindow | null = null
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged
@@ -113,9 +114,14 @@ function setupSingleInstanceLock(): void {
   }
 
   app.on('second-instance', (_, commandLine) => {
-    if (settingsWindow) {
-      if (settingsWindow.isMinimized()) settingsWindow.restore()
-      settingsWindow.focus()
+    try {
+      const token = store.get('token')
+      if (!token && settingsWindow) {
+        if (settingsWindow.isMinimized()) settingsWindow.restore()
+        settingsWindow.focus()
+      }
+    } catch {
+      // Ignore store read failures and avoid stealing focus.
     }
     handleOpenUrl(commandLine.pop())
   })

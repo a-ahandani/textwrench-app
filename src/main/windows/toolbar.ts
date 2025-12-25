@@ -6,7 +6,7 @@ import { info } from 'electron-log'
 import { join } from 'path'
 import { onSelection } from 'textwrench-observer'
 import { makeProximityChecker } from '../utils/distance-monitor'
-import { bringToFront } from '../services/set-focus'
+import { getSettingsWindow } from './settings'
 
 let toolbarWindow: BrowserWindow | undefined = undefined
 let previousSelection: { text: string; timestamp: number } | null = null
@@ -112,7 +112,18 @@ function ensureZOrder(win: BrowserWindow | undefined): void {
   }
 }
 
+function hideSettingsWindowOnToolbarOpen(): void {
+  const settingsWindow = getSettingsWindow()
+  if (!settingsWindow || settingsWindow.isDestroyed()) return
+  try {
+    if (settingsWindow.isVisible()) settingsWindow.hide()
+  } catch {
+    /* ignore */
+  }
+}
+
 function showToolbar(text: string, x: number, y: number, window): void {
+  hideSettingsWindowOnToolbarOpen()
   let position: { x: number; y: number } = {
     x: Math.round(x - WIDTH / 2),
     y: Math.round(y - 50)
@@ -239,12 +250,13 @@ function showToolbar(text: string, x: number, y: number, window): void {
       activePanel = panel || activePanel || 'default'
       toolbarWindow.setResizable(true)
       toolbarWindow.setFocusable(true)
-      // focus without stealing active app aggressively
+      // Keep toolbar visible without activating the app (avoid Space switching).
       setTimeout(() => {
         try {
-          bringToFront(toolbarWindow)
+          if (!toolbarWindow || toolbarWindow.isDestroyed()) return
+          if (!toolbarWindow.isVisible()) toolbarWindow.showInactive()
         } catch {
-          // ignore focus errors
+          // ignore visibility errors
         }
       }, 10)
       distanceMonitor?.restart()
