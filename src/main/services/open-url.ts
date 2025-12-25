@@ -9,6 +9,16 @@ import { store } from '../providers/store'
 
 const AUTH_TTL_MS = 10 * 60 * 1000
 
+function getCallbackState(urlParams: URL): string | null {
+  const stateFromQuery = urlParams.searchParams.get('state')
+  if (stateFromQuery) return stateFromQuery
+  if (!urlParams.hash) return null
+  const hashParams = new URLSearchParams(
+    urlParams.hash.startsWith('#') ? urlParams.hash.slice(1) : urlParams.hash
+  )
+  return hashParams.get('state')
+}
+
 export function handleOpenUrl(url): void {
   const settingsWindow = getSettingsWindow()
   const toolbarWindow = getToolbarWindow()
@@ -20,7 +30,7 @@ export function handleOpenUrl(url): void {
       return
     }
     const token = urlParams.searchParams.get('token')
-    const state = urlParams.searchParams.get('state')
+    const state = getCallbackState(urlParams)
     const authStartAt = store.get('authStartAt')
     const authState = store.get('authState')
     const now = Date.now()
@@ -41,13 +51,17 @@ export function handleOpenUrl(url): void {
       return
     }
 
-    if (!authState || !state || authState !== state) {
-      log.warn('Auth callback state mismatch', { authState, state })
-      updateStore('authStartAt', null)
-      updateStore('authState', null)
-      settingsWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
-      toolbarWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
-      return
+    if (state) {
+      if (!authState || authState !== state) {
+        log.warn('Auth callback state mismatch', { authState, state })
+        updateStore('authStartAt', null)
+        updateStore('authState', null)
+        settingsWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
+        toolbarWindow?.webContents.send(IPC_EVENTS.LOGIN_FULFILLED)
+        return
+      }
+    } else if (authState) {
+      log.warn('Auth callback missing state; proceeding without verification', { authState })
     }
 
     bringToFront()
