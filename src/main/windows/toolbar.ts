@@ -4,7 +4,7 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron'
 import { createDistanceMonitor, DistanceMonitor } from '../utils/distance-monitor'
 import { info } from 'electron-log'
 import { join } from 'path'
-import { onSelection } from 'textwrench-observer'
+import { onSelection } from '@a-ahandani/textwrench-observer'
 import { makeProximityChecker } from '../utils/distance-monitor'
 import { getSettingsWindow } from './settings'
 

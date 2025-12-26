@@ -3,7 +3,7 @@ import { randomBytes } from 'crypto'
 import { IPC_EVENTS } from '../../shared/ipc-events'
 import { store } from '../providers/store'
 import { updateStore } from '../services/update-store'
-import { paste } from 'textwrench-observer'
+import { paste } from '@a-ahandani/textwrench-observer'
 
 import {
   Category,
