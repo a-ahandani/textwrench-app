@@ -107,9 +107,17 @@ function ensureZOrder(win: BrowserWindow | undefined): void {
   try {
     win.setAlwaysOnTop(true, 'screen-saver', 1)
     win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
+    win.moveTop()
   } catch {
     /* ignore */
   }
+}
+
+// Reassert z-order after show; fullscreen Spaces can temporarily demote the window.
+function reinforceZOrder(win: BrowserWindow | undefined): void {
+  if (!win || win.isDestroyed()) return
+  ensureZOrder(win)
+  setTimeout(() => ensureZOrder(win), 80)
 }
 
 function hideSettingsWindowOnToolbarOpen(): void {
@@ -135,6 +143,7 @@ function showToolbar(text: string, x: number, y: number, window): void {
     ensureZOrder(toolbarWindow)
     toolbarWindow.showInactive()
     toolbarWindow.setPosition(position.x, position.y)
+    reinforceZOrder(toolbarWindow)
     toolbarWindow.webContents.send(IPC_EVENTS.SET_SELECTED_TEXT, { text, position, window })
     // Always reset active panel on new selection so UI returns to compact state
     try {
@@ -203,6 +212,7 @@ function showToolbar(text: string, x: number, y: number, window): void {
   toolbarWindow.on('ready-to-show', () => {
     ensureZOrder(toolbarWindow)
     toolbarWindow?.showInactive()
+    reinforceZOrder(toolbarWindow)
     toolbarWindow?.webContents.send(IPC_EVENTS.SET_SELECTED_TEXT, { text, position, window })
     // Initial mount also ensures panel is reset
     try {
