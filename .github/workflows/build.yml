@@ -7,6 +7,10 @@ on:
     types:
       - completed
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   release:
     runs-on: ${{ matrix.os }}
@@ -42,6 +46,8 @@ jobs:
 
       - name: Install dependencies
         run: yarn
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
 
       # ✅ Ensure macOS hotkey binary is executable
       - name: Make macOS hotkey binary executable
