@@ -16,6 +16,8 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
       NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
+      GCS_BUCKET: ${{ secrets.GCS_BUCKET || vars.GCS_BUCKET }}
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID || vars.GCP_PROJECT_ID }}
 
     strategy:
       matrix:
@@ -79,3 +81,27 @@ jobs:
           # Windows-specific code signing
           WIN_CSC_LINK: file://windows-certificate.pfx
           WIN_CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - name: Prepare updater uploads
+        run: |
+          set -euo pipefail
+          mkdir -p gcs_upload/updates gcs_upload/site
+          find dist -maxdepth 1 -type f \( -name "*.dmg" -o -name "*.exe" -o -name "*.zip" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.snap" -o -name "latest*.yml" -o -name "*.blockmap" \) -exec cp {} gcs_upload/updates/ \;
+          node scripts/generate-download-manifest.mjs dist gcs_upload/site/manifest.json
+          cp download/index.html gcs_upload/site/index.html
+
+      - name: Upload updates to GCS
+        run: gsutil -m rsync -r gcs_upload/updates gs://$GCS_BUCKET/updates
+
+      - name: Upload download page to GCS
+        run: gsutil -m rsync -r gcs_upload/site gs://$GCS_BUCKET

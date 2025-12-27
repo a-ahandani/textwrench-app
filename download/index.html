@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Textwrench Downloads</title>
+    <meta
+      name="description"
+      content="Download Textwrench for macOS, Windows, and Linux."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #151a1c;
+        --muted: #4c5a60;
+        --accent: #0b6d77;
+        --accent-strong: #0d7f8a;
+        --warm: #f2a65a;
+        --bg: #f6f1e9;
+        --panel: #ffffff;
+        --stroke: #e2ded4;
+        --shadow: 0 18px 40px rgba(15, 23, 29, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        inset: -20% -20%;
+        z-index: -1;
+        background: radial-gradient(
+            circle at 20% 20%,
+            rgba(11, 109, 119, 0.16),
+            transparent 55%
+          ),
+          radial-gradient(
+            circle at 80% 15%,
+            rgba(242, 166, 90, 0.18),
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 70% 80%,
+            rgba(45, 128, 92, 0.12),
+            transparent 55%
+          );
+      }
+
+      body::after {
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), transparent);
+        opacity: 0.6;
+      }
+
+      .wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 64px 24px 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .hero {
+        display: grid;
+        gap: 18px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-family: "Space Grotesk", "Segoe UI", sans-serif;
+        font-size: clamp(36px, 6vw, 56px);
+        line-height: 1.05;
+      }
+
+      .hero p {
+        margin: 0;
+        font-size: 18px;
+        color: var(--muted);
+        max-width: 640px;
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(13, 127, 138, 0.12);
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .chip.subtle {
+        background: rgba(21, 26, 28, 0.08);
+        color: var(--muted);
+        font-weight: 500;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        border-radius: 24px;
+        padding: 28px;
+        box-shadow: var(--shadow);
+      }
+
+      .downloads {
+        display: grid;
+        gap: 20px;
+      }
+
+      .status {
+        font-size: 15px;
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+      }
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 18px;
+        border-radius: 18px;
+        border: 1px solid rgba(11, 109, 119, 0.2);
+        background: linear-gradient(140deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.8));
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 26px rgba(11, 109, 119, 0.18);
+      }
+
+      .card-title {
+        font-family: "Space Grotesk", "Segoe UI", sans-serif;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .card-meta {
+        font-size: 13px;
+        color: var(--muted);
+        word-break: break-all;
+      }
+
+      .card-action {
+        margin-top: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        color: var(--accent-strong);
+      }
+
+      .help h2 {
+        font-family: "Space Grotesk", "Segoe UI", sans-serif;
+        margin: 0 0 8px;
+        font-size: 22px;
+      }
+
+      .help p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .foot {
+        margin-top: 18px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .foot a {
+        color: var(--accent-strong);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        background: var(--warm);
+      }
+
+      @media (max-width: 640px) {
+        .wrap {
+          padding: 48px 18px 64px;
+        }
+
+        .panel {
+          padding: 22px;
+        }
+
+        .card {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <header class="hero">
+        <div class="badge">Textwrench</div>
+        <h1>Download Textwrench</h1>
+        <p>
+          Grab the latest build for your platform. The app also checks for updates
+          in the background, so installs stay fresh.
+        </p>
+        <div class="meta">
+          <span class="chip">Latest version <strong data-version>...</strong></span>
+          <span class="chip subtle" data-updated></span>
+        </div>
+      </header>
+
+      <section class="panel downloads">
+        <div class="status" data-status>Loading downloads...</div>
+        <div class="grid" data-downloads></div>
+        <noscript>
+          <div class="status">Enable JavaScript to view the download links.</div>
+        </noscript>
+      </section>
+
+      <section class="panel help">
+        <h2>Auto updates</h2>
+        <p>
+          Textwrench checks for updates automatically. If you want a clean install,
+          grab a fresh installer above.
+        </p>
+        <div class="foot">
+          <a href="https://textwrench.ai" target="_blank" rel="noopener">textwrench.ai</a>
+          <span class="dot"></span>
+          <span>Public builds are hosted on Google Cloud Storage.</span>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        const statusEl = document.querySelector("[data-status]");
+        const downloadsEl = document.querySelector("[data-downloads]");
+        const versionEl = document.querySelector("[data-version]");
+        const updatedEl = document.querySelector("[data-updated]");
+
+        const platformOrder = { mac: 0, win: 1, linux: 2 };
+
+        const ensureSlash = (url) => (url.endsWith("/") ? url : `${url}/`);
+
+        const formatDate = (value) => {
+          if (!value) return "";
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) return "";
+          return `Updated ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+        };
+
+        fetch("manifest.json", { cache: "no-store" })
+          .then((res) => {
+            if (!res.ok) throw new Error("Manifest not found");
+            return res.json();
+          })
+          .then((manifest) => {
+            const version = manifest && manifest.version ? manifest.version : "latest";
+            if (versionEl) versionEl.textContent = version;
+            if (updatedEl) updatedEl.textContent = formatDate(manifest.generatedAt);
+
+            const baseUrl = ensureSlash(
+              manifest && manifest.baseUrl
+                ? manifest.baseUrl
+                : new URL("updates/", window.location.href).toString()
+            );
+
+            const files = Array.isArray(manifest.files) ? manifest.files : [];
+            if (!files.length) {
+              if (statusEl) statusEl.textContent = "No downloads published yet.";
+              return;
+            }
+
+            const sorted = files.slice().sort((a, b) => {
+              const aKey = platformOrder[a.platform] ?? 99;
+              const bKey = platformOrder[b.platform] ?? 99;
+              return aKey - bKey;
+            });
+
+            if (statusEl) statusEl.textContent = "";
+            downloadsEl.innerHTML = "";
+
+            sorted.forEach((item) => {
+              const link = document.createElement("a");
+              link.className = "card";
+              link.href = new URL(item.file, baseUrl).toString();
+              link.target = "_blank";
+              link.rel = "noopener";
+
+              const title = document.createElement("div");
+              title.className = "card-title";
+              title.textContent = item.label || item.platform || "Download";
+
+              const meta = document.createElement("div");
+              meta.className = "card-meta";
+              meta.textContent = item.file;
+
+              const action = document.createElement("div");
+              action.className = "card-action";
+              action.textContent = "Download";
+
+              link.appendChild(title);
+              link.appendChild(meta);
+              link.appendChild(action);
+              downloadsEl.appendChild(link);
+            });
+          })
+          .catch((err) => {
+            if (statusEl) statusEl.textContent = "Unable to load downloads.";
+            // eslint-disable-next-line no-console
+            console.error(err);
+          });
+      })();
+    </script>
+  </body>
+</html>
