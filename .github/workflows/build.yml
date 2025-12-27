@@ -7,7 +7,7 @@ on:
       - 'v*'
 
 permissions:
-  contents: read
+  contents: write
   packages: read
 
 jobs:
@@ -64,7 +64,7 @@ jobs:
       - name: Build/release Electron app
         uses: paneron/action-electron-builder@v1.8.1
         with:
-          github_token: ${{ secrets.github_token }}
+          github_token: ${{ secrets.GH_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
           release: true
         env:
           VITE_API_SERVER: ${{ secrets.VITE_API_SERVER }}
